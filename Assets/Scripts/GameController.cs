@@ -29,6 +29,9 @@ public class GameController : MonoBehaviour
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3((x*2)-30, 0, 0); //will change this
         cube.transform.localScale = new Vector3(0.08f, 1.0f, 0);
+
+
+        
     }
 
     void DrawLine()
