@@ -46,17 +46,18 @@ def amino_acid(list_of_peaks):
         "V": 99
     }
    
-
-    for peak in range(len(list_of_peaks)-1):
-        for peak in range(len(list_of_peaks)-1):
-            distance = round((list_of_peaks[peak+1] - list_of_peaks[peak]),0)
+    n = 10;
+    while n > 0:
+        for peak in range(len(list_of_peaks)-n):
+            distance = round((list_of_peaks[peak+n] - list_of_peaks[peak]),0)
             
-            if distance >=56 and distance <= 187:
+            if distance >=56 and distance <= 186:
                 if distance in amino_acids.values():
                     print(f"{distance} in dict")
                 else:
-                    print(f"not in dict")
-            
+                    print(f"{distance} not in dict")
+        n-=1
+        print("NEW LOOP")
            
             
             
@@ -68,4 +69,4 @@ def amino_acid(list_of_peaks):
 
 
 
-read_write_file('Assets/Scripts/selected_spectra.csv', ' ', 1)
+read_write_file('Assets/Scripts/selected_spectra.csv', ' ', 0)
