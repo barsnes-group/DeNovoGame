@@ -27,11 +27,9 @@ public class GameController : MonoBehaviour
     void DrawObj(float x, float y)
     {
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3((x*2)-30, 0, 0); //will change this
+        cube.transform.position = new Vector3((x*2), 0, 0); //will change this
         cube.transform.localScale = new Vector3(0.08f, 1.0f, 0);
 
-
-        
     }
 
     void DrawLine()
@@ -40,8 +38,8 @@ public class GameController : MonoBehaviour
 
         List<Vector3> pos = new List<Vector3>
         {
-            new Vector3(-500, 0),
-            new Vector3(500, 0)
+            new Vector3(0, 0),
+            new Vector3(100, 0)
         };
 
         l.startWidth = 0.05f;
