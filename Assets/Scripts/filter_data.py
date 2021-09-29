@@ -11,14 +11,15 @@ def read_write_file(file_in, file_out, percentage):
         for row in reader:
             intensity.append(float(row[1]))
 
+            #calculate percentage
             max_intensity = max(intensity)
             threshold_percentage = (float(row[1])/max_intensity*100)
 
             if threshold_percentage >= percentage:
                 mz.append(float(row[0]))
                 int_graph.append(float(row[1]))
-
-    amino_acid(mz)
+                
+                amino_acid(mz)
 
     print(f"Number of peaks: {len(mz)}")
 
@@ -45,28 +46,40 @@ def amino_acid(list_of_peaks):
         "N": 114,
         "V": 99
     }
-   
-    n = 10;
+    filtered_list = []
+    teller = 0
+    n = 100;
     while n > 0:
         for peak in range(len(list_of_peaks)-n):
             distance = round((list_of_peaks[peak+n] - list_of_peaks[peak]),0)
             
             if distance >=56 and distance <= 186:
                 if distance in amino_acids.values():
-                    print(f"{distance} in dict")
-                else:
-                    print(f"{distance} not in dict")
+                    print(f"{list_of_peaks[peak]} in dict")
+                    teller +=1
+                    filtered_list.append(list_of_peaks[peak])
+                
         n-=1
-        print("NEW LOOP")
-           
+    print(f"Antall peaks: {teller}")
+    return filtered_list 
+
+
+
+
+
+    """     n=1
+        for peaks in range(len(list_of_peaks)-n):
+            for peak in range(peaks):
+                distance = round((list_of_peaks[peak+1] - list_of_peaks[peak]),0)
+                
+                if distance >=56 and distance <= 187:
+                    if distance in amino_acids.values():
+                        print(f"{distance} in dict")
             
+            n+=1
+                """
             
   
-
-
-
-
-
 
 
 read_write_file('Assets/Scripts/selected_spectra.csv', ' ', 0)
