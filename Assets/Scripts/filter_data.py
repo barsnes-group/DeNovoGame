@@ -6,6 +6,7 @@ amino_acids = {
     "V": 99
 }
 
+
 def read_file(file_in):
     coord = []
     with open(file_in, 'r') as csvfile:
@@ -44,8 +45,11 @@ def normalize_data():
     pass
 
 
-def pluss_minus():
-    pass
+def pluss_minus(tall, pluss_minus):
+    list_of_number = []
+    for tall in range(tall-pluss_minus, tall+pluss_minus+1):
+        list_of_number.append(tall)
+    return list_of_number
 
 
 def percentage(part, whole):
@@ -73,10 +77,9 @@ def get_y_coor(coordinates):
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    filtered_on_percentage = filter_on_percentage(coordinates, 10)
-    
-    filtered_on_amino_acids_and_percentage = filter_amino_acid(filtered_on_percentage)
-    
+    filtered_on_percentage = filter_on_percentage(coordinates, 5)
+    filtered_on_amino_acids_and_percentage = filter_amino_acid(
+        filtered_on_percentage)
 
     print(f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids_and_percentage)}")
 
@@ -85,13 +88,16 @@ def main():
     plt.xlabel('m/z')
     plt.ylabel('int')
     plt.legend()
-    plt.show()
+    #plt.show()
 
-    plt.bar(get_x_coor(filtered_on_amino_acids_and_percentage), get_y_coor(filtered_on_amino_acids_and_percentage))
+    plt.bar(get_x_coor(filtered_on_amino_acids_and_percentage),
+            get_y_coor(filtered_on_amino_acids_and_percentage))
     plt.xlabel('m/z')
     plt.ylabel('int')
     plt.legend()
-    plt.show()
+    #plt.show()
+    
+    print("+/- ", pluss_minus(10, 4))
 
 
 main()
