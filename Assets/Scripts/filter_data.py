@@ -25,47 +25,73 @@ def write_to_file(filename_out):
         csvfile.close()
 
 
-def normalize_data():
-    pass
-
-
 def filter_amino_acid(coordinates):
     valid_coor = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
-        for( second_valueX, second_valueY) in coordinates[i+1:]:
+        for(second_valueX, second_valueY) in coordinates[i+1:]:
             distance = second_valueX - first_valueX
             if int(distance) in amino_acids.values():
                 valid_coor.append((first_valueX, first_valueY))
                 valid_coor.append((second_valueX, second_valueY))
+                #print(distance, "x1 ", first_valueX, "x2: ", second_valueX  )
+
     # remove duplicates
     valid_coor = list(dict.fromkeys(valid_coor))
     return valid_coor
 
 
+def normalize_data():
+    pass
 
 
-def filter_on_percentage(coord):
-    for pos in coord:
+def pluss_minus():
+    pass
 
-        intensity = pos[1]
-        # calculate percentage
-        max_intensity = max(intensity)
-        threshold_percentage = (intensity)/max_intensity*100
 
-        if threshold_percentage >= percentage:
-            mz.append(float(row[0]))
-            int_graph.append(float(intensity))
+def percentage(part, whole):
+    return (part/whole*100)
 
-            filter_amino_acid(mz)
 
-        print(f"Number of peaks: {len(mz)}")
+def filter_on_percentage(coordinates, threshold_percentage):
+    valid_coor = []
+    y_coord = get_y_coor(coordinates)
+    print(y_coord)
 
-def getXcoor(coordinates):
+    for (x, y) in coordinates:
+        if percentage(y, max(y_coord)) >= threshold_percentage:
+            valid_coor.append((x, y))
+    return valid_coor
+
+
+def get_x_coor(coordinates):
     return [x[0] for x in coordinates]
+
+
+def get_y_coor(coordinates):
+    return [y[1] for y in coordinates]
+
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    filtered_coordintes = filter_amino_acid(coordinates)
-    print(filtered_coordintes)
+    filtered_on_percentage = filter_on_percentage(coordinates, 10)
     
+    filtered_on_amino_acids_and_percentage = filter_amino_acid(filtered_on_percentage)
+    
+
+    print(f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids_and_percentage)}")
+
+    # plot graph
+    plt.bar(get_x_coor(coordinates), get_y_coor(coordinates))
+    plt.xlabel('m/z')
+    plt.ylabel('int')
+    plt.legend()
+    plt.show()
+
+    plt.bar(get_x_coor(filtered_on_amino_acids_and_percentage), get_y_coor(filtered_on_amino_acids_and_percentage))
+    plt.xlabel('m/z')
+    plt.ylabel('int')
+    plt.legend()
+    plt.show()
+
+
 main()
