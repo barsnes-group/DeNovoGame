@@ -2,8 +2,27 @@ import csv
 import matplotlib.pyplot as plt
 
 amino_acids = {
-    "N": 114,
-    "V": 99
+    "A": 71.037114,
+    "R": 156.101111,
+    "N": 114.042927,
+    "D": 115.026943,
+    "C": 103.009185,
+    "E": 129.042593,
+    "Q": 128.058578,
+    "G": 57.021464,
+    "H": 137.058912,
+    "I": 113.084064,
+    "L": 113.084064,
+    "K": 128.094963,
+    "M": 131.040485,
+    "F": 147.068414,
+    "P": 97.052764,
+    "S": 87.032028,
+    "T": 101.047679,
+    "U": 150.95363,
+    "W": 186.079313,
+    "Y": 163.06332,
+    "V": 99.068414
 }
 
 
@@ -26,78 +45,83 @@ def write_to_file(filename_out):
         csvfile.close()
 
 
-def filter_amino_acid(coordinates):
-    valid_coor = []
+def filter_amino_acid(coordinates: list):
+    '''
+    filter a list of coordinates, so only the coordinates where the mass of an amino acid(x-axis) fits inbetween is kept
+    '''
+    valid_coord = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
         for(second_valueX, second_valueY) in coordinates[i+1:]:
             distance = second_valueX - first_valueX
-            if int(distance) in amino_acids.values():
-                valid_coor.append((first_valueX, first_valueY))
-                valid_coor.append((second_valueX, second_valueY))
-                #print(distance, "x1 ", first_valueX, "x2: ", second_valueX  )
+            # if int(distance) in amino_acids.values():
+            if dist_in_range(distance, 0.02, amino_acids):
+                valid_coord.append((first_valueX, first_valueY))
+                valid_coord.append((second_valueX, second_valueY))
+                print(distance, "x1 ", first_valueX, "x2: ", second_valueX)
 
     # remove duplicates
-    valid_coor = list(dict.fromkeys(valid_coor))
-    return valid_coor
+    valid_coord = list(dict.fromkeys(valid_coord))
+    return valid_coord
+
+
+def filter_on_percentage(coordinates: list, threshold_percentage: float):
+    valid_coord = []
+    y_coord = get_y_coord(coordinates)
+
+    for (x, y) in coordinates:
+        if percentage(y, max(y_coord)) >= threshold_percentage:
+            valid_coord.append((x, y))
+    return valid_coord
 
 
 def normalize_data():
     pass
 
 
-def pluss_minus(tall, pluss_minus):
-    list_of_number = []
-    for tall in range(tall-pluss_minus, tall+pluss_minus+1):
-        list_of_number.append(tall)
-    return list_of_number
+def dist_in_range(input_number: float, threshold: float, amino_acid: list):
+    list_of_numbers_in_range = []
+
+    # loop amino_acids
+    for x in amino_acid.values():
+        if input_number-threshold <= x <= input_number+threshold:
+            list_of_numbers_in_range.append((input_number-threshold)+threshold)
+
+    return list_of_numbers_in_range
 
 
-def percentage(part, whole):
+def percentage(part: float, whole: float):
     return (part/whole*100)
 
 
-def filter_on_percentage(coordinates, threshold_percentage):
-    valid_coor = []
-    y_coord = get_y_coor(coordinates)
-    print(y_coord)
-
-    for (x, y) in coordinates:
-        if percentage(y, max(y_coord)) >= threshold_percentage:
-            valid_coor.append((x, y))
-    return valid_coor
-
-
-def get_x_coor(coordinates):
+def get_x_coor(coordinates: list):
     return [x[0] for x in coordinates]
 
 
-def get_y_coor(coordinates):
+def get_y_coord(coordinates: list):
     return [y[1] for y in coordinates]
 
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    filtered_on_percentage = filter_on_percentage(coordinates, 5)
-    filtered_on_amino_acids_and_percentage = filter_amino_acid(
-        filtered_on_percentage)
+    filtered_on_percentage = filter_on_percentage(coordinates, 10)
+    filtered_on_amino_acids = filter_amino_acid(filtered_on_percentage)
 
-    print(f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids_and_percentage)}")
+    print(
+        f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids)}")
 
     # plot graph
-    plt.bar(get_x_coor(coordinates), get_y_coor(coordinates))
+    plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
     plt.xlabel('m/z')
     plt.ylabel('int')
     plt.legend()
-    #plt.show()
+    plt.show()
 
-    plt.bar(get_x_coor(filtered_on_amino_acids_and_percentage),
-            get_y_coor(filtered_on_amino_acids_and_percentage))
+    plt.bar(get_x_coor(filtered_on_amino_acids),
+            get_y_coord(filtered_on_amino_acids))
     plt.xlabel('m/z')
     plt.ylabel('int')
     plt.legend()
-    #plt.show()
-    
-    print("+/- ", pluss_minus(10, 4))
+    plt.show()
 
 
 main()
