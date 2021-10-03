@@ -1,5 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
+import numpy as np
 
 amino_acids = {
     "A": 71.037114,
@@ -39,7 +41,6 @@ def read_file(file_in):
 def write_to_file(filename_out, list_of_filtered_data: list):
     with open(filename_out, 'w') as out:
         csv_out = csv.writer(out)
-
         for row in list_of_filtered_data:
             csv_out.writerow(row)
         out.close()
@@ -75,8 +76,10 @@ def filter_on_percentage(coordinates: list, threshold_percentage: float):
     return valid_coord
 
 
-def normalize_data():
-    pass
+def normalize_data(coordinates: list):
+    x_array = np.array(get_x_coor(coordinates))
+    normalized_arr = preprocessing.normalize([x_array])
+    return normalized_arr
 
 
 def dist_in_range(input_number: float, threshold: float, amino_acid: list):
@@ -104,13 +107,12 @@ def get_y_coord(coordinates: list):
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    filtered_on_percentage = filter_on_percentage(coordinates, 10)
+    filtered_on_percentage = filter_on_percentage(coordinates, 5)
     filtered_on_amino_acids = filter_amino_acid(filtered_on_percentage, 0.02)
 
     print(
         f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids)}")
 
-    # print(filtered_on_amino_acids)
     # plot graph
     plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
     plt.xlabel('m/z')
