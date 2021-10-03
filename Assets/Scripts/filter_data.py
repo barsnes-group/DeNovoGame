@@ -36,28 +36,29 @@ def read_file(file_in):
     return coord
 
 
-def write_to_file(filename_out):
-    with open(filename_out, 'w') as csvfile:
-        writer = csv.writer(csvfile)
+def write_to_file(filename_out, list_of_filtered_data: list):
+    with open(filename_out, 'w') as out:
+        csv_out = csv.writer(out)
 
-        for w in range(len(mz)):
-            writer.writerow([mz[w], int_graph[w]])
-        csvfile.close()
+        for row in list_of_filtered_data:
+            csv_out.writerow(row)
+        out.close()
 
 
-def filter_amino_acid(coordinates: list):
+def filter_amino_acid(coordinates: list, threshold: float):
     '''
-    filter a list of coordinates, so only the coordinates where the mass of an amino acid(x-axis) fits inbetween is kept
+    filter a list of coordinates so only the coordinates where the mass 
+    of an amino acid fits inbetween is kept
     '''
     valid_coord = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
         for(second_valueX, second_valueY) in coordinates[i+1:]:
             distance = second_valueX - first_valueX
             # if int(distance) in amino_acids.values():
-            if dist_in_range(distance, 0.02, amino_acids):
+            if dist_in_range(distance, threshold, amino_acids):
                 valid_coord.append((first_valueX, first_valueY))
                 valid_coord.append((second_valueX, second_valueY))
-                print(distance, "x1 ", first_valueX, "x2: ", second_valueX)
+                # print(distance, "x1 ", first_valueX, "x2: ", second_valueX)
 
     # remove duplicates
     valid_coord = list(dict.fromkeys(valid_coord))
@@ -104,24 +105,24 @@ def get_y_coord(coordinates: list):
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
     filtered_on_percentage = filter_on_percentage(coordinates, 10)
-    filtered_on_amino_acids = filter_amino_acid(filtered_on_percentage)
+    filtered_on_amino_acids = filter_amino_acid(filtered_on_percentage, 0.02)
 
     print(
         f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids)}")
 
+    # print(filtered_on_amino_acids)
     # plot graph
     plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
     plt.xlabel('m/z')
     plt.ylabel('int')
-    plt.legend()
-    plt.show()
+    # plt.show()
 
     plt.bar(get_x_coor(filtered_on_amino_acids),
             get_y_coord(filtered_on_amino_acids))
     plt.xlabel('m/z')
     plt.ylabel('int')
-    plt.legend()
-    plt.show()
+    # plt.show()
 
+    write_to_file('Assets/Scripts/filtered_data.csv', filtered_on_amino_acids)
 
 main()
