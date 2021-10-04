@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         DrawLine();
+        //DrawAminoAcids();
         string[] array = CsvFile.text.Split('\n');
         for (int i = 0; i <= array.Length-1; i++)
         {
@@ -20,11 +21,11 @@ public class GameController : MonoBehaviour
             yCoord = float.Parse(rows[1]);
 
             Debug.Log("x: " + xCoord/10 + " y: " + yCoord/10);
-            DrawObj(xCoord/10, yCoord/10);
+            DrawPeaks(xCoord/10, yCoord/10);
         }
     }
 
-    void DrawObj(float x, float y)
+    void DrawPeaks(float x, float y)
     {
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3(x, 0, 0); 
@@ -45,5 +46,13 @@ public class GameController : MonoBehaviour
         l.startWidth = 0.3f;
         l.SetPositions(pos.ToArray());
         l.useWorldSpace = true;
+    }
+
+    void DrawAminoAcids() {
+        
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.transform.position = new Vector3(50, 0, 0); 
+        cube.transform.localScale = new Vector3(14.0f, 14.0f, 0);
+
     }
 }
