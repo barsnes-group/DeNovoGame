@@ -14,21 +14,27 @@ public class AminoAcids : MonoBehaviour
 
     void Start()
     {
+
+        for (int i = 0; i < AminoAcidsDict.Count-1; i++)
+        {
+
         foreach(KeyValuePair<string, float> aminoacid in AminoAcidsDict) {
-            DrawAminoAcids(aminoacid.Value/10);
+            DrawAminoAcids(aminoacid.Value/10, aminoacid.Value);
+
+        }
+            
         }
         
     }
 
-    void DrawAminoAcids(float width)
+    void DrawAminoAcids(float width, float x)
     {
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(50, 10, 0);
-        cube.transform.localScale = new Vector3(width, 14.0f, 0);
-        
-        var cubeRenderer = cube.GetComponent<Renderer>();
-        cubeRenderer.material.SetColor("_Color", Color.green);
+        cube.GetComponent<Renderer>().material.color = new Color(0,1,0,1);
+        cube.transform.position = new Vector3(x, 20, 0);
+        cube.transform.localScale = new Vector3(width, 5.0f, 0);
+
     }
 
 }
