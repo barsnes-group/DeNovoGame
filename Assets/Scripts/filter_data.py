@@ -6,12 +6,14 @@ import numpy as np
 
 class Slot:
     def __repr__(self) -> str:
-        return (f"x1: {self.start}, x2: {self.end}, distance: {self.distance}, intensity: {self.intensity}")
+        return (f"x1: {self.start}, x2: {self.end}, distance: {self.width()}, intensity: {self.intensity}")
 
-    def __init__(self, start, end, distance, intensity: list) -> None:
+    def width(self) -> float:
+        return self.end - self.start
+
+    def __init__(self, start, end, intensity: list) -> None:
         self.start = start
         self.end = end
-        self.distance = distance
         self.intensity = intensity
 
 
@@ -58,44 +60,52 @@ def write_to_file(filename_out: str, list_of_filtered_data: list):
         out.close()
 
 
-def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict":
+def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[str, Slot]":
     '''
-    checks if amino acids fits between two or more slots
-    create Slot object and return a dictionary of amino acids and its valid slots
+    create Slot object from
+    get all matching slots for each amino acid
+    return a dictionary of amino acids and its valid slots
     '''
-    acid_to_slots = {}
- 
+    amino_acid_to_slots = {}
+
     all_slots = make_slot_objects(coordinates)
-    for acid in amino_acids.keys():
-        matching_slots = get_all_matching_slots(amino_acids.get(acid), all_slots, threshold)
-        acid_to_slots[acid] = matching_slots
-    return acid_to_slots
-        
-def get_all_matching_slots(acid, all_slots, threshold):
+    for amino_acid in amino_acids.keys():
+        matching_slots = get_all_matching_slots(
+            amino_acids.get(amino_acid), all_slots, threshold)
+        amino_acid_to_slots[amino_acid] = matching_slots
+    return amino_acid_to_slots
+
+
+def get_all_matching_slots(acid: float, all_slots: "list[Slot]", threshold: float) -> "list[Slot]":
     '''
     checks if amino acid +/- threshold fits in slot
     returns list of all valid slots
     '''
     valid_slots = []
     for slot in all_slots:
-        if slot.distance - threshold <= acid <= slot.distance + threshold:
+        if slot.width() - threshold <= acid <= slot.width() + threshold:
             valid_slots.append(slot)
     return valid_slots
 
 
-def make_slot_objects(coordinates: list):
-    # Slot width == distance between peaks
+def make_slot_objects(coordinates: list) -> "list[Slot]":
+    '''
+    create Slot object from list of coordinates
+    return list of Slots
+    '''
     slots = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
         for(second_valueX, second_valueY) in coordinates[i+1:]:
-            slot_width = second_valueX - first_valueX
-            slot = Slot(first_valueX, second_valueX, slot_width, [first_valueY, second_valueY])
+            slot = Slot(first_valueX, second_valueX, [
+                        first_valueY, second_valueY])
             slots.append(slot)
     return slots
- 
+
 
 def filter_on_percentage(coordinates: list, threshold_percentage: float) -> "list[tuple]":
-    '''returns a list of coordinates where the intensity of the peaks are over the chosen threshold'''
+    '''
+    returns a list of coordinates where the intensity of the peaks are over the chosen threshold
+    '''
     valid_coord = []
     y_coord = get_y_coord(coordinates)
 
@@ -130,10 +140,11 @@ def main():
         coordinates, 0.02)
 
     print(filtered_on_amino_acids)
-    #print(map_amino_acid_to_slot_numbers(filtered_on_amino_acids))
 
-    print(f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering on percentage: {len(coordinates)}\nNumber of peaks after filtering on percentage and amino acids: {len(filtered_on_amino_acids)}")
-    # print(map_amino_acid_to_slot_numbers(filtered_on_amino_acids))
+    print(
+        f"Number of peaks after filtering on percentage: {len(coordinates)}\nNumber of peaks after filtering on percentage and amino acids: {len(filtered_on_amino_acids)}")
+
+    # TODO: make file with coord (Slot.start, Slot.end)
 
     # plot graph
     """   plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
