@@ -3,6 +3,18 @@ import matplotlib.pyplot as plt
 from sklearn import preprocessing
 import numpy as np
 
+
+class Slot:
+    def __repr__(self) -> str:
+        return (f"x1: {self.start}, x2: {self.end}, distance: {self.distance}, intensity: {self.intensity}")
+
+    def __init__(self, start, end, distance, intensity: list) -> None:
+        self.start = start
+        self.end = end
+        self.distance = distance
+        self.intensity = intensity
+
+
 amino_acids = {
     "A": 71.037114,
     "R": 156.101111,
@@ -38,7 +50,7 @@ def read_file(file_in):
     return coord
 
 
-def write_to_file(filename_out, list_of_filtered_data: list):
+def write_to_file(filename_out: str, list_of_filtered_data: list):
     with open(filename_out, 'w') as out:
         csv_out = csv.writer(out)
         for row in list_of_filtered_data:
@@ -46,27 +58,44 @@ def write_to_file(filename_out, list_of_filtered_data: list):
         out.close()
 
 
-def filter_amino_acid(coordinates: list, threshold: float):
+def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict":
     '''
-    filter a list of coordinates so only the coordinates where the mass 
-    of an amino acid fits inbetween is kept
+    checks if amino acids fits between two or more slots
+    create Slot object and return a dictionary of amino acids and its valid slots
     '''
-    valid_coord = []
+    acid_to_slots = {}
+ 
+    all_slots = make_slot_objects(coordinates)
+    for acid in amino_acids.keys():
+        matching_slots = get_all_matching_slots(amino_acids.get(acid), all_slots, threshold)
+        acid_to_slots[acid] = matching_slots
+    return acid_to_slots
+        
+def get_all_matching_slots(acid, all_slots, threshold):
+    '''
+    checks if amino acid +/- threshold fits in slot
+    returns list of all valid slots
+    '''
+    valid_slots = []
+    for slot in all_slots:
+        if slot.distance - threshold <= acid <= slot.distance + threshold:
+            valid_slots.append(slot)
+    return valid_slots
+
+
+def make_slot_objects(coordinates: list):
+    # Slot width == distance between peaks
+    slots = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
         for(second_valueX, second_valueY) in coordinates[i+1:]:
-            distance = second_valueX - first_valueX
-            # if int(distance) in amino_acids.values():
-            if dist_in_range(distance, threshold, amino_acids):
-                valid_coord.append((first_valueX, first_valueY))
-                valid_coord.append((second_valueX, second_valueY))
-                # print(distance, "x1 ", first_valueX, "x2: ", second_valueX)
+            slot_width = second_valueX - first_valueX
+            slot = Slot(first_valueX, second_valueX, slot_width, [first_valueY, second_valueY])
+            slots.append(slot)
+    return slots
+ 
 
-    # remove duplicates
-    valid_coord = list(dict.fromkeys(valid_coord))
-    return valid_coord
-
-
-def filter_on_percentage(coordinates: list, threshold_percentage: float):
+def filter_on_percentage(coordinates: list, threshold_percentage: float) -> "list[tuple]":
+    '''returns a list of coordinates where the intensity of the peaks are over the chosen threshold'''
     valid_coord = []
     y_coord = get_y_coord(coordinates)
 
@@ -76,55 +105,49 @@ def filter_on_percentage(coordinates: list, threshold_percentage: float):
     return valid_coord
 
 
-def normalize_data(coordinates: list):
-    x_array = np.array(get_x_coor(coordinates))
-    normalized_arr = preprocessing.normalize([x_array])
-    return normalized_arr
+def normalize_data(coordinates: list):  # not used yet
+    x_array = np.array(get_x_coord(coordinates))
+    normalized_x_arr = preprocessing.normalize([x_array])
+    return normalized_x_arr
 
 
-def dist_in_range(input_number: float, threshold: float, amino_acid: list):
-    list_of_numbers_in_range = []
-
-    # loop amino_acids
-    for x in amino_acid.values():
-        if input_number-threshold <= x <= input_number+threshold:
-            list_of_numbers_in_range.append((input_number-threshold)+threshold)
-
-    return list_of_numbers_in_range
-
-
-def percentage(part: float, whole: float):
+def percentage(part: float, whole: float) -> float:
     return (part/whole*100)
 
 
-def get_x_coor(coordinates: list):
+def get_x_coord(coordinates: list) -> "list[float]":
     return [x[0] for x in coordinates]
 
 
-def get_y_coord(coordinates: list):
+def get_y_coord(coordinates: list) -> "list[float]":
     return [y[1] for y in coordinates]
 
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    filtered_on_percentage = filter_on_percentage(coordinates, 5)
-    filtered_on_amino_acids = filter_amino_acid(filtered_on_percentage, 0.02)
+    coordinates = filter_on_percentage(coordinates, 20)
+    filtered_on_amino_acids: list[Slot] = create_slots_from_coordinates(
+        coordinates, 0.02)
 
-    print(
-        f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering: {len(filtered_on_amino_acids)}")
+    print(filtered_on_amino_acids)
+    #print(map_amino_acid_to_slot_numbers(filtered_on_amino_acids))
+
+    print(f"Number of peaks before filtering: {len(coordinates)} \nNumber of peaks after filtering on percentage: {len(coordinates)}\nNumber of peaks after filtering on percentage and amino acids: {len(filtered_on_amino_acids)}")
+    # print(map_amino_acid_to_slot_numbers(filtered_on_amino_acids))
 
     # plot graph
-    plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
+    """   plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
     plt.xlabel('m/z')
-    plt.ylabel('int')
+    plt.ylabel('int') """
     # plt.show()
 
-    plt.bar(get_x_coor(filtered_on_amino_acids),
+    """    plt.bar(get_x_coord(filtered_on_amino_acids),
             get_y_coord(filtered_on_amino_acids))
     plt.xlabel('m/z')
-    plt.ylabel('int')
+    plt.ylabel('int') """
     # plt.show()
 
-    write_to_file('Assets/Scripts/filtered_data.csv', filtered_on_amino_acids)
+    #write_to_file('Assets/Scripts/filtered_data.csv', filtered_on_amino_acids)
+
 
 main()

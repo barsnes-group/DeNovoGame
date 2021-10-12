@@ -48,11 +48,4 @@ public class GameController : MonoBehaviour
         l.useWorldSpace = true;
     }
 
-    void DrawAminoAcids() {
-        
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(50, 0, 0); 
-        cube.transform.localScale = new Vector3(14.0f, 14.0f, 0);
-
-    }
 }

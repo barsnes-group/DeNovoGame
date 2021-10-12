@@ -53,8 +53,9 @@
     <UnityVersion>2021.1.22f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets/Scripts/GameController.cs" />
     <Compile Include="Assets/Scripts/AminoAcids.cs" />
+    <Compile Include="Assets/Scripts/GameController.cs" />
+    <Compile Include="Assets/Scripts/Draggable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
