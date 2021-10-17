@@ -6,15 +6,18 @@ import numpy as np
 
 class Slot:
     def __repr__(self) -> str:
-        return (f"x1: {self.start}, x2: {self.end}, distance: {self.width()}, intensity: {self.intensity}")
+        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+        
 
     def width(self) -> float:
         return self.end - self.start
+        
 
     def __init__(self, start, end, intensity: list) -> None:
         self.start = start
         self.end = end
         self.intensity = intensity
+        
 
 
 amino_acids = {
@@ -59,10 +62,19 @@ def write_to_file(filename_out: str, list_of_filtered_data: list):
             csv_out.writerow(row)
         out.close()
 
+def playing_board_file(filename_out: str, list_of_filtered_data: list):
+    '''
+    make file with x- and y-coordinates
+    '''
+    with open(filename_out, 'w') as out:
+        csv_out = csv.writer(out)
+        for row in list_of_filtered_data:
+            csv_out.writerow(row)
+        out.close()
 
 def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[str, Slot]":
     '''
-    create Slot object from
+    create Slot object
     get all matching slots for each amino acid
     return a dictionary of amino acids and its valid slots
     '''
@@ -75,7 +87,19 @@ def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[
         amino_acid_to_slots[amino_acid] = matching_slots
     return amino_acid_to_slots
 
-
+def list_of_Slot_coord(dict_of_Slots) -> "list[tuple]":
+    '''
+    returns a list of x- and y-coordinates of a Slot
+    '''
+    coord = []
+    
+    for slot_list in dict_of_Slots.values():
+        if len(slot_list) != 0:
+            for slot in slot_list:
+                    coord.append((slot.start, slot.intensity[0]))
+                    coord.append((slot.end, slot.intensity[1]))  
+    return coord
+        
 def get_all_matching_slots(acid: float, all_slots: "list[Slot]", threshold: float) -> "list[Slot]":
     '''
     checks if amino acid +/- threshold fits in slot
@@ -86,7 +110,7 @@ def get_all_matching_slots(acid: float, all_slots: "list[Slot]", threshold: floa
         if slot.width() - threshold <= acid <= slot.width() + threshold:
             valid_slots.append(slot)
     return valid_slots
-
+  
 
 def make_slot_objects(coordinates: list) -> "list[Slot]":
     '''
@@ -114,7 +138,7 @@ def filter_on_percentage(coordinates: list, threshold_percentage: float) -> "lis
             valid_coord.append((x, y))
     return valid_coord
 
-
+#TODO: skal jeg normalisere data 
 def normalize_data(coordinates: list):  # not used yet
     x_array = np.array(get_x_coord(coordinates))
     normalized_x_arr = preprocessing.normalize([x_array])
@@ -135,30 +159,31 @@ def get_y_coord(coordinates: list) -> "list[float]":
 
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
+    print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     coordinates = filter_on_percentage(coordinates, 20)
-    filtered_on_amino_acids: list[Slot] = create_slots_from_coordinates(
+    filtered_on_amino_acids: dict[Slot] = create_slots_from_coordinates(
         coordinates, 0.02)
+        
 
-    print(filtered_on_amino_acids)
+    #print(filtered_on_amino_acids)
+    filtered_Slot_coord = (list_of_Slot_coord(filtered_on_amino_acids))
 
-    print(
-        f"Number of peaks after filtering on percentage: {len(coordinates)}\nNumber of peaks after filtering on percentage and amino acids: {len(filtered_on_amino_acids)}")
+    print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
 
     # TODO: make file with coord (Slot.start, Slot.end)
 
     # plot graph
-    """   plt.bar(get_x_coor(coordinates), get_y_coord(coordinates))
+    plt.bar(get_x_coord(coordinates), get_y_coord(coordinates))
     plt.xlabel('m/z')
-    plt.ylabel('int') """
-    # plt.show()
+    plt.ylabel('int') 
+    plt.show()
 
-    """    plt.bar(get_x_coord(filtered_on_amino_acids),
-            get_y_coord(filtered_on_amino_acids))
+    plt.bar(get_x_coord(filtered_Slot_coord),get_y_coord(filtered_Slot_coord))
     plt.xlabel('m/z')
-    plt.ylabel('int') """
-    # plt.show()
+    plt.ylabel('int')
+    plt.show()
 
-    #write_to_file('Assets/Scripts/filtered_data.csv', filtered_on_amino_acids)
+    write_to_file('Assets/Scripts/filtered_data.csv', filtered_Slot_coord)
 
 
 main()
