@@ -131,23 +131,18 @@ def filter_on_percentage(coordinates: list, threshold_percentage: float) -> "lis
     returns a list of coordinates where the intensity of the peaks are over the chosen threshold
     '''
     valid_coord = []
-    y_coord = get_y_coord(coordinates)
+    #sort coordinates by the y-value 
+    sorted_coord = sorted(coordinates, key=lambda x: x[1])
+    valid_coord = sorted_coord[:int(len(sorted_coord) * threshold_percentage / 100)]
 
-    for (x, y) in coordinates:
-        if percentage(y, max(y_coord)) >= threshold_percentage:
-            valid_coord.append((x, y))
     return valid_coord
+
 
 #TODO: skal jeg normalisere data 
 def normalize_data(coordinates: list):  # not used yet
     x_array = np.array(get_x_coord(coordinates))
     normalized_x_arr = preprocessing.normalize([x_array])
     return normalized_x_arr
-
-
-def percentage(part: float, whole: float) -> float:
-    return (part/whole*100)
-
 
 def get_x_coord(coordinates: list) -> "list[float]":
     return [x[0] for x in coordinates]
@@ -160,7 +155,7 @@ def get_y_coord(coordinates: list) -> "list[float]":
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
-    coordinates = filter_on_percentage(coordinates, 20)
+    coordinates = filter_on_percentage(coordinates, 30)
     filtered_on_amino_acids: dict[Slot] = create_slots_from_coordinates(
         coordinates, 0.02)
         
@@ -169,8 +164,6 @@ def main():
     filtered_Slot_coord = (list_of_Slot_coord(filtered_on_amino_acids))
 
     print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
-
-    # TODO: make file with coord (Slot.start, Slot.end)
 
     # plot graph
     plt.bar(get_x_coord(coordinates), get_y_coord(coordinates))
@@ -183,7 +176,7 @@ def main():
     plt.ylabel('int')
     plt.show()
 
-    write_to_file('Assets/Scripts/filtered_data.csv', filtered_Slot_coord)
+    #write_to_file('Assets/Scripts/filtered_data.csv', filtered_Slot_coord)
 
 
 main()
