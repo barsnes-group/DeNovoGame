@@ -1,9 +1,10 @@
 import csv
 import matplotlib.pyplot as plt
+import json
 
 class Slot:
     def __repr__(self) -> str:
-        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+        return (f"\nSlot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
 
     def width(self) -> float:
         return abs(self.end - self.start)
@@ -43,8 +44,8 @@ def read_file(file_in):
     with open(file_in, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=' ')
         for row in reader:
-            tuple = (float(row[0]), float(row[1]))
-            coord.append(tuple)
+            xy = (float(row[0]), float(row[1]))
+            coord.append(xy)
     return coord
 
 
@@ -132,14 +133,11 @@ def normalize_data(coordinates: "list[tuple]") -> "list[tuple]":
     '''
     normalize data by dividing all x-values on max x-value
     '''
-    
     norm = []
     max_x = max(get_x_coord(coordinates))
     for (x,y) in coordinates:
         norm.append((x/max_x * 100, y))
     return norm
-
-    #return [x/max_x*100 for (x,y) in coordinates]
 
 
 def get_x_coord(coordinates: list) -> "list[float]":
@@ -149,15 +147,16 @@ def get_x_coord(coordinates: list) -> "list[float]":
 def get_y_coord(coordinates: list) -> "list[float]":
     return [y[1] for y in coordinates]
 
-
+    
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    coordinates = percentile_sorted(coordinates, 30)
-    filtered_on_amino_acids: dict[Slot] = create_slots_from_coordinates(coordinates, 0.02)
-    filtered_Slot_coord: list[tuple] = (list_of_Slot_coord(filtered_on_amino_acids))
-    filtered_Slot_coord = normalize_data(filtered_Slot_coord)
-
-
+    print(f"Number of peaks before filtering: {len(coordinates)}")
+    coordinates = percentile_sorted(coordinates, 90)
+    slot_dict = create_slots_from_coordinates(coordinates, 0.02)
+    filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
+    filtered_Slot_coord = normalize_data(filtered_Slot_coord) #må flytte denne
+    
+    print(slot_dict)
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")    
     
