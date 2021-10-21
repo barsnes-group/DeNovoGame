@@ -1,10 +1,11 @@
 import csv
 import matplotlib.pyplot as plt
 import json
+import pprint
 
 class Slot:
     def __repr__(self) -> str:
-        return (f"\nSlot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
 
     def width(self) -> float:
         return abs(self.end - self.start)
@@ -133,11 +134,8 @@ def normalize_data(coordinates: "list[tuple]") -> "list[tuple]":
     '''
     normalize data by dividing all x-values on max x-value
     '''
-    norm = []
     max_x = max(get_x_coord(coordinates))
-    for (x,y) in coordinates:
-        norm.append((x/max_x * 100, y))
-    return norm
+    return [(x/max_x * 100, y) for (x,y) in coordinates]
 
 
 def get_x_coord(coordinates: list) -> "list[float]":
@@ -156,9 +154,9 @@ def main():
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
     filtered_Slot_coord = normalize_data(filtered_Slot_coord) #må flytte denne
     
-    print(slot_dict)
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")    
+    pprint.pprint(slot_dict)
     
     # plot graph
     min_y = min(get_y_coord(coordinates))
