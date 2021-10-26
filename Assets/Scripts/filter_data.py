@@ -2,7 +2,6 @@ import csv
 import matplotlib.pyplot as plt
 import json
 import pprint
-import pandas as pd
 
 
 class Slot:
@@ -74,6 +73,8 @@ def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[
     amino_acid_to_slots = {}
 
     all_slots = make_slot_objects(coordinates)
+    normalize_amino_acids(max_x_slot(all_slots))
+    normalize_slots(all_slots)
     for amino_acid in amino_acids.keys():
         matching_slots = get_all_matching_slots(
             amino_acids.get(amino_acid), all_slots, threshold)
@@ -135,13 +136,54 @@ def percentile_sorted(coordinates: list, threshold_percentage: float) -> "list[t
     return valid_coord
 
 
-def normalize_data(coordinates: "list[tuple]") -> "list[tuple]":
+def normalize_coordinates(coordinates: list[tuple]) -> "list[tuple]":
     '''
     normalize x-values by dividing all x-values on max x-value
     '''
     max_x = max(get_x_coord(coordinates))
     max_y = max(get_y_coord(coordinates))
     return [(x/max_x * 100, y/max_y * 100) for (x, y) in coordinates]
+
+
+def max_x_slot(slots):
+    max_x = -1
+    for slot in slots:
+        x = max(slot.start, slot.end)
+        if max_x < x:
+            max_x = x
+    return max_x
+
+
+def max_y_slot(slots):
+    max_y = -1
+    for slot in slots:
+        y = max(slot.intensity)
+        if max_y < y:
+            max_y = y
+    return max_y
+
+
+def normalize_slots(slots: list[Slot]):
+    max_x = max_x_slot(slots)
+    max_y = max_y_slot(slots)
+    """     for slot in slots:
+            x = max(slot.start, slot.end)
+            y = max(slot.intensity)
+            if max_x < x:
+                max_x = x
+            if max_y < y:
+                max_y = y """
+    for slot in slots:
+        slot.start = slot.start/max_x * 100
+        slot.end = slot.end/max_x * 100
+        slot.intensity = [y/max_y * 100 for y in slot.intensity]
+
+
+def normalize_amino_acids(max_x):
+    for key in amino_acids.keys():
+        value = amino_acids.get(key)
+        normalized_value = value/max_x * 100
+        amino_acids[key] = normalized_value
 
 
 def get_x_coord(coordinates: list) -> "list[float]":
@@ -170,14 +212,13 @@ def main():
     coordinates = percentile_sorted(coordinates, 85)
     slot_dict = create_slots_from_coordinates(coordinates, 0.02)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
-    filtered_Slot_coord = normalize_data(filtered_Slot_coord)
+    filtered_Slot_coord = normalize_coordinates(filtered_Slot_coord)
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(
         f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
     pprint.pprint(slot_dict)
-
-    # plot(coordinates, filtered_Slot_coord)
+    plot(coordinates, filtered_Slot_coord)
     # playing_board_file('Assets/Scripts/test.csv', filtered_Slot_coord)
 
 
