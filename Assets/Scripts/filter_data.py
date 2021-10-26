@@ -2,18 +2,20 @@ import csv
 import matplotlib.pyplot as plt
 import json
 import pprint
+import pandas as pd
+
 
 class Slot:
+    def __init__(self, start, end, intensity: list) -> None:
+        self.start = start
+        self.end = end
+        self.intensity = intensity
+
     def __repr__(self) -> str:
         return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
 
     def width(self) -> float:
         return abs(self.end - self.start)
-
-    def __init__(self, start, end, intensity: list) -> None:
-        self.start = start
-        self.end = end
-        self.intensity = intensity
 
 
 amino_acids = {
@@ -26,8 +28,7 @@ amino_acids = {
     "Q": 128.058578,
     "G": 57.021464,
     "H": 137.058912,
-    "I": 113.084064,
-    "L": 113.084064,
+    "I/L": 113.084064,
     "K": 128.094963,
     "M": 131.040485,
     "F": 147.068414,
@@ -40,11 +41,14 @@ amino_acids = {
     "V": 99.068414
 }
 
+
 def read_file(file_in):
     coord = []
     with open(file_in, 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=' ')
-        for row in reader:
+        reader = csvfile.readlines()
+        for row in reader[5:-1]:
+            row = row.strip()
+            row = row.split(" ")
             xy = (float(row[0]), float(row[1]))
             coord.append(xy)
     return coord
@@ -125,17 +129,19 @@ def percentile_sorted(coordinates: list, threshold_percentage: float) -> "list[t
     valid_coord = []
     # sort coordinates by the y-value
     sorted_coord = sorted(coordinates, key=lambda x: x[1])
-    valid_coord = sorted_coord[int(len(sorted_coord) * threshold_percentage / 100):]
+    valid_coord = sorted_coord[int(
+        len(sorted_coord) * threshold_percentage / 100):]
 
     return valid_coord
 
 
 def normalize_data(coordinates: "list[tuple]") -> "list[tuple]":
     '''
-    normalize data by dividing all x-values on max x-value
+    normalize x-values by dividing all x-values on max x-value
     '''
     max_x = max(get_x_coord(coordinates))
-    return [(x/max_x * 100, y) for (x,y) in coordinates]
+    max_y = max(get_y_coord(coordinates))
+    return [(x/max_x * 100, y/max_y * 100) for (x, y) in coordinates]
 
 
 def get_x_coord(coordinates: list) -> "list[float]":
@@ -145,36 +151,34 @@ def get_x_coord(coordinates: list) -> "list[float]":
 def get_y_coord(coordinates: list) -> "list[float]":
     return [y[1] for y in coordinates]
 
-    
-def main():
-    coordinates = read_file('Assets/Scripts/selected_spectra.csv')
-    print(f"Number of peaks before filtering: {len(coordinates)}")
-    coordinates = percentile_sorted(coordinates, 90)
-    slot_dict = create_slots_from_coordinates(coordinates, 0.02)
-    filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
-    filtered_Slot_coord = normalize_data(filtered_Slot_coord) #må flytte denne
-    
-    print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
-    print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")    
-    pprint.pprint(slot_dict)
-    
-    # plot graph
-    min_y = min(get_y_coord(coordinates))
-    plt.bar(get_x_coord(coordinates), get_y_coord(coordinates))
+
+def plot(input_coord, filtered_coord):
+    plt.bar(get_x_coord(input_coord), get_y_coord(input_coord))
     plt.xlabel('m/z')
     plt.ylabel('int')
-    plt.axhline(y= min_y, color='r', linestyle='-', label=min_y)
-    plt.legend()
-    plt.show()
-    
-    min_y = min(get_y_coord(filtered_Slot_coord))
-    plt.bar(get_x_coord(filtered_Slot_coord), get_y_coord(filtered_Slot_coord))
-    plt.xlabel('m/z')
-    plt.ylabel('int')
-    plt.axhline(y= min_y, color='r', linestyle='-', label=min_y)
-    plt.legend()
     plt.show()
 
+    plt.bar(get_x_coord(filtered_coord), get_y_coord(filtered_coord))
+    plt.xlabel('m/z')
+    plt.ylabel('int')
+    plt.show()
+
+
+def main():
+    coordinates = read_file('Assets/Scripts/selected_spectra.mgf')
+    print(f"Number of peaks before filtering: {len(coordinates)}")
+    coordinates = percentile_sorted(coordinates, 85)
+    slot_dict = create_slots_from_coordinates(coordinates, 0.02)
+    filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
+    filtered_Slot_coord = normalize_data(filtered_Slot_coord)
+
+    print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
+    print(
+        f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
+    pprint.pprint(slot_dict)
+
+    # plot(coordinates, filtered_Slot_coord)
     # playing_board_file('Assets/Scripts/test.csv', filtered_Slot_coord)
+
 
 main()
