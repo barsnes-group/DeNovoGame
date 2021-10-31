@@ -11,7 +11,14 @@ class Slot:
         self.intensity = intensity
 
     def __repr__(self) -> str:
-        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, distance: {round(self.width(),3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+
+    def __dict__(self):
+        new_dict = {"x1": round(self.start, 3),
+                    "x2": round(self.end, 3),
+                    "intensity": [round(intensity, 3) for intensity in self.intensity]
+                    }
+        return new_dict
 
     def width(self) -> float:
         return abs(self.end - self.start)
@@ -71,10 +78,10 @@ def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[
     return a dictionary of amino acids and its valid slots
     '''
     amino_acid_to_slots = {}
-
     all_slots = make_slot_objects(coordinates)
     normalize_amino_acids(max_x_slot(all_slots))
     normalize_slots(all_slots)
+
     for amino_acid in amino_acids.keys():
         matching_slots = get_all_matching_slots(
             amino_acids.get(amino_acid), all_slots, threshold)
@@ -136,15 +143,6 @@ def percentile_sorted(coordinates: list, threshold_percentage: float) -> "list[t
     return valid_coord
 
 
-def normalize_coordinates(coordinates: list[tuple]) -> "list[tuple]":
-    '''
-    normalize x-values by dividing all x-values on max x-value
-    '''
-    max_x = max(get_x_coord(coordinates))
-    max_y = max(get_y_coord(coordinates))
-    return [(x/max_x * 100, y/max_y * 100) for (x, y) in coordinates]
-
-
 def max_x_slot(slots):
     max_x = -1
     for slot in slots:
@@ -166,13 +164,7 @@ def max_y_slot(slots):
 def normalize_slots(slots: list[Slot]):
     max_x = max_x_slot(slots)
     max_y = max_y_slot(slots)
-    """     for slot in slots:
-            x = max(slot.start, slot.end)
-            y = max(slot.intensity)
-            if max_x < x:
-                max_x = x
-            if max_y < y:
-                max_y = y """
+
     for slot in slots:
         slot.start = slot.start/max_x * 100
         slot.end = slot.end/max_x * 100
@@ -206,20 +198,32 @@ def plot(input_coord, filtered_coord):
     plt.show()
 
 
+def write_to_json(slot_dict: dict, filename: str):
+    json_dict = {}
+    for key, value in slot_dict.items():
+        json_dict[key] = []
+        for e in value:
+            json_dict[key].append(e.__dict__())
+
+    with open(filename, 'w') as out:
+        json.dump(json_dict, out)
+
+
 def main():
     coordinates = read_file('Assets/Scripts/selected_spectra.mgf')
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, 85)
     slot_dict = create_slots_from_coordinates(coordinates, 0.02)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
-    filtered_Slot_coord = normalize_coordinates(filtered_Slot_coord)
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(
         f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
-    pprint.pprint(slot_dict)
-    plot(coordinates, filtered_Slot_coord)
-    # playing_board_file('Assets/Scripts/test.csv', filtered_Slot_coord)
+    # pprint.pprint(slot_dict)
+    # pprint.pprint(filtered_Slot_coord)
+    # plot(coordinates, filtered_Slot_coord)
+    playing_board_file('Assets/Scripts/playing_board.csv', filtered_Slot_coord)
+    write_to_json(slot_dict, 'Assets/Scripts/aa_to_slots.json')
 
 
 main()
