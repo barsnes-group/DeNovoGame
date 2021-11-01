@@ -229,8 +229,8 @@ if __name__ == "__main__":
     # pprint.pprint(slot_dict)
     # pprint.pprint(filtered_Slot_coord)
     # plot(coordinates, filtered_Slot_coord)
-    playing_board_file('Assets/Scripts/playing_board.csv', filtered_Slot_coord)
-    write_to_json(slot_dict, 'Assets/Scripts/aa_to_slots.json')
+    playing_board_file(f'{cwd}/playing_board.csv', filtered_Slot_coord)
+    write_to_json(slot_dict, f'{cwd}/aa_to_slots.json')
 
 
 
