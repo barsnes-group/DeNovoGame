@@ -1,45 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
+[System.Serializable]
 public class AminoAcids : MonoBehaviour
 {
+    public SlotInfo[] D;
+}
+/*
     float width;
     float height;
 
+    public TextAsset JSONFile;
+    public float x1;
 
-    Dictionary<string, float> AminoAcidsDict = new Dictionary<string, float>() {
-       /*  {"A", 71.037114f},
-        {"R", 156.101111f},
-        {"N", 114.042927f},
-        {"D", 115.026943f},
-        {"C", 103.009185f},
-        {"E", 129.042593f},
-        {"Q", 128.058578f},
-        {"G", 57.021464f},
-        {"H", 137.058912f},
-        {"I", 113.084064f},
-        {"L", 113.084064f},
-        {"K", 128.094963f},
-        {"M", 131.040485f},
-        {"F", 147.068414f},
-        {"P", 97.052764f},
-        {"S", 87.032028f},
-        {"T", 101.047679f},
-        {"U", 150.95363f},
-        {"W", 186.079313f},
-        {"Y", 163.06332f},
-        {"V", 99.068414f} */
+    public float x2;
 
-        {"N", 114.042927f},
-        {"V", 99.068414f}
-    };
-
-
+    public List<float> intensity;
 
     void Start()
     {
-
+        
+        PlayerInfor(JSONFile);
         for (int i = 0; i < AminoAcidsDict.Count - 1; i++)
         {
 
@@ -49,8 +30,13 @@ public class AminoAcids : MonoBehaviour
 
             }
 
-        }
+        } 
 
+    }
+
+    public static AminoAcidInfo CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<AminoAcidInfo>(jsonString);
     }
 
     void DrawAminoAcids(float width, float x)
@@ -64,3 +50,4 @@ public class AminoAcids : MonoBehaviour
     }
 
 }
+ */

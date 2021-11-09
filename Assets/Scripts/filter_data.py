@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import argparse
 
 parser = argparse.ArgumentParser() 
-parser.add_argument("-p", "--percentile", help="Must be a number. Choose the percentile threshold for the intensity of the peaks", type=float)
+parser.add_argument("-p", "--percentile", help="Must be a number. Choose the percentile threshold for the intensity of the peaks.", type=float, default=85)
+parser.add_argument("-t", "--threshold", help="Must be a number. Choose the threshold for the ", type=float, default=0.02)
 args = parser.parse_args()
 
 
@@ -216,19 +217,18 @@ def write_to_json(slot_dict: dict, filename: str):
 
 
 if __name__ == "__main__":
-    # get the current working directory (cwd)
-    cwd = os.getcwd()  
+    cwd = os.getcwd()  # get the current working directory (cwd)
     coordinates = read_file(f'{cwd}/selected_spectra.mgf')
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, args.percentile)
-    slot_dict = create_slots_from_coordinates(coordinates, 0.02)
+    slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
-    # pprint.pprint(slot_dict)
-    # pprint.pprint(filtered_Slot_coord)
-    # plot(coordinates, filtered_Slot_coord)
+    #pprint.pprint(slot_dict)
+    #pprint.pprint(filtered_Slot_coord)
+    #plot(coordinates, filtered_Slot_coord)
     playing_board_file(f'{cwd}/playing_board.csv', filtered_Slot_coord)
     write_to_json(slot_dict, f'{cwd}/aa_to_slots.json')
 

@@ -20,8 +20,8 @@ public class GameController : MonoBehaviour
             xCoord = float.Parse(rows[0]);
             yCoord = float.Parse(rows[1]);
 
-            Debug.Log("x: " + xCoord/10 + " y: " + yCoord/10);
-            DrawPeaks(xCoord/10, yCoord/10);
+            //Debug.Log("x: " + xCoord + " y: " + yCoord);
+            DrawPeaks(xCoord, yCoord);  
         }
     }
 
