@@ -206,19 +206,25 @@ def plot(input_coord, filtered_coord):
 
 
 def write_to_json(slot_dict: dict, filename: str):
-    json_dict = {}
-    for key, value in slot_dict.items():
-        json_dict[key] = []
-        for e in value:
-            json_dict[key].append(e.__dict__())
-
+    list_of_amino_acids = []
+    for amino_acid, slot in slot_dict.items():
+        a_a_dict = {}
+        a_a_dict["AminoAcid"] = amino_acid
+        slots = []
+        for e in slot:
+            slots.append(e.__dict__())
+        a_a_dict["slots"] = slots
+        list_of_amino_acids.append(a_a_dict)
+        
     with open(filename, 'w') as out:
-        json.dump(json_dict, out)
-
+        json.dump(list_of_amino_acids, out)
+        
+    
 
 if __name__ == "__main__":
     cwd = os.getcwd()  # get the current working directory (cwd)
-    coordinates = read_file(f'{cwd}/selected_spectra.mgf')
+    #coordinates = read_file(f'{cwd}/selected_spectra.mgf')
+    coordinates = read_file('Assets/Scripts/selected_spectra.mgf')
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, args.percentile)
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
@@ -230,7 +236,7 @@ if __name__ == "__main__":
     #pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
     playing_board_file(f'{cwd}/playing_board.csv', filtered_Slot_coord)
-    write_to_json(slot_dict, f'{cwd}/aa_to_slots.json')
+    write_to_json(slot_dict, f'{cwd}/aa_to_slots_3.json')
 
 
 
