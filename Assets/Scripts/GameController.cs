@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
         string[] array = CsvFile.text.Split('\n');
         for (int i = 0; i <= array.Length-1; i++)
         {
+            return;
             string[] rows = array[i].Split(',');
 
             xCoord = float.Parse(rows[0]);
