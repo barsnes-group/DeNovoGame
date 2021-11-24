@@ -210,6 +210,7 @@ def write_to_json(slot_dict: dict, filename: str):
     for amino_acid, slot in slot_dict.items():
         a_a_dict = {}
         a_a_dict["AminoAcidName"] = amino_acid
+        a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
         slots = []
         for e in slot:
             slots.append(e.__dict__())

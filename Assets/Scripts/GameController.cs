@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
         string[] array = CsvFile.text.Split('\n');
         for (int i = 0; i <= array.Length-1; i++)
         {
+            return;
             string[] rows = array[i].Split(',');
 
             xCoord = float.Parse(rows[0]);
@@ -39,7 +40,15 @@ public class GameController : MonoBehaviour
      
         foreach(JSONReader.AminoAcid a in aminoAcids)
         {
-            Debug.Log(a);
+            //Debug.Log("a.slots: " + a.slots.Length);
+            if (a.slots.Length > 0)
+            {
+                Debug.Log("name: " + a.AminoAcidName + " mass: " + a.Mass + " antall slots: " + a.slots.Length);
+                foreach (JSONReader.Slot s in a.slots)
+                {
+                    Debug.Log("x1: " + s.x1 + " x2: " + s.x2);
+                }
+            }
         }
        
     }

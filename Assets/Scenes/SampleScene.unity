@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonString: {fileID: 4900000, guid: 6db4882743296401d8527a24596db377, type: 3}
+  GameControllerObject: {fileID: 791126974}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
