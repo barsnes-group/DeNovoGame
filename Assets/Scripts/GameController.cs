@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour
         string[] array = CsvFile.text.Split('\n');
         for (int i = 0; i <= array.Length-1; i++)
         {
-            return;
             string[] rows = array[i].Split(',');
 
             xCoord = float.Parse(rows[0]);
@@ -26,6 +25,7 @@ public class GameController : MonoBehaviour
         }
     }
 
+
     void DrawPeaks(float x, float y)
     {
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -33,7 +33,16 @@ public class GameController : MonoBehaviour
         cube.transform.localScale = new Vector3(0.4f, 6.0f, 0);
 
     }
-
+    public void createSlots(JSONReader.AminoAcid[] aminoAcids)
+    {
+        //sjekke om aa har slot
+     
+        foreach(JSONReader.AminoAcid a in aminoAcids)
+        {
+            Debug.Log(a);
+        }
+       
+    }
     void DrawLine()
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
