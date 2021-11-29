@@ -369,9 +369,10 @@
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/AminoAcids.cs"
 "Assets/Scripts/Draggable.cs"
+"Assets/Scripts/DraggableBox.cs"
 "Assets/Scripts/GameController.cs"
-"Assets/Scripts/JsonHelper.cs"
 "Assets/Scripts/JSONReader.cs"
+"Assets/Scripts/Slot.cs"
 "Assets/Scripts/SlotInfo.cs"
 -langversion:9.0
 

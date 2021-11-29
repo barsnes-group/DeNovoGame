@@ -4,54 +4,71 @@ using System.Collections.Generic;
 public class GameController : MonoBehaviour
 {
     public TextAsset CsvFile;
-
-    float xCoord;
-    float yCoord;
+    public GameObject boxPrefab;
+    public GameObject slotPrefab;
 
     void Start()
     {
         DrawLine();
-        //DrawAminoAcids();
         string[] array = CsvFile.text.Split('\n');
         for (int i = 0; i <= array.Length-1; i++)
         {
-            return;
             string[] rows = array[i].Split(',');
 
-            xCoord = float.Parse(rows[0]);
-            yCoord = float.Parse(rows[1]);
+            float xCoord = float.Parse(rows[0]);
+            //float yCoord = float.Parse(rows[1]);
 
-            //Debug.Log("x: " + xCoord + " y: " + yCoord);
-            DrawPeaks(xCoord, yCoord);  
+            DrawSlots(xCoord, 0);
+
         }
     }
 
 
-    void DrawPeaks(float x, float y)
+    void DrawSlots(float pos_x, float pos_y)
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(x, 0, 0); 
-        cube.transform.localScale = new Vector3(0.4f, 6.0f, 0);
+
+        GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 1), Quaternion.identity);
+        slot.GetComponent<Slot>().SetScale(0.4f, 6.0f);
+        slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
+
 
     }
-    public void createSlots(JSONReader.AminoAcid[] aminoAcids)
+
+    void DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
     {
-        //sjekke om aa har slot
-     
+        GameObject box = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        box.GetComponent<DraggableBox>().SetScale(scale_x, scale_y);
+        box.transform.SetParent(GameObject.Find("BoxContainer").transform);
+        //Renderer rend = box.GetComponent<Renderer>();
+        //rend.material.color = Color.yellow;
+    }
+
+    public void CreateSlots(JSONReader.AminoAcid[] aminoAcids)
+    {
+
+        int n = 0;
         foreach(JSONReader.AminoAcid a in aminoAcids)
         {
-            //Debug.Log("a.slots: " + a.slots.Length);
             if (a.slots.Length > 0)
             {
-                Debug.Log("name: " + a.AminoAcidName + " mass: " + a.Mass + " antall slots: " + a.slots.Length);
+                DrawBox(a.Mass + n, 10, a.Mass, 10);
+                n += 10;
+
                 foreach (JSONReader.Slot s in a.slots)
                 {
-                    Debug.Log("x1: " + s.x1 + " x2: " + s.x2);
+                    //Debug.Log("x1: " + s.x1 + " x2: " + s.x2);
                 }
             }
         }
        
     }
+
+    void GetSlots()
+    {
+        return;
+    }
+
+
     void DrawLine()
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();

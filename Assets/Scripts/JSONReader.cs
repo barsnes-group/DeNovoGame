@@ -39,7 +39,7 @@ public class JSONReader : MonoBehaviour
         AminoAcid[] aminoAcids = JsonConvert.DeserializeObject<AminoAcid[]>(jsonString.text);
         Debug.Log(aminoAcids);
         //createSlots(slot1)
-        gc.createSlots(aminoAcids);
+        gc.CreateSlots(aminoAcids);
         //foreach (AminoAcid s in aminoAcids)
         //{
         //    Debug.Log(s);
