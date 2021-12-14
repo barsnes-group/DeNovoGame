@@ -18,18 +18,18 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            DrawSlots(xCoord, 0);
+            DrawPeaks(xCoord, 0);
 
         }
     }
 
-
-    void DrawSlots(float pos_x, float pos_y)
+    void DrawPeaks(float pos_x, float pos_y)
     {
 
         GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 1), Quaternion.identity);
         slot.GetComponent<Slot>().SetScale(0.4f, 6.0f);
         slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
+        //get int fra slot og sett farge
 
 
     }
@@ -51,8 +51,8 @@ public class GameController : MonoBehaviour
         {
             if (a.slots.Length > 0)
             {
-                DrawBox(a.Mass + n, 10, a.Mass, 10);
-                n += 10;
+                DrawBox(a.Mass + n, 10, a.Mass/2, a.Mass/2);
+                n += 20;
 
                 foreach (JSONReader.Slot s in a.slots)
                 {

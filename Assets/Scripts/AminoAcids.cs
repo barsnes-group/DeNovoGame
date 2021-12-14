@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class AminoAcids : MonoBehaviour
 {
-    public SlotInfo[] D;
+    public SlotDeserializer[] D;
 }
 /*
     float width;

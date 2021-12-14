@@ -37,7 +37,6 @@ public class JSONReader : MonoBehaviour
         gc = GameControllerObject.GetComponent<GameController>();
 
         AminoAcid[] aminoAcids = JsonConvert.DeserializeObject<AminoAcid[]>(jsonString.text);
-        Debug.Log(aminoAcids);
         //createSlots(slot1)
         gc.CreateSlots(aminoAcids);
         //foreach (AminoAcid s in aminoAcids)

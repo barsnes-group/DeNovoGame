@@ -1,37 +1,67 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
+using System;
 
-public class DraggableBox : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DraggableBox : MonoBehaviour
 {
 
-	public Transform parentToReturnTo = null;
 
-	public void SetScale(float scale_x, float scale_y)
+    private float dist;
+    private bool dragging = false;
+    private Vector3 offset;
+    private Transform toDrag;
+
+    // Update is called once per frame
+    void Update()
     {
-        this.transform.localScale = new Vector3(scale_x, scale_y, 1);
-	}
 
-	public void OnBeginDrag(PointerEventData eventData)
-	{
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
 
-		parentToReturnTo = this.transform.parent;
-		this.transform.SetParent(this.transform.parent.parent);
+            dragging = true;
 
-		GetComponent<CanvasGroup>().blocksRaycasts = false;
-	}
+            Debug.Log("touch pos: " + touch.position + " name: " + gameObject.name);
 
-	public void OnDrag(PointerEventData eventData)
-	{
-		this.transform.position = eventData.position;
-	}
+            this.transform.position = touch.position;
+        }
 
-	public void OnEndDrag(PointerEventData eventData)
-	{
-		//Debug.Log("OnEndDrag");
-		//ref til parent, lag ny clone
-		//clonen sin parent er boxcontainer
+    }
 
-		this.transform.SetParent(parentToReturnTo);
-		GetComponent<CanvasGroup>().blocksRaycasts = true;
-	}
+
+    public void SetScale(float scale_x, float scale_y)
+    {
+        RectTransform rt = GetComponent<RectTransform>();
+        rt.localScale = new Vector3(scale_x, scale_y, 1);
+    }
+
+    //private Vector3 _dragOffset;
+    //private Camera _cam;
+
+    //[SerializeField] private float _speed = 10;
+
+    //void Awake()
+    //{
+    //    _cam = Camera.main;
+    //}
+
+    //void OnMouseDown()
+    //{
+    //    print("OnMouseDown");
+    //    _dragOffset = transform.position - GetMousePos();
+    //}
+
+    //void OnMouseDrag()
+    //{
+    //    print("OnMouseDrag");
+    //    transform.position = Vector3.MoveTowards(transform.position, GetMousePos() + _dragOffset, _speed * Time.deltaTime);
+    //}
+
+    //Vector3 GetMousePos()
+    //{
+    //    var mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+    //    mousePos.z = 0;
+    //    return mousePos;
+    //}
 }
