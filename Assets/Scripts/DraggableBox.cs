@@ -13,25 +13,7 @@ public class DraggableBox : MonoBehaviour
     private Transform toDrag;
     public float size;
     public float width_space;
-    public float x_offset;
-    public float y_offset;
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            dragging = true;
-
-            Debug.Log("touch pos: " + touch.position + " name: " + gameObject.name);
-
-            this.transform.position = touch.position;
-        }
-
-    }
 
 
     public void SetScale(float scale_x, float scale_y)
@@ -39,7 +21,7 @@ public class DraggableBox : MonoBehaviour
            transform.localScale = new Vector3(scale_x * size, scale_y * size, 0);
     }
 
-    public void SetPos(float pos_x, float pos_y)
+    public void SetPos(float pos_x, float pos_y, float x_offset, float y_offset)
     {
         transform.localPosition = new Vector3(pos_x * width_space + x_offset, pos_y * width_space + y_offset, 0);
     }

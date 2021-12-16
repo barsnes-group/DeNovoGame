@@ -6,6 +6,11 @@ public class GameController : MonoBehaviour
     public TextAsset CsvFile;
     public GameObject boxPrefab;
     public GameObject slotPrefab;
+    [Header("sizes")]
+    public float size;
+    public float width_space;
+    public float x_offset;
+    public float y_offset;
 
     void Start()
     {
@@ -18,16 +23,18 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            DrawPeaks(xCoord, 0);
+            DrawPeaks(xCoord, 5,1,1);
 
         }
+
     }
 
-    void DrawPeaks(float pos_x, float pos_y)
+    void DrawPeaks(float pos_x, float pos_y, float scale_x, float scale_y)
     {
 
         GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        //slot.GetComponent<Slot>().SetScale(0.4f, 6.0f);
+        slot.GetComponent<Slot>().SetScale(scale_x, scale_y);
+        slot.GetComponent<Slot>().SetPos(pos_x, pos_y, x_offset, y_offset);
         slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
         //get int fra slot og sett farge
 
@@ -38,7 +45,7 @@ public class GameController : MonoBehaviour
     {
         GameObject box = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         box.GetComponent<DraggableBox>().SetScale(scale_x, scale_y);
-        box.GetComponent<DraggableBox>().SetPos(pos_x, pos_y);
+        box.GetComponent<DraggableBox>().SetPos(pos_x, pos_y, x_offset, y_offset);
         box.transform.SetParent(GameObject.Find("BoxContainer").transform);
         //Renderer rend = box.GetComponent<Renderer>();
         //rend.material.color = Color.yellow;
@@ -61,13 +68,7 @@ public class GameController : MonoBehaviour
                     //Debug.Log("x1: " + s.x1 + " x2: " + s.x2);
                 }
             }
-        }
-       
-    }
-
-    void GetSlots()
-    {
-        return;
+        }  
     }
 
 
@@ -77,7 +78,7 @@ public class GameController : MonoBehaviour
 
         List<Vector3> pos = new List<Vector3>
         {
-            new Vector3(0, 0, 0),
+            new Vector3(-500, 0, 0),
             new Vector3(1000, 0, 0)
         };
 
