@@ -26,8 +26,8 @@ public class GameController : MonoBehaviour
     void DrawPeaks(float pos_x, float pos_y)
     {
 
-        GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 1), Quaternion.identity);
-        slot.GetComponent<Slot>().SetScale(0.4f, 6.0f);
+        GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        //slot.GetComponent<Slot>().SetScale(0.4f, 6.0f);
         slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
         //get int fra slot og sett farge
 
@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour
     {
         GameObject box = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         box.GetComponent<DraggableBox>().SetScale(scale_x, scale_y);
+        box.GetComponent<DraggableBox>().SetPos(pos_x, pos_y);
         box.transform.SetParent(GameObject.Find("BoxContainer").transform);
         //Renderer rend = box.GetComponent<Renderer>();
         //rend.material.color = Color.yellow;
@@ -51,7 +52,8 @@ public class GameController : MonoBehaviour
         {
             if (a.slots.Length > 0)
             {
-                DrawBox(a.Mass + n, 10, a.Mass/2, a.Mass/2);
+                //print(a.AminoAcidName + " has mass: " + a.Mass);
+                DrawBox(a.Mass + n, 10, a.Mass, a.Mass);
                 n += 20;
 
                 foreach (JSONReader.Slot s in a.slots)
@@ -75,8 +77,8 @@ public class GameController : MonoBehaviour
 
         List<Vector3> pos = new List<Vector3>
         {
-            new Vector3(0, 0),
-            new Vector3(1000, 0)
+            new Vector3(0, 0, 0),
+            new Vector3(1000, 0, 0)
         };
 
         l.startWidth = 0.3f;

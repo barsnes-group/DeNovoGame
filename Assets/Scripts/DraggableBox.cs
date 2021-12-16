@@ -11,6 +11,10 @@ public class DraggableBox : MonoBehaviour
     private bool dragging = false;
     private Vector3 offset;
     private Transform toDrag;
+    public float size;
+    public float width_space;
+    public float x_offset;
+    public float y_offset;
 
     // Update is called once per frame
     void Update()
@@ -32,8 +36,12 @@ public class DraggableBox : MonoBehaviour
 
     public void SetScale(float scale_x, float scale_y)
     {
-        RectTransform rt = GetComponent<RectTransform>();
-        rt.localScale = new Vector3(scale_x, scale_y, 1);
+           transform.localScale = new Vector3(scale_x * size, scale_y * size, 0);
+    }
+
+    public void SetPos(float pos_x, float pos_y)
+    {
+        transform.localPosition = new Vector3(pos_x * width_space + x_offset, pos_y * width_space + y_offset, 0);
     }
 
     //private Vector3 _dragOffset;
