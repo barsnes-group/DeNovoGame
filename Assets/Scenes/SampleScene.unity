@@ -337,6 +337,7 @@ MonoBehaviour:
   peaksYPos: 5
   boxYPos: 15
   scaleWidth: 0.5
+  SlotContainer: {fileID: 146717902}
 --- !u!114 &1943325020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +364,7 @@ GameObject:
   - component: {fileID: 2031277497}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -517,6 +518,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ad4bef68c754d0e9a913b1091d434c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startIndexes: 
+  endIndexes: 
+  _speed: 10
 --- !u!61 &7554153867389100607
 BoxCollider2D:
   m_ObjectHideFlags: 0

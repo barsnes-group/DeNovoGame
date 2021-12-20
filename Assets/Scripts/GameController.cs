@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
     public float boxYPos = 15;
     public float scaleWidth = 0.1f;
     private float rightBoxMargin = 1;
+    [SerializeField]
+    GameObject SlotContainer;
 
     void Start()
     {
@@ -45,9 +47,9 @@ public class GameController : MonoBehaviour
 
     }
 
-    void GetPeakNr()
+    public GameObject GetPeak(int number)
     {
-
+        return SlotContainer.transform.GetChild(number).gameObject;
     }
 
     DraggableBox DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
