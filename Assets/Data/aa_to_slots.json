@@ -1,1 +1,45 @@
-[{"AminoAcidName": "A", "Mass": 4.86, "Slots": []}, {"AminoAcidName": "R", "Mass": 10.679, "Slots": []}, {"AminoAcidName": "N", "Mass": 7.802, "Slots": [{"peak 1": 6, "peak 2": 7, "x1": 70.571, "x2": 78.372, "intensity": [7.966, 32.643]}]}, {"AminoAcidName": "D", "Mass": 7.869, "Slots": [{"peak 1": 6, "peak 2": 8, "x1": 70.571, "x2": 78.441, "intensity": [7.966, 13.646]}, {"peak 1": 9, "peak 2": 10, "x1": 86.108, "x2": 93.977, "intensity": [12.762, 13.467]}, {"peak 1": 5, "peak 2": 7, "x1": 70.503, "x2": 78.372, "intensity": [23.525, 32.643]}]}, {"AminoAcidName": "C", "Mass": 7.047, "Slots": []}, {"AminoAcidName": "E", "Mass": 8.828, "Slots": [{"peak 1": 4, "peak 2": 5, "x1": 61.675, "x2": 70.503, "intensity": [18.729, 23.525]}]}, {"AminoAcidName": "Q", "Mass": 8.761, "Slots": []}, {"AminoAcidName": "G", "Mass": 3.901, "Slots": []}, {"AminoAcidName": "H", "Mass": 9.376, "Slots": []}, {"AminoAcidName": "I/L", "Mass": 7.736, "Slots": [{"peak 1": 9, "peak 2": 7, "x1": 86.108, "x2": 78.372, "intensity": [12.762, 32.643]}, {"peak 1": 1, "peak 2": 2, "x1": 39.426, "x2": 47.162, "intensity": [17.142, 28.634]}, {"peak 1": 4, "peak 2": 3, "x1": 61.675, "x2": 53.939, "intensity": [18.729, 35.171]}]}, {"AminoAcidName": "K", "Mass": 8.763, "Slots": []}, {"AminoAcidName": "M", "Mass": 8.965, "Slots": []}, {"AminoAcidName": "F", "Mass": 10.061, "Slots": []}, {"AminoAcidName": "P", "Mass": 6.639, "Slots": []}, {"AminoAcidName": "S", "Mass": 5.954, "Slots": [{"peak 1": 10, "peak 2": 11, "x1": 93.977, "x2": 99.931, "intensity": [13.467, 23.162]}]}, {"AminoAcidName": "T", "Mass": 6.913, "Slots": []}, {"AminoAcidName": "U", "Mass": 10.327, "Slots": []}, {"AminoAcidName": "W", "Mass": 12.73, "Slots": []}, {"AminoAcidName": "Y", "Mass": 11.155, "Slots": []}, {"AminoAcidName": "V", "Mass": 6.777, "Slots": [{"peak 1": 1, "peak 2": 0, "x1": 39.426, "x2": 32.648, "intensity": [17.142, 27.481]}, {"peak 1": 2, "peak 2": 3, "x1": 47.162, "x2": 53.939, "intensity": [28.634, 35.171]}]}]
+[
+  { "AminoAcidName": "A", "Mass": 4.86, "Slots": [] },
+  { "AminoAcidName": "R", "Mass": 10.679, "Slots": [] },
+  { "AminoAcidName": "N", "Mass": 7.802, "Slots": [{ "start peak": 6, "end peak": 7, "x1": 70.571, "x2": 78.372, "intensity": [7.966, 32.643] }] },
+  {
+    "AminoAcidName": "D",
+    "Mass": 7.869,
+    "Slots": [
+      { "start peak": 6, "end peak": 8, "x1": 70.571, "x2": 78.441, "intensity": [7.966, 13.646] },
+      { "start peak": 9, "end peak": 10, "x1": 86.108, "x2": 93.977, "intensity": [12.762, 13.467] },
+      { "start peak": 5, "end peak": 7, "x1": 70.503, "x2": 78.372, "intensity": [23.525, 32.643] }
+    ]
+  },
+  { "AminoAcidName": "C", "Mass": 7.047, "Slots": [] },
+  { "AminoAcidName": "E", "Mass": 8.828, "Slots": [{ "start peak": 4, "end peak": 5, "x1": 61.675, "x2": 70.503, "intensity": [18.729, 23.525] }] },
+  { "AminoAcidName": "Q", "Mass": 8.761, "Slots": [] },
+  { "AminoAcidName": "G", "Mass": 3.901, "Slots": [] },
+  { "AminoAcidName": "H", "Mass": 9.376, "Slots": [] },
+  {
+    "AminoAcidName": "I/L",
+    "Mass": 7.736,
+    "Slots": [
+      { "start peak": 9, "end peak": 7, "x1": 86.108, "x2": 78.372, "intensity": [12.762, 32.643] },
+      { "start peak": 1, "end peak": 2, "x1": 39.426, "x2": 47.162, "intensity": [17.142, 28.634] },
+      { "start peak": 4, "end peak": 3, "x1": 61.675, "x2": 53.939, "intensity": [18.729, 35.171] }
+    ]
+  },
+  { "AminoAcidName": "K", "Mass": 8.763, "Slots": [] },
+  { "AminoAcidName": "M", "Mass": 8.965, "Slots": [] },
+  { "AminoAcidName": "F", "Mass": 10.061, "Slots": [] },
+  { "AminoAcidName": "P", "Mass": 6.639, "Slots": [] },
+  { "AminoAcidName": "S", "Mass": 5.954, "Slots": [{ "start peak": 10, "end peak": 11, "x1": 93.977, "x2": 99.931, "intensity": [13.467, 23.162] }] },
+  { "AminoAcidName": "T", "Mass": 6.913, "Slots": [] },
+  { "AminoAcidName": "U", "Mass": 10.327, "Slots": [] },
+  { "AminoAcidName": "W", "Mass": 12.73, "Slots": [] },
+  { "AminoAcidName": "Y", "Mass": 11.155, "Slots": [] },
+  {
+    "AminoAcidName": "V",
+    "Mass": 6.777,
+    "Slots": [
+      { "start peak": 1, "end peak": 0, "x1": 39.426, "x2": 32.648, "intensity": [17.142, 27.481] },
+      { "start peak": 2, "end peak": 3, "x1": 47.162, "x2": 53.939, "intensity": [28.634, 35.171] }
+    ]
+  }
+]

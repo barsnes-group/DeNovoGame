@@ -222,7 +222,6 @@ def write_to_json(slot_dict: dict, filename: str):
             slots.append(e.to_dict(peaks_to_index))
         a_a_dict["Slots"] = slots
         list_of_amino_acids.append(a_a_dict)
-    print(list_of_amino_acids)
     with open(filename, 'w') as out:
         json.dump(list_of_amino_acids, out)
 
@@ -255,11 +254,9 @@ if __name__ == "__main__":
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
-    print(
-        f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
+    print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
     # pprint.pprint(slot_dict)
     # pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
-    playing_board_file(
-        f'{cwd}/Assets/Data/playing_board.csv', filtered_Slot_coord)
+    playing_board_file(f'{cwd}/Assets/Data/playing_board.csv', filtered_Slot_coord)
     write_to_json(slot_dict, f'{cwd}/Assets/Data/aa_to_slots.json')
