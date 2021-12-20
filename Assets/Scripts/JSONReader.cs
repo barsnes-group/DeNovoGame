@@ -13,13 +13,15 @@ public class JSONReader : MonoBehaviour
     [System.Serializable]
     public class Slot
     {
-        public float x1;
-        public float x2;
+        public int start_peak_index;
+        public float start_peak_coord;
+        public int end_peak_index;
+        public float end_peak_coord;
         public List<float> intensity;
 
         public override String ToString()
         {
-            return x1.ToString() + x2.ToString();
+            return start_peak_index.ToString() + start_peak_coord.ToString() + end_peak_index.ToString() + end_peak_coord.ToString();
         }
     }
     [System.Serializable]

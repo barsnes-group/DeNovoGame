@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146717902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalPosition: {x: -9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -333,11 +333,10 @@ MonoBehaviour:
   CsvFile: {fileID: 4900000, guid: d52ebc0d66f4e409bb917737273f5b87, type: 3}
   boxPrefab: {fileID: 579977173573170919, guid: c8c6dac98996f45febecb9576b932d8c, type: 3}
   slotPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
-  size: 0.5
-  width_space: 0.4
-  peaks_y: 5
-  box_y: 15
-  space_boxes: 3
+  slotAndBoxScaling: 0.5
+  peaksYPos: 5
+  boxYPos: 15
+  scaleWidth: 0.5
 --- !u!114 &1943325020
 MonoBehaviour:
   m_ObjectHideFlags: 0

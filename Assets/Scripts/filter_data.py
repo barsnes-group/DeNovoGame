@@ -24,10 +24,10 @@ class Slot:
 
     def to_dict(self, peak_to_index):
         new_dict = {
-                    "start peak index": peak_to_index[self.start], 
-                    "start peak coord": round(self.start, 3),
-                    "end peak index": peak_to_index[self.end],
-                    "end peak coord": round(self.end, 3),
+                    "start_peak_index": peak_to_index[self.start], 
+                    "start_peak_coord": round(self.start, 3),
+                    "end_peak_index": peak_to_index[self.end],
+                    "end_peak_coord": round(self.end, 3),
                     "intensity": [round(intensity, 3) for intensity in self.intensity]
                     }
         return new_dict

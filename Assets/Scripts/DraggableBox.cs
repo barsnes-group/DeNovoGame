@@ -6,6 +6,9 @@ using System;
 public class DraggableBox : MonoBehaviour
 {
 
+    public List<int> startIndexes;
+    public List<int> endIndexes;
+
 
 
     public void SetScale(float scale_x, float scale_y)

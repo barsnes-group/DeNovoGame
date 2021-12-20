@@ -7,11 +7,11 @@ public class GameController : MonoBehaviour
     public GameObject boxPrefab;
     public GameObject slotPrefab;
     [Header("Sizes")]
-    public float size;
-    public float width_space;
-    public float peaks_y = 15;
-    public float box_y = 15;
-    public float space_boxes = 10;
+    public float slotAndBoxScaling;
+    public float peaksYPos = 15;
+    public float boxYPos = 15;
+    public float scaleWidth = 0.1f;
+    private float rightBoxMargin = 1;
 
     void Start()
     {
@@ -24,46 +24,58 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            DrawPeaks(xCoord, peaks_y, 0.2f,1);
+            DrawPeaks(xCoord, peaksYPos, 0.2f,1);
 
         }
 
     }
 
-    void DrawPeaks(float pos_x, float pos_y, float scale_x, float scale_y)
+    Slot DrawPeaks(float pos_x, float pos_y, float scale_x, float scale_y)
     {
 
-        GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        slot.GetComponent<Slot>().SetScale(scale_x * size, scale_y * size);
-        slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
-        slot.GetComponent<Slot>().SetPos(pos_x * width_space, pos_y);
+        GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        slotObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
+
+        Slot slot = slotObject.GetComponent<Slot>();
+        slot.SetScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
+        slot.SetPos(pos_x * scaleWidth, pos_y);
+        return slot;
         //get int fra slot og sett farge
 
 
     }
 
-    void DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
+    void GetPeakNr()
     {
-        GameObject box = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        box.GetComponent<DraggableBox>().SetScale(scale_x * size, scale_y * size);
-        box.transform.SetParent(GameObject.Find("BoxContainer").transform);
-        box.GetComponent<DraggableBox>().SetPos(pos_x * width_space, pos_y);
+
+    }
+
+    DraggableBox DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
+    {
+        GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
+
+        DraggableBox box = boxObject.GetComponent<DraggableBox>();
+        box.SetScale(scale_x * slotAndBoxScaling * scaleWidth, scale_y * slotAndBoxScaling);
+        box.SetPos(pos_x * scaleWidth, pos_y);
+        return box;
+        
     }
 
     public void CreateSlots(JSONReader.AminoAcid[] aminoAcids)
     {
 
-        foreach(JSONReader.AminoAcid a in aminoAcids)
+        foreach(JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
-            if (a.slots.Length > 0)
+            if (aminoAcidChar.slots.Length > 0)
             {
-                //print(a.AminoAcidName + " has mass: " + a.Mass);
-                DrawBox(a.Mass + space_boxes, box_y, a.Mass, a.Mass);
-                space_boxes += 20;
-
-                foreach (JSONReader.Slot s in a.slots)
+                DraggableBox box = DrawBox(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+                rightBoxMargin += 20;
+                foreach (JSONReader.Slot slot in aminoAcidChar.slots)
                 {
-                    //Debug.Log("x1: " + s.x1 + " x2: " + s.x2);
+                    box.startIndexes.Add(slot.start_peak_index);
+                    box.endIndexes.Add(slot.end_peak_index);
+
                 }
             }
         }  
@@ -79,8 +91,8 @@ public class GameController : MonoBehaviour
 
         List<Vector3> pos = new List<Vector3>
         {
-            new Vector3(-500, peaks_y, 0),
-            new Vector3(1000, peaks_y, 0)
+            new Vector3(-500, peaksYPos, 0),
+            new Vector3(1000, peaksYPos, 0)
         };
 
         l.startWidth = 0.1f;

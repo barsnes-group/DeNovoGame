@@ -1,18 +1,18 @@
 [
   { "AminoAcidName": "A", "Mass": 4.86, "Slots": [] },
   { "AminoAcidName": "R", "Mass": 10.679, "Slots": [] },
-  { "AminoAcidName": "N", "Mass": 7.802, "Slots": [{ "start peak index": 6, "start peak coord": 70.571, "end peak index": 7, "end peak coord": 78.372, "intensity": [7.966, 32.643] }] },
+  { "AminoAcidName": "N", "Mass": 7.802, "Slots": [{ "start_peak_index": 6, "start_peak_coord": 70.571, "end_peak_index": 7, "end_peak_coord": 78.372, "intensity": [7.966, 32.643] }] },
   {
     "AminoAcidName": "D",
     "Mass": 7.869,
     "Slots": [
-      { "start peak index": 6, "start peak coord": 70.571, "end peak index": 8, "end peak coord": 78.441, "intensity": [7.966, 13.646] },
-      { "start peak index": 9, "start peak coord": 86.108, "end peak index": 10, "end peak coord": 93.977, "intensity": [12.762, 13.467] },
-      { "start peak index": 5, "start peak coord": 70.503, "end peak index": 7, "end peak coord": 78.372, "intensity": [23.525, 32.643] }
+      { "start_peak_index": 6, "start_peak_coord": 70.571, "end_peak_index": 8, "end_peak_coord": 78.441, "intensity": [7.966, 13.646] },
+      { "start_peak_index": 9, "start_peak_coord": 86.108, "end_peak_index": 10, "end_peak_coord": 93.977, "intensity": [12.762, 13.467] },
+      { "start_peak_index": 5, "start_peak_coord": 70.503, "end_peak_index": 7, "end_peak_coord": 78.372, "intensity": [23.525, 32.643] }
     ]
   },
   { "AminoAcidName": "C", "Mass": 7.047, "Slots": [] },
-  { "AminoAcidName": "E", "Mass": 8.828, "Slots": [{ "start peak index": 4, "start peak coord": 61.675, "end peak index": 5, "end peak coord": 70.503, "intensity": [18.729, 23.525] }] },
+  { "AminoAcidName": "E", "Mass": 8.828, "Slots": [{ "start_peak_index": 4, "start_peak_coord": 61.675, "end_peak_index": 5, "end_peak_coord": 70.503, "intensity": [18.729, 23.525] }] },
   { "AminoAcidName": "Q", "Mass": 8.761, "Slots": [] },
   { "AminoAcidName": "G", "Mass": 3.901, "Slots": [] },
   { "AminoAcidName": "H", "Mass": 9.376, "Slots": [] },
@@ -20,16 +20,16 @@
     "AminoAcidName": "I/L",
     "Mass": 7.736,
     "Slots": [
-      { "start peak index": 9, "start peak coord": 86.108, "end peak index": 7, "end peak coord": 78.372, "intensity": [12.762, 32.643] },
-      { "start peak index": 1, "start peak coord": 39.426, "end peak index": 2, "end peak coord": 47.162, "intensity": [17.142, 28.634] },
-      { "start peak index": 4, "start peak coord": 61.675, "end peak index": 3, "end peak coord": 53.939, "intensity": [18.729, 35.171] }
+      { "start_peak_index": 9, "start_peak_coord": 86.108, "end_peak_index": 7, "end_peak_coord": 78.372, "intensity": [12.762, 32.643] },
+      { "start_peak_index": 1, "start_peak_coord": 39.426, "end_peak_index": 2, "end_peak_coord": 47.162, "intensity": [17.142, 28.634] },
+      { "start_peak_index": 4, "start_peak_coord": 61.675, "end_peak_index": 3, "end_peak_coord": 53.939, "intensity": [18.729, 35.171] }
     ]
   },
   { "AminoAcidName": "K", "Mass": 8.763, "Slots": [] },
   { "AminoAcidName": "M", "Mass": 8.965, "Slots": [] },
   { "AminoAcidName": "F", "Mass": 10.061, "Slots": [] },
   { "AminoAcidName": "P", "Mass": 6.639, "Slots": [] },
-  { "AminoAcidName": "S", "Mass": 5.954, "Slots": [{ "start peak index": 10, "start peak coord": 93.977, "end peak index": 11, "end peak coord": 99.931, "intensity": [13.467, 23.162] }] },
+  { "AminoAcidName": "S", "Mass": 5.954, "Slots": [{ "start_peak_index": 10, "start_peak_coord": 93.977, "end_peak_index": 11, "end_peak_coord": 99.931, "intensity": [13.467, 23.162] }] },
   { "AminoAcidName": "T", "Mass": 6.913, "Slots": [] },
   { "AminoAcidName": "U", "Mass": 10.327, "Slots": [] },
   { "AminoAcidName": "W", "Mass": 12.73, "Slots": [] },
@@ -38,8 +38,8 @@
     "AminoAcidName": "V",
     "Mass": 6.777,
     "Slots": [
-      { "start peak index": 1, "start peak coord": 39.426, "end peak index": 0, "end peak coord": 32.648, "intensity": [17.142, 27.481] },
-      { "start peak index": 2, "start peak coord": 47.162, "end peak index": 3, "end peak coord": 53.939, "intensity": [28.634, 35.171] }
+      { "start_peak_index": 1, "start_peak_coord": 39.426, "end_peak_index": 0, "end_peak_coord": 32.648, "intensity": [17.142, 27.481] },
+      { "start_peak_index": 2, "start_peak_coord": 47.162, "end_peak_index": 3, "end_peak_coord": 53.939, "intensity": [28.634, 35.171] }
     ]
   }
 ]
