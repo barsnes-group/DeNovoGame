@@ -6,11 +6,12 @@ public class GameController : MonoBehaviour
     public TextAsset CsvFile;
     public GameObject boxPrefab;
     public GameObject slotPrefab;
-    [Header("sizes")]
+    [Header("Sizes")]
     public float size;
     public float width_space;
-    public float x_offset;
-    public float y_offset;
+    public float peaks_y = 15;
+    public float box_y = 15;
+    public float space_boxes = 10;
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            DrawPeaks(xCoord, 5,1,1);
+            DrawPeaks(xCoord, peaks_y, 0.2f,1);
 
         }
 
@@ -33,9 +34,9 @@ public class GameController : MonoBehaviour
     {
 
         GameObject slot = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        slot.GetComponent<Slot>().SetScale(scale_x, scale_y);
-        slot.GetComponent<Slot>().SetPos(pos_x, pos_y, x_offset, y_offset);
+        slot.GetComponent<Slot>().SetScale(scale_x * size, scale_y * size);
         slot.transform.SetParent(GameObject.Find("SlotContainer").transform);
+        slot.GetComponent<Slot>().SetPos(pos_x * width_space, pos_y);
         //get int fra slot og sett farge
 
 
@@ -44,24 +45,21 @@ public class GameController : MonoBehaviour
     void DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
     {
         GameObject box = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        box.GetComponent<DraggableBox>().SetScale(scale_x, scale_y);
-        box.GetComponent<DraggableBox>().SetPos(pos_x, pos_y, x_offset, y_offset);
+        box.GetComponent<DraggableBox>().SetScale(scale_x * size, scale_y * size);
         box.transform.SetParent(GameObject.Find("BoxContainer").transform);
-        //Renderer rend = box.GetComponent<Renderer>();
-        //rend.material.color = Color.yellow;
+        box.GetComponent<DraggableBox>().SetPos(pos_x * width_space, pos_y);
     }
 
     public void CreateSlots(JSONReader.AminoAcid[] aminoAcids)
     {
 
-        int n = 0;
         foreach(JSONReader.AminoAcid a in aminoAcids)
         {
             if (a.slots.Length > 0)
             {
                 //print(a.AminoAcidName + " has mass: " + a.Mass);
-                DrawBox(a.Mass + n, 10, a.Mass, a.Mass);
-                n += 20;
+                DrawBox(a.Mass + space_boxes, box_y, a.Mass, a.Mass);
+                space_boxes += 20;
 
                 foreach (JSONReader.Slot s in a.slots)
                 {
@@ -76,13 +74,16 @@ public class GameController : MonoBehaviour
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
 
+        l.transform.SetParent(GameObject.Find("SlotContainer").transform);
+
+
         List<Vector3> pos = new List<Vector3>
         {
-            new Vector3(-500, 0, 0),
-            new Vector3(1000, 0, 0)
+            new Vector3(-500, peaks_y, 0),
+            new Vector3(1000, peaks_y, 0)
         };
 
-        l.startWidth = 0.3f;
+        l.startWidth = 0.1f;
         l.SetPositions(pos.ToArray());
         l.useWorldSpace = true;
     }

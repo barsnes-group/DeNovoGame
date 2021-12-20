@@ -5,23 +5,30 @@ import os
 import matplotlib.pyplot as plt
 import argparse
 
-parser = argparse.ArgumentParser() 
-parser.add_argument("-p", "--percentile", help="Must be a number. Choose the percentile threshold for the intensity of the peaks.", type=float, default=85)
-parser.add_argument("-t", "--threshold", help="Must be a number. Choose the threshold for the ", type=float, default=0.02)
+parser = argparse.ArgumentParser()
+parser.add_argument("-p", "--percentile",
+                    help="Must be a number. Choose the percentile threshold for the intensity of the peaks.", type=float, default=85)
+parser.add_argument("-t", "--threshold",
+                    help="Must be a number. Choose the threshold for the ", type=float, default=0.02)
 args = parser.parse_args()
 
 
 class Slot:
-    def __init__(self, start, end, intensity: list) -> None:
+    def __init__(self, peak_1, peak_2, start, end, intensity: list) -> None:
+        self.peak_1 = peak_1
+        self.peak_2 = peak_2
         self.start = start
         self.end = end
         self.intensity = intensity
 
     def __repr__(self) -> str:
-        return (f"Slot: x1: {round(self.start,3)}, x2: {round(self.end,3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
+        return (f"peak 1: {self.peak_1}, peak 2: {self.peak_2}, x1: {round(self.start,3)}, x2: {round(self.end,3)}, intensity: {[round(intensity,3) for intensity in self.intensity]}")
 
-    def __dict__(self):
-        new_dict = {"x1": round(self.start, 3),
+    def to_dict(self):
+        new_dict = {
+                    "peak 1": {self.peak_1}, 
+                    "peak 2": {self.peak_2},
+                    "x1": round(self.start, 3),
                     "x2": round(self.end, 3),
                     "intensity": [round(intensity, 3) for intensity in self.intensity]
                     }
@@ -29,8 +36,8 @@ class Slot:
 
     def width(self) -> float:
         return abs(self.end - self.start)
-
-
+        
+        
 amino_acids = {
     "A": 71.037114,
     "R": 156.101111,
@@ -78,7 +85,7 @@ def playing_board_file(filename_out: str, list_of_filtered_data: list):
         out.close()
 
 
-def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[str, Slot]":
+def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[str, list[Slot]]":
     '''
     create Slot object
     get all matching slots for each amino acid
@@ -90,8 +97,7 @@ def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[
     normalize_slots(all_slots)
 
     for amino_acid in amino_acids.keys():
-        matching_slots = get_all_matching_slots(
-            amino_acids.get(amino_acid), all_slots, threshold)
+        matching_slots = get_all_matching_slots(amino_acids.get(amino_acid), all_slots, threshold)
         amino_acid_to_slots[amino_acid] = matching_slots
     return amino_acid_to_slots
 
@@ -105,8 +111,9 @@ def list_of_Slot_coord(dict_of_Slots) -> "list[tuple]":
     for slot_list in dict_of_Slots.values():
         if len(slot_list) != 0:
             for slot in slot_list:
-                coord.append((slot.start, slot.intensity[0]))
-                coord.append((slot.end, slot.intensity[1]))
+                coord.append(
+                    (round(slot.start, 3), round(slot.intensity[0], 3)))
+                coord.append((round(slot.end, 3), round(slot.intensity[1], 3)))
     coord = list(dict.fromkeys(coord))
     return coord
 
@@ -131,7 +138,7 @@ def make_slot_objects(coordinates: list) -> "list[Slot]":
     slots = []
     for i, (first_valueX, first_valueY) in enumerate(coordinates):
         for(second_valueX, second_valueY) in coordinates[i+1:]:
-            slot = Slot(first_valueX, second_valueX, [
+            slot = Slot(-1, -1, first_valueX, second_valueX, [
                         first_valueY, second_valueY])
             slots.append(slot)
     return slots
@@ -213,15 +220,32 @@ def write_to_json(slot_dict: dict, filename: str):
         a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
         slots = []
         for e in slot:
-            slots.append(e.__dict__())
+            slots.append(e.to_dict())
         a_a_dict["Slots"] = slots
         list_of_amino_acids.append(a_a_dict)
-        
+
     with open(filename, 'w') as out:
         json.dump(list_of_amino_acids, out)
-        
-    
 
+def sorted_peaks(dict: "dict"):
+    '''
+    make a list of sorted unique peaks from dictionary of Slots
+    return a map where the peak points at an index
+    '''
+    peaks = []
+    for slots in dict.values():
+        for slot in slots:
+            peaks.append(float(slot.start))
+            peaks.append(float(slot.end))
+    peaks = sorted(peaks)
+    #remove duplicates
+    peaks = list(dict.fromkeys(peaks))
+    peaks_index = {}
+    for index, peak in enumerate(peaks):
+        peaks_index[peak] = index
+    return peaks_index
+    
+    
 if __name__ == "__main__":
     cwd = os.getcwd()  # get the current working directory (cwd)
     #coordinates = read_file(f'{cwd}/selected_spectra.mgf')
@@ -229,15 +253,15 @@ if __name__ == "__main__":
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, args.percentile)
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
+    print(sorted_peaks(slot_dict))
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
-    print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
-    #pprint.pprint(slot_dict)
-    #pprint.pprint(filtered_Slot_coord)
+    print(
+        f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
+    # pprint.pprint(slot_dict)
+    # pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
-    playing_board_file(f'{cwd}/Assets/Data/playing_board.csv', filtered_Slot_coord)
+    playing_board_file(
+        f'{cwd}/Assets/Data/playing_board.csv', filtered_Slot_coord)
     write_to_json(slot_dict, f'{cwd}/Assets/Data/aa_to_slots.json')
-
-
-

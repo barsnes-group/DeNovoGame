@@ -34,17 +34,17 @@ public class JSONReader : MonoBehaviour
 
     void Start()
     {
-        GameControllerObject = GameObject.Find("GameController");
+        GameControllerObject = gameObject;
         gc = GameControllerObject.GetComponent<GameController>();
         AminoAcid[] aminoAcids = JsonConvert.DeserializeObject<AminoAcid[]>(jsonString.text);
         //createSlots(slot1)
         gc.CreateSlots(aminoAcids);
 
-        foreach (AminoAcid s in aminoAcids)
-        {
-            Debug.Log(s.AminoAcidName + s.Mass );
+        //foreach (AminoAcid s in aminoAcids)
+        //{
+        //    Debug.Log(s.AminoAcidName + s.Mass );
 
-        }
+        //}
 
     }
 

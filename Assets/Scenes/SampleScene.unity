@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146717902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,9 +334,10 @@ MonoBehaviour:
   boxPrefab: {fileID: 579977173573170919, guid: c8c6dac98996f45febecb9576b932d8c, type: 3}
   slotPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   size: 0.5
-  width_space: 0.2
-  x_offset: 0
-  y_offset: 0
+  width_space: 0.4
+  peaks_y: 5
+  box_y: 15
+  space_boxes: 3
 --- !u!114 &1943325020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,8 +518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ad4bef68c754d0e9a913b1091d434c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 0
-  width_space: 0
 --- !u!61 &7554153867389100607
 BoxCollider2D:
   m_ObjectHideFlags: 0
