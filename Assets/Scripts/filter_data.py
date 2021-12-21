@@ -252,6 +252,7 @@ if __name__ == "__main__":
     coordinates = percentile_sorted(coordinates, args.percentile)
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
+    filtered_Slot_coord = sorted(filtered_Slot_coord);
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")

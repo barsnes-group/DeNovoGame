@@ -22,6 +22,13 @@ public class DraggableBox : MonoBehaviour
     void OnMouseDown()
     {
         _dragOffset = transform.position - GetMousePos();
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.SetHighlight(startIndexes, endIndexes, true);
+    }
+    private void OnMouseUp()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.SetHighlight(startIndexes, endIndexes, false);
     }
 
     void OnMouseDrag()

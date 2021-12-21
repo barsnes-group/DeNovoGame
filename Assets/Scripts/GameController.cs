@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -30,6 +31,23 @@ public class GameController : MonoBehaviour
 
         }
 
+    }
+
+    internal void SetHighlight(List<int> startIndexes, List<int> endIndexes, bool enabled)
+    {
+        foreach (int i in startIndexes)
+        {
+            Slot slot = GetPeak(i).GetComponent<Slot>();
+            if (enabled) { slot.highlight(); } else { slot.defaultColor(); }
+
+        }
+        foreach (int i in endIndexes)
+        {
+            Slot slot = GetPeak(i).GetComponent<Slot>();
+            if (enabled) { slot.highlight(); } else { slot.defaultColor(); }
+
+
+        }
     }
 
     Slot DrawPeaks(float pos_x, float pos_y, float scale_x, float scale_y)
