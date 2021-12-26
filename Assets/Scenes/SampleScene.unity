@@ -336,7 +336,7 @@ MonoBehaviour:
   slotAndBoxScaling: 0.5
   peaksYPos: 5
   boxYPos: 15
-  scaleWidth: 1
+  scaleWidth: 0.5
   SlotContainer: {fileID: 146717902}
 --- !u!114 &1943325020
 MonoBehaviour:
