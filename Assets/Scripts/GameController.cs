@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour
 {
     public TextAsset CsvFile;
     public GameObject boxPrefab;
-    public GameObject slotPrefab;
+    public GameObject peakPrefab;
     [Header("Sizes")]
     public float slotAndBoxScaling;
     public float peaksYPos = 15;
@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     {
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
+        float previousX = 0;
         for (int i = 0; i <= array.Length-1; i++)
         {
             string[] rows = array[i].Split(',');
@@ -27,7 +28,8 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            DrawPeaks(xCoord, peaksYPos, 0.2f,1);
+            createPeakPrefab(xCoord, peaksYPos, 0.2f,1, xCoord - previousX, i);
+            previousX = xCoord;
 
         }
 
@@ -37,32 +39,27 @@ public class GameController : MonoBehaviour
     {
         foreach (int i in startIndexes)
         {
-            Slot slot = GetPeak(i).GetComponent<Slot>();
-            if (enabled) { slot.highlight(); } else { slot.defaultColor(); }
-
+            Peak slot = GetPeak(i).GetComponent<Peak>();
+            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
         }
         foreach (int i in endIndexes)
         {
-            Slot slot = GetPeak(i).GetComponent<Slot>();
-            if (enabled) { slot.highlight(); } else { slot.defaultColor(); }
-
+            Peak slot = GetPeak(i).GetComponent<Peak>();
+            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
 
         }
     }
-
-    Slot DrawPeaks(float pos_x, float pos_y, float scale_x, float scale_y)
+    
+    Peak createPeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
     {
+        GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        peakObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
 
-        GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        slotObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
-
-        Slot slot = slotObject.GetComponent<Slot>();
-        slot.SetScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
-        slot.SetPos(pos_x * scaleWidth, pos_y);
-        return slot;
-        //get int fra slot og sett farge
-
-
+        Peak peak = peakObject.GetComponent<Peak>();
+        peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
+        peak.SetPos(pos_x * scaleWidth, pos_y);
+        peak.SetText(index+"\n"+width_to_prev.ToString());
+        return peak;
     }
 
     public GameObject GetPeak(int number)
@@ -70,33 +67,34 @@ public class GameController : MonoBehaviour
         return SlotContainer.transform.GetChild(number).gameObject;
     }
 
-    DraggableBox DrawBox(float pos_x, float pos_y, float scale_x, float scale_y)
+    DraggableBox createBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
     {
         GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
 
         DraggableBox box = boxObject.GetComponent<DraggableBox>();
-        box.SetScale(scale_x * slotAndBoxScaling * scaleWidth, scale_y * slotAndBoxScaling);
-        box.SetPos(pos_x * scaleWidth, pos_y);
+        box.width = scale_x.ToString();
+        box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
+        box.SetPos(pos_x * scaleWidth, pos_y); //*slotAndBoxScaling
         return box;
         
     }
 
-    public void CreateSlots(JSONReader.AminoAcid[] aminoAcids)
+    public void CreateBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
 
         foreach(JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
             if (aminoAcidChar.slots.Length > 0)
             {
-                DraggableBox box = DrawBox(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
-                rightBoxMargin += 20;
+                DraggableBox box = createBoxPrefab(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+                rightBoxMargin += 15;
                 foreach (JSONReader.Slot slot in aminoAcidChar.slots)
                 {
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
-
                 }
+                //box.SetText(box.startIndexes.ToString());
             }
         }  
     }
