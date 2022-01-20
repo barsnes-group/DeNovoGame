@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637756335280000000
-    m_Hash: 1750080714
+      ticks: 637782848570000000
+    m_Hash: 1721493376
   m_LockFileStatus:
     m_FilePath: /Users/ingridingrid/Unity/DeNovoGame2/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637756335280000000
-    m_Hash: 3353875834
+      ticks: 637782848570000000
+    m_Hash: 3807419956
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -106,6 +106,7 @@ m_ResolvedPackages:
     - 5.0.8
     - 5.0.9
     - 5.0.10
+    - 5.1.0
     - 6.0.0-pre.1
     - 6.0.0-pre.2
     - 6.0.1
@@ -314,6 +315,7 @@ m_ResolvedPackages:
     - 4.1.1
     - 4.1.2
     - 4.1.3
+    - 4.2.0
     - 5.0.0-pre.1
     - 5.0.0-pre.2
     - 5.0.1
@@ -512,6 +514,7 @@ m_ResolvedPackages:
     - 5.1.5
     - 5.1.6
     - 5.1.7
+    - 5.2.0
     - 6.0.0-pre.1
     - 6.0.0-pre.2
     - 6.0.0
@@ -689,9 +692,11 @@ m_ResolvedPackages:
     - 1.14.1
     - 1.14.4
     - 1.14.7
+    - 1.14.9
     - 1.15.1
     - 1.15.4
     - 1.15.7
+    - 1.15.9
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -706,6 +711,7 @@ m_ResolvedPackages:
     - 1.15.1
     - 1.15.4
     - 1.15.7
+    - 1.15.9
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -716,7 +722,7 @@ m_ResolvedPackages:
     - 2.1.0-preview.3
     - 2.1.0-preview.5
     - 2.1.0-preview.6
-    verified: 1.15.7
+    verified: 1.15.9
   dependencies:
   - name: com.unity.nuget.newtonsoft-json
     version: 2.0.0
@@ -810,9 +816,13 @@ m_ResolvedPackages:
     - 3.0.5
     - 3.0.6
     - 3.0.7
+    - 3.0.9
+    - 3.0.10
     compatible:
     - 3.0.7
-    verified: 3.0.7
+    - 3.0.9
+    - 3.0.10
+    verified: 3.0.10
   dependencies:
   - name: com.unity.ext.nunit
     version: 1.0.6
@@ -840,12 +850,12 @@ m_ResolvedPackages:
   unityLifecycle:
     version: 3.0.7
     nextVersion: 
-- packageId: com.unity.ide.visualstudio@2.0.11
+- packageId: com.unity.ide.visualstudio@2.0.12
   testable: 0
   isDirectDependency: 1
-  version: 2.0.11
+  version: 2.0.12
   source: 1
-  resolvedPath: /Users/ingridingrid/Unity/DeNovoGame2/Library/PackageCache/com.unity.ide.visualstudio@2.0.11
+  resolvedPath: /Users/ingridingrid/Unity/DeNovoGame2/Library/PackageCache/com.unity.ide.visualstudio@2.0.12
   assetPath: Packages/com.unity.ide.visualstudio
   name: com.unity.ide.visualstudio
   displayName: Visual Studio Editor
@@ -904,13 +914,13 @@ m_ResolvedPackages:
     capabilities: 7
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 637613656180000000
+  datePublishedTicks: 637720564750000000
   documentationUrl: 
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.ide.visualstudio.git
-    revision: 680e06d94ffca728223ae2cb14bb919cd354e2c1
+    revision: 8d436ff053b9c59677b5e9799208143553cd02d9
     path: 
   unityLifecycle:
     version: 2.0.11
@@ -3696,6 +3706,7 @@ m_ResolvedPackages:
     - 2.0.1
     - 2.0.2
     - 2.1.0
+    - 2.1.1
     - 3.0.0
     - 3.0.1
     - 4.0.0
@@ -3703,6 +3714,7 @@ m_ResolvedPackages:
     - 4.0.2
     - 4.0.3
     - 4.0.4
+    - 4.1.0
     - 5.0.0-pre.1
     - 5.0.0-pre.2
     - 5.0.0
@@ -3961,14 +3973,16 @@ m_ResolvedPackages:
     - 1.6.1
     - 1.6.2
     - 1.6.3
+    - 1.6.4
     - 1.7.0-pre.1
     compatible:
     - 1.6.0
     - 1.6.1
     - 1.6.2
     - 1.6.3
+    - 1.6.4
     - 1.7.0-pre.1
-    verified: 1.6.3
+    verified: 1.6.4
   dependencies:
   - name: com.unity.mathematics
     version: 1.2.1

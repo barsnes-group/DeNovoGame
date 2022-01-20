@@ -33,7 +33,6 @@ public class JSONReader : MonoBehaviour
 
     }
 
-
     void Start()
     {
         GameControllerObject = gameObject;
