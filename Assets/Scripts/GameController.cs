@@ -39,12 +39,12 @@ public class GameController : MonoBehaviour
     {
         foreach (int i in startIndexes)
         {
-            Peak slot = GetPeak(i).GetComponent<Peak>();
+            Peak slot = GetPeak(i);
             if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
         }
         foreach (int i in endIndexes)
         {
-            Peak slot = GetPeak(i).GetComponent<Peak>();
+            Peak slot = GetPeak(i);
             if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
 
         }
@@ -62,9 +62,16 @@ public class GameController : MonoBehaviour
         return peak;
     }
 
-    public GameObject GetPeak(int number)
+    public Peak GetPeak(int index)
     {
-        return SlotContainer.transform.GetChild(number).gameObject;
+        GameObject peakIndex = SlotContainer.transform.GetChild(index).gameObject;
+        Peak peak = peakIndex.GetComponent<Peak>();
+
+        if (peakIndex == null || peak == null)
+        {
+            throw new Exception("peak index or peak = null");
+        }
+        return peak;
     }
 
     DraggableBox createBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
@@ -104,8 +111,7 @@ public class GameController : MonoBehaviour
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
 
-        l.transform.SetParent(GameObject.Find("SlotContainer").transform);
-
+        //l.transform.SetParent(GameObject.Find("SlotContainer").transform);
 
         List<Vector3> pos = new List<Vector3>
         {

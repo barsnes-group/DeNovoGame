@@ -37,7 +37,6 @@ public class DraggableBox : MonoBehaviour
 
 
 
-
     void OnMouseDown()
     {
         print("box can be placed in " + indexesToString());
