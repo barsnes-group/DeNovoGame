@@ -11,7 +11,7 @@ public class JSONReader : MonoBehaviour
 
 
     [System.Serializable]
-    public class Slot
+    public class SerializedSlot
     {
         public int start_peak_index;
         public float start_peak_coord;
@@ -29,7 +29,7 @@ public class JSONReader : MonoBehaviour
     {
         public string AminoAcidName;
         public float Mass;
-        public Slot[] slots;
+        public SerializedSlot[] slots;
 
     }
 
@@ -38,15 +38,7 @@ public class JSONReader : MonoBehaviour
         GameControllerObject = gameObject;
         gc = GameControllerObject.GetComponent<GameController>();
         AminoAcid[] aminoAcids = JsonConvert.DeserializeObject<AminoAcid[]>(jsonString.text);
-        //createSlots(slot1)
         gc.CreateBoxes(aminoAcids);
-
-        //foreach (AminoAcid s in aminoAcids)
-        //{
-        //    Debug.Log(s.AminoAcidName + s.Mass );
-
-        //}
-
     }
 
 }

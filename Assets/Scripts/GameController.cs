@@ -28,11 +28,9 @@ public class GameController : MonoBehaviour
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            createPeakPrefab(xCoord, peaksYPos, 0.2f,1, xCoord - previousX, i);
+            CreatePeakPrefab(xCoord, peaksYPos, 0.2f,1, xCoord - previousX, i);
             previousX = xCoord;
-
         }
-
     }
 
     internal void SetHighlight(List<int> startIndexes, List<int> endIndexes, bool enabled)
@@ -50,7 +48,7 @@ public class GameController : MonoBehaviour
         }
     }
     
-    Peak createPeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
+    Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
     {
         GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         peakObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
@@ -61,6 +59,12 @@ public class GameController : MonoBehaviour
         peak.SetText(index+"\n"+width_to_prev.ToString());
         return peak;
     }
+
+    internal void UpdateScore(DraggableBox draggableBox)
+    {
+        throw new NotImplementedException();
+    }
+
 
     public Peak GetPeak(int index)
     {
@@ -74,7 +78,7 @@ public class GameController : MonoBehaviour
         return peak;
     }
 
-    DraggableBox createBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
+    DraggableBox CreateBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
     {
         GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
@@ -94,14 +98,15 @@ public class GameController : MonoBehaviour
         {
             if (aminoAcidChar.slots.Length > 0)
             {
-                DraggableBox box = createBoxPrefab(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+                DraggableBox box = CreateBoxPrefab(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
                 rightBoxMargin += 15;
-                foreach (JSONReader.Slot slot in aminoAcidChar.slots)
+                foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
                 {
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
+                    box.startCoord.Add(slot.start_peak_coord);
+                    box.endCoord.Add(slot.end_peak_coord);
                 }
-                //box.SetText(box.startIndexes.ToString());
             }
         }  
     }

@@ -9,13 +9,17 @@ public class DraggableBox : MonoBehaviour
 
     public List<int> startIndexes;
     public List<int> endIndexes;
+    public List<float> startCoord;
+    public List<float> endCoord;
+
     public string width;
 
     private Vector3 _dragOffset;
     private Camera _cam;
-
+    private Vector3 startPos;
     [SerializeField] private float _speed = 10;
     [SerializeField] private GameObject textObject;
+    private float boxToSlotTheshold = 5;
 
     void Awake()
     {
@@ -49,6 +53,29 @@ public class DraggableBox : MonoBehaviour
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         gameController.SetHighlight(startIndexes, endIndexes, false);
+        //check if close enough to start index, snap into position
+        foreach (int i in startIndexes)
+        {
+            Vector2 peakPos = gameController.GetPeak(i).transform.position;
+            if (Vector2.Distance(peakPos, transform.position) < boxToSlotTheshold)
+            {
+                SnapPosition(peakPos);
+                gameController.UpdateScore(this);
+                return;
+            }
+
+        }
+        ReturnToStartPos();
+    }
+
+    private void ReturnToStartPos()
+    {
+        transform.position = startPos;
+    }
+
+    private void SnapPosition(Vector2 peakPos)
+    {
+        transform.position = peakPos;
     }
 
     void OnMouseDrag()
@@ -73,6 +100,7 @@ public class DraggableBox : MonoBehaviour
     {
         Vector3 parent_transform = transform.parent.position;
         transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
+        startPos = transform.position;
     }
     private void Update()
     {
