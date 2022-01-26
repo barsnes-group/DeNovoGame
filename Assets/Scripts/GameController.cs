@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class GameController : MonoBehaviour
 {
     public TextAsset CsvFile;
     public GameObject boxPrefab;
     public GameObject peakPrefab;
+    public GameObject slotPrefab;
     [Header("Sizes")]
     public float slotAndBoxScaling;
     public float peaksYPos = 15;
@@ -33,6 +35,63 @@ public class GameController : MonoBehaviour
         }
     }
 
+    SlotDeserializer CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity)
+    {
+        GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
+        slotObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
+
+        SlotDeserializer slot = slotObject.GetComponent<SlotDeserializer>();
+        slot.SetScale(MathF.Abs(pos_x2-pos_x1), intensity);
+        slot.SetPos(pos_x1, pos_y);
+        return slot;
+    }
+
+    Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
+    {
+        GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        peakObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
+
+        Peak peak = peakObject.GetComponent<Peak>();
+        peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
+        peak.SetPos(pos_x * scaleWidth, pos_y);
+        peak.SetText(index + "\n" + width_to_prev.ToString());
+        return peak;
+    }
+
+    DraggableBox CreateBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
+    {
+        GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
+
+        DraggableBox box = boxObject.GetComponent<DraggableBox>();
+        box.width = scale_x.ToString();
+        box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
+        box.SetPos(pos_x * scaleWidth, pos_y); //*slotAndBoxScaling
+        return box;
+
+    }
+
+    internal void HighlightValidSlot(List<int> startIndexes, List<int> endIndexes, bool enabled)
+    {
+        // (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create)
+        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        {
+            Peak x1 = GetPeak(startAndEndIndexes.Item1);
+            Peak x2 = GetPeak(startAndEndIndexes.Item2);
+            Vector2 x1_pos = x1.transform.position;
+            Vector2 x2_pos = x2.transform.position;
+            if (enabled)
+            {
+                print("x1 & x2: " + x1_pos.x + ", " + x2_pos.x + "dist: " + MathF.Abs(x2_pos.x-x1_pos.x));
+                //tegn box mellom x1 og x2 koord
+                CreateSlotPrefab(x1_pos.x, x2_pos.x, peaksYPos, 10);
+            }
+        
+
+    
+        }
+    }
+
     internal void SetHighlight(List<int> startIndexes, List<int> endIndexes, bool enabled)
     {
         foreach (int i in startIndexes)
@@ -48,23 +107,10 @@ public class GameController : MonoBehaviour
         }
     }
     
-    Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
-    {
-        GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        peakObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
-
-        Peak peak = peakObject.GetComponent<Peak>();
-        peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
-        peak.SetPos(pos_x * scaleWidth, pos_y);
-        peak.SetText(index+"\n"+width_to_prev.ToString());
-        return peak;
-    }
-
     internal void UpdateScore(DraggableBox draggableBox)
     {
         throw new NotImplementedException();
     }
-
 
     public Peak GetPeak(int index)
     {
@@ -76,19 +122,6 @@ public class GameController : MonoBehaviour
             throw new Exception("peak index or peak = null");
         }
         return peak;
-    }
-
-    DraggableBox CreateBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
-    {
-        GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
-
-        DraggableBox box = boxObject.GetComponent<DraggableBox>();
-        box.width = scale_x.ToString();
-        box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
-        box.SetPos(pos_x * scaleWidth, pos_y); //*slotAndBoxScaling
-        return box;
-        
     }
 
     public void CreateBoxes(JSONReader.AminoAcid[] aminoAcids)
@@ -104,13 +137,10 @@ public class GameController : MonoBehaviour
                 {
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
-                    box.startCoord.Add(slot.start_peak_coord);
-                    box.endCoord.Add(slot.end_peak_coord);
                 }
             }
         }  
     }
-
 
     void DrawLine()
     {

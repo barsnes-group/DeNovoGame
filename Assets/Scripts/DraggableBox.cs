@@ -1,8 +1,9 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using System.Linq;
+using UnityEngine.UIElements;
 //https://gist.github.com/Matthew-J-Spencer/65aea3d55f1e2c6ccb2c3586bccbdbdb 
 public class DraggableBox : MonoBehaviour
 {
@@ -13,13 +14,13 @@ public class DraggableBox : MonoBehaviour
     public List<float> endCoord;
 
     public string width;
+    public float boxToSlotTheshold = 5;
 
     private Vector3 _dragOffset;
     private Camera _cam;
     private Vector3 startPos;
     [SerializeField] private float _speed = 10;
     [SerializeField] private GameObject textObject;
-    private float boxToSlotTheshold = 5;
 
     void Awake()
     {
@@ -46,6 +47,7 @@ public class DraggableBox : MonoBehaviour
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.HighlightValidSlot(startIndexes, endIndexes, true);
         gameController.SetHighlight(startIndexes, endIndexes, true);
     }
 
@@ -54,16 +56,21 @@ public class DraggableBox : MonoBehaviour
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         gameController.SetHighlight(startIndexes, endIndexes, false);
         //check if close enough to start index, snap into position
-        foreach (int i in startIndexes)
+        // (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create)
+
+        foreach (int peak in startIndexes)
         {
-            Vector2 peakPos = gameController.GetPeak(i).transform.position;
+            Vector2 peakPos = gameController.GetPeak(peak).transform.position;
+            //Vector2 startPeakPos = gameController.GetPeak(startAndEndIndexes.Item1).transform.position;
+            //Vector2 endPeakPos = gameController.GetPeak(startAndEndIndexes.Item2).transform.position;
+            //Vector2 absPeakPos = Mathf.Abs((startPeakPos - endPeakPos) / 2);
+
             if (Vector2.Distance(peakPos, transform.position) < boxToSlotTheshold)
             {
                 SnapPosition(peakPos);
-                gameController.UpdateScore(this);
+                //gameController.UpdateScore(this);
                 return;
             }
-
         }
         ReturnToStartPos();
     }
