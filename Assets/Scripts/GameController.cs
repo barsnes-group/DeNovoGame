@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public GameObject boxPrefab;
     public GameObject peakPrefab;
     public GameObject slotPrefab;
+    public List<Slot> allValidSlots;
     [Header("Sizes")]
     public float slotAndBoxScaling;
     public float peaksYPos = 15;
@@ -35,14 +36,14 @@ public class GameController : MonoBehaviour
         }
     }
 
-    SlotDeserializer CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity)
+    Slot CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity)
     {
         GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
-        slotObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
+        slotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
 
-        SlotDeserializer slot = slotObject.GetComponent<SlotDeserializer>();
+        Slot slot = slotObject.GetComponent<Slot>();
         slot.SetScale(MathF.Abs(pos_x2-pos_x1), intensity);
-        slot.SetPos(pos_x1, pos_y);
+        //slot.SetPos(pos_x1, pos_y);
         return slot;
     }
 
@@ -73,22 +74,33 @@ public class GameController : MonoBehaviour
 
     internal void HighlightValidSlot(List<int> startIndexes, List<int> endIndexes, bool enabled)
     {
-        // (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create)
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
-            Peak x1 = GetPeak(startAndEndIndexes.Item1);
-            Peak x2 = GetPeak(startAndEndIndexes.Item2);
-            Vector2 x1_pos = x1.transform.position;
-            Vector2 x2_pos = x2.transform.position;
+            Peak startPeak = GetPeak(startAndEndIndexes.Item1);
+            Peak endPeak = GetPeak(startAndEndIndexes.Item2);
+            Vector2 startPeakPos = startPeak.transform.position;
+            Vector2 endPeakPos = endPeak.transform.position;
             if (enabled)
             {
-                print("x1 & x2: " + x1_pos.x + ", " + x2_pos.x + "dist: " + MathF.Abs(x2_pos.x-x1_pos.x));
-                //tegn box mellom x1 og x2 koord
-                CreateSlotPrefab(x1_pos.x, x2_pos.x, peaksYPos, 10);
+                //draw valid slots, the height is the average intensity of the peaks
+                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, ((startPeak.intensity+endPeak.intensity)/2)/10);
             }
-        
+            else
+            {
+                ClearSlots();   
+            }
+        }
+    }
 
-    
+    private void ClearSlots()
+    {
+        GameObject container = GameObject.Find("ValidSlotsContainer");
+
+        allValidSlots = container.GetComponentsInChildren<Slot>().ToList();
+
+        foreach (Slot slot in allValidSlots)
+        {
+            Destroy(slot.gameObject);
         }
     }
 
@@ -124,6 +136,11 @@ public class GameController : MonoBehaviour
         return peak;
     }
 
+    internal void GetPeakIntensity()
+    {
+        throw new NotImplementedException();
+    }
+
     public void CreateBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
 
@@ -137,6 +154,14 @@ public class GameController : MonoBehaviour
                 {
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
+                    //add intensity to peaks
+                    Peak startPeak = GetPeak(slot.start_peak_index);
+                    Peak endPeak = GetPeak(slot.end_peak_index);
+                    float startPeakIntensity = slot.intensity[0];
+                    float endPeakIntensity = slot.intensity[1];
+                    startPeak.intensity = startPeakIntensity;
+                    endPeak.intensity = endPeakIntensity;
+
                 }
             }
         }  
@@ -145,9 +170,6 @@ public class GameController : MonoBehaviour
     void DrawLine()
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
-
-        //l.transform.SetParent(GameObject.Find("SlotContainer").transform);
-
         List<Vector3> pos = new List<Vector3>
         {
             new Vector3(-500, peaksYPos, 0),

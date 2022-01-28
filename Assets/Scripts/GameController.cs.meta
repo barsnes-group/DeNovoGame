@@ -6,7 +6,9 @@ MonoImporter:
   defaultReferences:
   - CsvFile: {fileID: 4900000, guid: d52ebc0d66f4e409bb917737273f5b87, type: 3}
   - boxPrefab: {fileID: 579977173573170919, guid: c8c6dac98996f45febecb9576b932d8c, type: 3}
-  - slotPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
+  - peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
+  - slotPrefab: {fileID: 579977173573170919, guid: 5d2e837c36324462db2591aa8b0429c6, type: 3}
+  - SlotContainer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -9,6 +9,8 @@ public class Peak : MonoBehaviour
     public GameObject textObject;
     public GameObject line;
 
+    public float intensity;
+
     public void SetImageScale(float scale_x, float scale_y)
     {
         line.transform.localScale = new Vector3(scale_x, scale_y, 0);

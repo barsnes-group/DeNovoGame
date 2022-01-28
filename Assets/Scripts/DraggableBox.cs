@@ -54,6 +54,7 @@ public class DraggableBox : MonoBehaviour
     private void OnMouseUp()
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.HighlightValidSlot(startIndexes, endIndexes, false);
         gameController.SetHighlight(startIndexes, endIndexes, false);
         //check if close enough to start index, snap into position
         // (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create)

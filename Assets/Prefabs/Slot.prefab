@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8279912526089599117}
   - component: {fileID: 3744303929149073090}
   - component: {fileID: 8041363399656947910}
-  - component: {fileID: 5155634506419000261}
+  - component: {fileID: 8732257083626916470}
   m_Layer: 0
   m_Name: Slot
   m_TagString: Untagged
@@ -113,7 +113,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5155634506419000261
+--- !u!114 &8732257083626916470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,12 +122,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 579977173573170919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf9063b97bad341e6bc2b4d247f67c74, type: 3}
+  m_Script: {fileID: 11500000, guid: 78d7438a487b648439d18cc72920cec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x1: 0
-  x2: 0
-  intensity: []
 --- !u!1 &1157266166136046853
 GameObject:
   m_ObjectHideFlags: 0
