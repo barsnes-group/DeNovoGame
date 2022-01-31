@@ -10,6 +10,9 @@ scopes = {
 	"last_search.83F126EB" = ""
 	"InspectorPreview.83F126EB" = "0"
 	"currentGroup.83F126EB" = "asset"
+	"last_search.7F95D817" = "nuget.newtonsoft-json"
+	"OpenInspectorPreview.7F95D817" = "0"
+	"currentGroup.7F95D817" = "scene"
 }
 providers = {
 	asset = {
@@ -47,10 +50,28 @@ providers = {
 		priority = 100
 		defaultAction = null
 	}
+	adb = {
+		active = false
+		priority = 2500
+		defaultAction = null
+	}
+	performance = {
+		active = false
+		priority = 100
+		defaultAction = null
+	}
 }
 recentSearches = [
+	"nuget.newtonsoft-json"
+	"com. unity. nuget. newtonsoft-json"
 ]
 searchItemFavorites = [
 ]
 savedSearchesSortOrder = 0
 showSavedSearchPanel = false
+expandedQueries = [
+]
+queryBuilder = false
+ignoredProperties = "id;name;classname;imagecontentshash"
+helperWidgetCurrentArea = "all"
+disabledIndexers = ""

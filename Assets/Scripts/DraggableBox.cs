@@ -49,6 +49,7 @@ public class DraggableBox : MonoBehaviour
     private void OnMouseUp()
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //@todo: get the index of the peaks that we drop the box in?
         gameController.SetHighlight(startIndexes, endIndexes, false);
     }
 

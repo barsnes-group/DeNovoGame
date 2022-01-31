@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Globalization;
 
 public class GameController : MonoBehaviour
 {
@@ -16,19 +17,27 @@ public class GameController : MonoBehaviour
     [SerializeField]
     GameObject SlotContainer;
 
+
+
     void Start()
     {
+        CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+        ci.NumberFormat.CurrencyDecimalSeparator = ".";
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
         float previousX = 0;
-        for (int i = 0; i <= array.Length-1; i++)
+        for (int i = 0; i <= array.Length - 1; i++)
         {
             string[] rows = array[i].Split(',');
+            if (rows[0].Length == 0)
+            {
+                continue;
+            }
 
-            float xCoord = float.Parse(rows[0]);
+            float xCoord = float.Parse(rows[0], NumberStyles.Any, ci);
             //float yCoord = float.Parse(rows[1]);
 
-            createPeakPrefab(xCoord, peaksYPos, 0.2f,1, xCoord - previousX, i);
+            createPeakPrefab(xCoord, peaksYPos, 0.2f, 1, xCoord - previousX, i);
             previousX = xCoord;
 
         }
@@ -37,19 +46,38 @@ public class GameController : MonoBehaviour
 
     internal void SetHighlight(List<int> startIndexes, List<int> endIndexes, bool enabled)
     {
-        foreach (int i in startIndexes)
+        if (enabled)
         {
-            Peak slot = GetPeak(i).GetComponent<Peak>();
-            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
-        }
-        foreach (int i in endIndexes)
-        {
-            Peak slot = GetPeak(i).GetComponent<Peak>();
-            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
+            for (int i = 0; i < SlotContainer.transform.childCount; i++)
+            {
+                Peak slot = GetPeak(i).GetComponent<Peak>();
+                slot.hideColor();
+            }
+            foreach (int i in startIndexes)
+            {
+                Peak slot = GetPeak(i).GetComponent<Peak>();
+                slot.Highlight();
+            }
+            foreach (int i in endIndexes)
+            {
+                Peak slot = GetPeak(i).GetComponent<Peak>();
+                slot.Highlight();
+
+            }
 
         }
+        else
+        {
+            for (int i = 0; i < SlotContainer.transform.childCount; i++)
+            {
+                Peak slot = GetPeak(i).GetComponent<Peak>();
+                slot.DefaultColor();
+            }
+
+        }
+
     }
-    
+
     Peak createPeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
     {
         GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
@@ -58,7 +86,7 @@ public class GameController : MonoBehaviour
         Peak peak = peakObject.GetComponent<Peak>();
         peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
         peak.SetPos(pos_x * scaleWidth, pos_y);
-        peak.SetText(index+"\n"+width_to_prev.ToString());
+        peak.SetText(index + "\n" + width_to_prev.ToString());
         return peak;
     }
 
@@ -66,6 +94,12 @@ public class GameController : MonoBehaviour
     {
         return SlotContainer.transform.GetChild(number).gameObject;
     }
+    public GameObject GetPeak(float pos_x)
+    {
+        //@todo: get peak using the pos_x to validate the right peak selected
+        return SlotContainer.transform.GetChild(1).gameObject;
+    }
+
 
     DraggableBox createBoxPrefab(float pos_x, float pos_y, float scale_x, float scale_y)
     {
@@ -77,13 +111,13 @@ public class GameController : MonoBehaviour
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
         box.SetPos(pos_x * scaleWidth, pos_y); //*slotAndBoxScaling
         return box;
-        
+
     }
 
     public void CreateBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
 
-        foreach(JSONReader.AminoAcid aminoAcidChar in aminoAcids)
+        foreach (JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
             if (aminoAcidChar.slots.Length > 0)
             {
@@ -96,7 +130,7 @@ public class GameController : MonoBehaviour
                 }
                 //box.SetText(box.startIndexes.ToString());
             }
-        }  
+        }
     }
 
 
@@ -104,7 +138,7 @@ public class GameController : MonoBehaviour
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
 
-        l.transform.SetParent(GameObject.Find("SlotContainer").transform);
+        //  l.transform.SetParent(GameObject.Find("SlotContainer").transform);
 
 
         List<Vector3> pos = new List<Vector3>

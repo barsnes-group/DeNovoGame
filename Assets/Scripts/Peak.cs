@@ -8,6 +8,8 @@ public class Peak : MonoBehaviour
 {
     public GameObject textObject;
     public GameObject line;
+     
+    
 
     public void SetImageScale
         (float scale_x, float scale_y)
@@ -23,14 +25,21 @@ public class Peak : MonoBehaviour
 
     internal void Highlight()
     {
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.black;
     }
 
     internal void DefaultColor()
     {
         gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.black;
     }
-
+    
+  internal void hideColor()
+     {
+          Color color = Color.black;
+          color.a = 0.2f;
+         gameObject.GetComponentInChildren<SpriteRenderer>().color = color;
+    }
+    
 
     internal void SetText(string text)
     {

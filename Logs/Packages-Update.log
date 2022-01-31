@@ -54,3 +54,69 @@ The following packages were updated:
   com.unity.2d.animation from version 7.0.1 to 7.0.2
   com.unity.2d.spriteshape from version 7.0.2 to 7.0.3
   com.unity.collab-proxy from version 1.13.5 to 1.15.1
+
+=== Thu Jan 20 15:56:23 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were removed:
+  com.unity.2d.animation@7.0.2
+  com.unity.2d.pixel-perfect@5.0.1
+  com.unity.2d.psdimporter@6.0.1
+  com.unity.2d.sprite@1.0.0
+  com.unity.2d.spriteshape@7.0.3
+  com.unity.2d.tilemap@1.0.0
+  com.unity.mobile.android-logcat@1.2.3
+  com.unity.mobile.notifications@1.4.2
+
+=== Thu Jan 20 17:25:39 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were added:
+  com.unity.ugui@1.0.0
+The following packages were updated:
+  com.unity.collab-proxy from version 1.15.9 to 1.15.1
+  com.unity.ide.rider from version 3.0.10 to 3.0.7
+  com.unity.ide.visualstudio from version 2.0.14 to 2.0.11
+  com.unity.test-framework from version 1.1.30 to 1.1.29
+  com.unity.timeline from version 1.6.3 to 1.6.2
+  com.unity.visualscripting from version 1.7.6 to 1.7.5
+
+=== Thu Jan 20 18:45:49 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were updated:
+  com.unity.ide.rider from version 3.0.10 to 3.0.7
+
+=== Thu Jan 20 19:00:50 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were added:
+  com.unity.ugui@1.0.0
+
+=== Thu Jan 20 19:01:58 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were added:
+  com.unity.ugui@1.0.0
+
+=== Thu Jan 20 19:04:00 2022
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.collab-proxy from version 1.15.1 to 1.15.7
+  com.unity.ide.rider from version 3.0.7 to 3.0.9
+  com.unity.ide.visualstudio from version 2.0.11 to 2.0.12
+  com.unity.timeline from version 1.6.2 to 1.6.3
+  com.unity.visualscripting from version 1.7.5 to 1.7.6

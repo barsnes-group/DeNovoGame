@@ -332,7 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CsvFile: {fileID: 4900000, guid: d52ebc0d66f4e409bb917737273f5b87, type: 3}
   boxPrefab: {fileID: 579977173573170919, guid: c8c6dac98996f45febecb9576b932d8c, type: 3}
-  peakPrefab: {fileID: 0}
+  peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   slotAndBoxScaling: 0.4
   peaksYPos: 5
   boxYPos: 15
@@ -503,7 +503,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &3881816199750541080

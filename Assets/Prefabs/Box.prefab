@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startIndexes: 
   endIndexes: 
+  width: 
   _speed: 100
   textObject: {fileID: 1157266166136046853}
 --- !u!1 &1157266166136046853
