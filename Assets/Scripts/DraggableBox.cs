@@ -145,21 +145,20 @@ public class DraggableBox : MonoBehaviour
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
 
-    internal void sortIndexes()
+    internal void SwitchStartAndEndIndexes()
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        //switch the start and end index if the start index is bigger than the end index
+        for (int i = 0; i < startIndexes.Count(); i++)
         {
-            int startPeakIndex = startAndEndIndexes.Item1;
-            int endPeakIndex = startAndEndIndexes.Item2;
-
-            if (startPeakIndex > endPeakIndex)
+            if (startIndexes[i] > endIndexes[i])
             {
-                int temp = startPeakIndex;
-                endPeakIndex = startPeakIndex;
-                startPeakIndex = temp;
-            }
+                print("switch startindex: " + startIndexes[i] + " endindex: " + endIndexes[i]);
+                int temp = endIndexes[i];
+                endIndexes[i] = startIndexes[i];
+                startIndexes[i] = temp;
+                print("switched startindex: " + startIndexes[i] + " endindex: " + endIndexes[i]);
 
+            }
         }
     }
 }

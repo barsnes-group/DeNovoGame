@@ -170,7 +170,7 @@ public class GameController : MonoBehaviour
 
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
-                    box.sortIndexes();
+                    box.SwitchStartAndEndIndexes();
                     //add intensity to peaks
                     Peak startPeak = GetPeak(slot.start_peak_index);
                     Peak endPeak = GetPeak(slot.end_peak_index);
