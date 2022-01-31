@@ -15,6 +15,7 @@ public class DraggableBox : MonoBehaviour
 
     public string width;
     public float boxToSlotTheshold = 5;
+    
 
     private Vector3 _dragOffset;
     private Camera _cam;
@@ -56,29 +57,54 @@ public class DraggableBox : MonoBehaviour
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         gameController.HighlightValidSlot(startIndexes, endIndexes, false);
         gameController.SetHighlight(startIndexes, endIndexes, false);
-        //check if close enough to start index, snap into position
-        // (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create)
 
+        //check if close enough to start index, snap into position
         foreach (int peak in startIndexes)
         {
             Vector2 peakPos = gameController.GetPeak(peak).transform.position;
-            //Vector2 startPeakPos = gameController.GetPeak(startAndEndIndexes.Item1).transform.position;
-            //Vector2 endPeakPos = gameController.GetPeak(startAndEndIndexes.Item2).transform.position;
-            //Vector2 absPeakPos = Mathf.Abs((startPeakPos - endPeakPos) / 2);
-
             if (Vector2.Distance(peakPos, transform.position) < boxToSlotTheshold)
             {
                 SnapPosition(peakPos);
-                //gameController.UpdateScore(this);
+                gameController.UpdateScore(1);
                 return;
             }
         }
         ReturnToStartPos();
+        gameController.UpdateScore(-1);
     }
 
     private void ReturnToStartPos()
     {
         transform.position = startPos;
+    }
+
+    private float CalculateCenterOfSlot()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        float center = 0;
+        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        {
+            float startPeakPos = gameController.GetPeak(startAndEndIndexes.Item1).transform.position.x;
+            float endPeakPos = gameController.GetPeak(startAndEndIndexes.Item2).transform.position.x;
+            float absPeakPos = Mathf.Abs((startPeakPos - endPeakPos) / 2);
+            if (startPeakPos > endPeakPos)
+            {
+                center = endPeakPos + absPeakPos;
+                print("center = endPeakPos + absPeakPos " + endPeakPos + " + " + absPeakPos + " = " + center);
+            }
+            else
+            {
+                center = startPeakPos + absPeakPos;
+                print("center = startPeakPos + absPeakPos " + startPeakPos + " + " + absPeakPos + " = " + center);
+            }
+        }
+        return center;
+    }
+
+    private void SnapInCenter(float center)
+    {
+        Vector3 temp = new Vector3(center, 0, 0);
+        transform.position += temp;
     }
 
     private void SnapPosition(Vector2 peakPos)
@@ -99,15 +125,15 @@ public class DraggableBox : MonoBehaviour
     }
 
 
-    public void SetScale(float scale_x, float scale_y)
+    public void SetScale(float scaleX, float scaleY)
     {
-        transform.localScale = new Vector3(scale_x, scale_y, 0);
+        transform.localScale = new Vector3(scaleX, scaleY, 0);
     }
 
-    public void SetPos(float pos_x, float pos_y)
+    public void SetPos(float posX, float posY)
     {
-        Vector3 parent_transform = transform.parent.position;
-        transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
+        Vector3 parentTransform = transform.parent.position;
+        transform.localPosition = new Vector3((parentTransform.x + posX), (parentTransform.y + posY), 0);
         startPos = transform.position;
     }
     private void Update()
@@ -117,5 +143,23 @@ public class DraggableBox : MonoBehaviour
     internal void SetText(string text)
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
+    }
+
+    internal void sortIndexes()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        {
+            int startPeakIndex = startAndEndIndexes.Item1;
+            int endPeakIndex = startAndEndIndexes.Item2;
+
+            if (startPeakIndex > endPeakIndex)
+            {
+                int temp = startPeakIndex;
+                endPeakIndex = startPeakIndex;
+                startPeakIndex = temp;
+            }
+
+        }
     }
 }

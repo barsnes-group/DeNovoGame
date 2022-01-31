@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using TMPro;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class GameController : MonoBehaviour
     public GameObject peakPrefab;
     public GameObject slotPrefab;
     public List<Slot> allValidSlots;
+    public int score = 0;
+    [SerializeField]
+    private GameObject scoreObject;
+
     [Header("Sizes")]
     public float slotAndBoxScaling;
     public float peaksYPos = 15;
@@ -43,7 +49,14 @@ public class GameController : MonoBehaviour
 
         Slot slot = slotObject.GetComponent<Slot>();
         slot.SetScale(MathF.Abs(pos_x2-pos_x1), intensity);
-        //slot.SetPos(pos_x1, pos_y);
+        if (pos_x1 > pos_x2)
+        {
+            slot.SetPos(pos_x2, pos_y);
+        }
+        else
+        {
+            slot.SetPos(pos_x1, pos_y);
+        } 
         return slot;
     }
 
@@ -83,7 +96,8 @@ public class GameController : MonoBehaviour
             if (enabled)
             {
                 //draw valid slots, the height is the average intensity of the peaks
-                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, ((startPeak.intensity+endPeak.intensity)/2)/10);
+                float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
+                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity/10);
             }
             else
             {
@@ -119,9 +133,10 @@ public class GameController : MonoBehaviour
         }
     }
     
-    internal void UpdateScore(DraggableBox draggableBox)
+    internal void UpdateScore(int score)
     {
-        throw new NotImplementedException();
+        Score scoreComponent = scoreObject.GetComponent<Score>();
+        scoreComponent.AddScore(score);
     }
 
     public Peak GetPeak(int index)
@@ -152,8 +167,10 @@ public class GameController : MonoBehaviour
                 rightBoxMargin += 15;
                 foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
                 {
+
                     box.startIndexes.Add(slot.start_peak_index);
                     box.endIndexes.Add(slot.end_peak_index);
+                    box.sortIndexes();
                     //add intensity to peaks
                     Peak startPeak = GetPeak(slot.start_peak_index);
                     Peak endPeak = GetPeak(slot.end_peak_index);

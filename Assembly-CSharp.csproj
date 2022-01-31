@@ -60,6 +60,7 @@
     <Compile Include="Assets/Scripts/SlotDeserializer.cs" />
     <Compile Include="Assets/Scripts/JSONReader.cs" />
     <Compile Include="Assets/Scripts/GameController.cs" />
+    <Compile Include="Assets/Scripts/Score.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

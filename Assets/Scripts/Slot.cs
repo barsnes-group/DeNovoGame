@@ -12,4 +12,10 @@ public class Slot : MonoBehaviour
     {
         transform.localScale = new Vector3(scale_x, intensity, 0);
     }
+
+    internal void SetPos(float pos_x, float pos_y)
+    {
+        Vector3 parent_transform = transform.parent.position;
+        transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
+    }
 }

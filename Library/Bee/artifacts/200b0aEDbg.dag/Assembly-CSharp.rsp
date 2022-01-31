@@ -372,6 +372,7 @@
 "Assets/Scripts/GameController.cs"
 "Assets/Scripts/JSONReader.cs"
 "Assets/Scripts/Peak.cs"
+"Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
 "Assets/Scripts/SlotDeserializer.cs"
 -langversion:9.0
