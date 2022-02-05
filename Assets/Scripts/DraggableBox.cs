@@ -1,13 +1,15 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
 using System.Linq;
+using Random = UnityEngine.Random;
 using UnityEngine.UIElements;
 //https://gist.github.com/Matthew-J-Spencer/65aea3d55f1e2c6ccb2c3586bccbdbdb 
+
 public class DraggableBox : MonoBehaviour
 {
-
     public List<int> startIndexes;
     public List<int> endIndexes;
     public List<float> startCoord;
@@ -15,96 +17,103 @@ public class DraggableBox : MonoBehaviour
 
     public string width;
     public float boxToSlotTheshold = 5;
-    
 
+    private GameObject scoreObject;
     private Vector3 _dragOffset;
     private Camera _cam;
-    private Vector3 startPos;
+    public Vector3 startPos;
     [SerializeField] private float _speed = 10;
     [SerializeField] private GameObject textObject;
+    internal JSONReader.AminoAcid aminoAcidChar;
+    private bool isPlaced = false;
+    private int placedStartPeak;
+    private int placedEndPeak;
+    internal float posX;
 
+    public bool getIsPlaced()
+    {
+        return isPlaced;
+    }
+    public int getStartPeak()
+    {
+        if (!isPlaced)
+        {
+            throw new Exception("no start peak");
+        }
+        return placedStartPeak;
+    }
+
+    public int getEndPeak()
+    {
+        if (!isPlaced)
+        {
+            throw new Exception("no end peak");
+        }
+        return placedEndPeak;
+    }
     void Awake()
     {
         _cam = Camera.main;
     }
 
-    private String indexesToString() {
+    private String indexesToString()
+    {
         String str = "";
-        foreach (var s in startIndexes) {
-            str += s+", ";
+        foreach (var s in startIndexes)
+        {
+            str += s + ", ";
         }
         str += "\n endpoints:";
         foreach (var s in endIndexes)
         {
-            str += s+", ";
+            str += s + ", ";
         }
         return str;
     }
-
-
 
     void OnMouseDown()
     {
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.HighlightValidSlot(startIndexes, endIndexes, true);
+        gameController.HighlightValidSlots(startIndexes, endIndexes, true);
         gameController.SetHighlight(startIndexes, endIndexes, true);
     }
 
     private void OnMouseUp()
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.HighlightValidSlot(startIndexes, endIndexes, false);
+        gameController.HighlightValidSlots(startIndexes, endIndexes, false);
         gameController.SetHighlight(startIndexes, endIndexes, false);
 
-        //check if close enough to start index, snap into position
-        foreach (int peak in startIndexes)
+        //check if close enough to start index, snap into slot
+        foreach (int startpeak in startIndexes)
         {
-            Vector2 peakPos = gameController.GetPeak(peak).transform.position;
+            Vector2 peakPos = gameController.GetPeak(startpeak).transform.position;
             if (Vector2.Distance(peakPos, transform.position) < boxToSlotTheshold)
             {
                 SnapPosition(peakPos);
-                gameController.UpdateScore(1);
+                isPlaced = true;
+                placedStartPeak = startpeak;
+                //TODO:
+                //placedEndPeak = startpeak;
+                gameController.BoxPlaced(1, true, this);
                 return;
             }
         }
         ReturnToStartPos();
-        gameController.UpdateScore(-1);
+        Score scoreComponent = scoreObject.GetComponent<Score>();
+        if (scoreComponent.currentScore > 0)
+        {
+            print("score: " + gameController.score);
+            gameController.BoxPlaced(-1, false, this);
+
+        }  
     }
 
     private void ReturnToStartPos()
     {
         transform.position = startPos;
-    }
-
-    private float CalculateCenterOfSlot()
-    {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        float center = 0;
-        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
-        {
-            float startPeakPos = gameController.GetPeak(startAndEndIndexes.Item1).transform.position.x;
-            float endPeakPos = gameController.GetPeak(startAndEndIndexes.Item2).transform.position.x;
-            float absPeakPos = Mathf.Abs((startPeakPos - endPeakPos) / 2);
-            if (startPeakPos > endPeakPos)
-            {
-                center = endPeakPos + absPeakPos;
-                print("center = endPeakPos + absPeakPos " + endPeakPos + " + " + absPeakPos + " = " + center);
-            }
-            else
-            {
-                center = startPeakPos + absPeakPos;
-                print("center = startPeakPos + absPeakPos " + startPeakPos + " + " + absPeakPos + " = " + center);
-            }
-        }
-        return center;
-    }
-
-    private void SnapInCenter(float center)
-    {
-        Vector3 temp = new Vector3(center, 0, 0);
-        transform.position += temp;
     }
 
     private void SnapPosition(Vector2 peakPos)
@@ -124,7 +133,6 @@ public class DraggableBox : MonoBehaviour
         return mousePos;
     }
 
-
     public void SetScale(float scaleX, float scaleY)
     {
         transform.localScale = new Vector3(scaleX, scaleY, 0);
@@ -136,10 +144,18 @@ public class DraggableBox : MonoBehaviour
         transform.localPosition = new Vector3((parentTransform.x + posX), (parentTransform.y + posY), 0);
         startPos = transform.position;
     }
+
+    public void SetColor()
+    {
+        Color color = new(Random.Range(0, 255), Random.Range(0, 255), Random.Range(0, 255), 255);
+        GetComponentInChildren<SpriteRenderer>().color = color;
+    }
+
     private void Update()
     {
         SetText(width);
     }
+
     internal void SetText(string text)
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
@@ -152,13 +168,11 @@ public class DraggableBox : MonoBehaviour
         {
             if (startIndexes[i] > endIndexes[i])
             {
-                print("switch startindex: " + startIndexes[i] + " endindex: " + endIndexes[i]);
                 int temp = endIndexes[i];
                 endIndexes[i] = startIndexes[i];
                 startIndexes[i] = temp;
-                print("switched startindex: " + startIndexes[i] + " endindex: " + endIndexes[i]);
-
             }
         }
     }
+
 }

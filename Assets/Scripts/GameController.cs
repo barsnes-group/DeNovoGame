@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using TMPro;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -19,9 +17,8 @@ public class GameController : MonoBehaviour
     [Header("Sizes")]
     public float slotAndBoxScaling;
     public float peaksYPos = 15;
-    public float boxYPos = 15;
+    public float boxYPos = 13;
     public float scaleWidth = 0.1f;
-    private float rightBoxMargin = 1;
     [SerializeField]
     GameObject SlotContainer;
 
@@ -30,14 +27,14 @@ public class GameController : MonoBehaviour
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
         float previousX = 0;
-        for (int i = 0; i <= array.Length-1; i++)
+        for (int i = 0; i <= array.Length - 1; i++)
         {
             string[] rows = array[i].Split(',');
 
             float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
-            CreatePeakPrefab(xCoord, peaksYPos, 0.2f,1, xCoord - previousX, i);
+            CreatePeakPrefab(xCoord, peaksYPos, 0.2f, 1, xCoord - previousX, i);
             previousX = xCoord;
         }
     }
@@ -48,7 +45,7 @@ public class GameController : MonoBehaviour
         slotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
 
         Slot slot = slotObject.GetComponent<Slot>();
-        slot.SetScale(MathF.Abs(pos_x2-pos_x1), intensity);
+        slot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
         if (pos_x1 > pos_x2)
         {
             slot.SetPos(pos_x2, pos_y);
@@ -56,7 +53,7 @@ public class GameController : MonoBehaviour
         else
         {
             slot.SetPos(pos_x1, pos_y);
-        } 
+        }
         return slot;
     }
 
@@ -80,12 +77,13 @@ public class GameController : MonoBehaviour
         DraggableBox box = boxObject.GetComponent<DraggableBox>();
         box.width = scale_x.ToString();
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
-        box.SetPos(pos_x * scaleWidth, pos_y); //*slotAndBoxScaling
+        box.SetPos(pos_x * scaleWidth, pos_y);
+        box.posX = pos_x;
+        box.SetColor();
         return box;
-
     }
 
-    internal void HighlightValidSlot(List<int> startIndexes, List<int> endIndexes, bool enabled)
+    internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes, bool enabled)
     {
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
@@ -97,11 +95,11 @@ public class GameController : MonoBehaviour
             {
                 //draw valid slots, the height is the average intensity of the peaks
                 float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity/10);
+                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity / 10);
             }
             else
             {
-                ClearSlots();   
+                ClearSlots();
             }
         }
     }
@@ -129,15 +127,74 @@ public class GameController : MonoBehaviour
         {
             Peak slot = GetPeak(i);
             if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
-
         }
     }
-    
-    internal void UpdateScore(int score)
+
+    internal void BoxPlaced(int score, bool validPosition, DraggableBox draggableBox)
     {
+        //TODO: set all affected slots to taken
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.AddScore(score);
+        JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
+        if (validPosition)
+        {
+            //TODO: spawn new box if there are available slots
+            for (int i = 0; i < possibleSlots.Length; i++)
+            {
+                JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
+                int start_peak_index = serializedSlot.start_peak_index;
+                int end_peak_index = serializedSlot.end_peak_index;
+                if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
+                {
+                    CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
+                    continue;
+                }
+                //TODO: else remove from possible slots list
+            }
+        }
     }
+
+    //True if slot between (slotstart, slotend) is occupied by any other box
+    private bool SlotOccupied(int slotStart, int slotEnd, DraggableBox[] draggableBoxes)
+    {
+        for (int i = 0; i < draggableBoxes.Length; i++)
+        {
+            DraggableBox box = draggableBoxes[i];
+            if (box.getIsPlaced())
+            {
+                int boxStart = box.getStartPeak();
+                int boxEnd = box.getEndPeak();
+                if (Overlap(boxStart, boxEnd, slotStart, slotEnd))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
+    {
+        if (boxStart < slotEnd && boxEnd > slotStart)
+        {
+            return true;
+        }
+        else if (boxStart > slotEnd && boxEnd > slotEnd)
+        {
+            return true;
+        }
+        else if (boxStart <= slotEnd && boxEnd <= slotEnd)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private DraggableBox[] GetAllBoxes()
+    {
+        return GameObject.Find("BoxContainer").GetComponentsInChildren<DraggableBox>();
+    }
+
 
     public Peak GetPeak(int index)
     {
@@ -151,37 +208,37 @@ public class GameController : MonoBehaviour
         return peak;
     }
 
-    internal void GetPeakIntensity()
+    public void CreateAllBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
-        throw new NotImplementedException();
-    }
-
-    public void CreateBoxes(JSONReader.AminoAcid[] aminoAcids)
-    {
-
-        foreach(JSONReader.AminoAcid aminoAcidChar in aminoAcids)
+        int rightBoxMargin = 0;
+        foreach (JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
             if (aminoAcidChar.slots.Length > 0)
             {
-                DraggableBox box = CreateBoxPrefab(aminoAcidChar.Mass + rightBoxMargin, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
-                rightBoxMargin += 15;
-                foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
-                {
-
-                    box.startIndexes.Add(slot.start_peak_index);
-                    box.endIndexes.Add(slot.end_peak_index);
-                    box.SwitchStartAndEndIndexes();
-                    //add intensity to peaks
-                    Peak startPeak = GetPeak(slot.start_peak_index);
-                    Peak endPeak = GetPeak(slot.end_peak_index);
-                    float startPeakIntensity = slot.intensity[0];
-                    float endPeakIntensity = slot.intensity[1];
-                    startPeak.intensity = startPeakIntensity;
-                    endPeak.intensity = endPeakIntensity;
-
-                }
+                CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin);
+                rightBoxMargin += 12;
             }
-        }  
+        }
+    }
+
+    private void CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
+    {
+        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+        
+        foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
+        {
+            box.startIndexes.Add(slot.start_peak_index);
+            box.endIndexes.Add(slot.end_peak_index);
+            box.SwitchStartAndEndIndexes();
+            box.aminoAcidChar = aminoAcidChar;
+            //add intensity to peaks
+            Peak startPeak = GetPeak(slot.start_peak_index);
+            Peak endPeak = GetPeak(slot.end_peak_index);
+            float startPeakIntensity = slot.intensity[0];
+            float endPeakIntensity = slot.intensity[1];
+            startPeak.intensity = startPeakIntensity;
+            endPeak.intensity = endPeakIntensity;
+        }
     }
 
     void DrawLine()

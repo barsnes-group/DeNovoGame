@@ -6,7 +6,7 @@ using TMPro;
 public class Score : MonoBehaviour
 {
 
-    private int currentScore;
+    public int currentScore;
 
     private void SetText(string text)
     {
@@ -15,14 +15,22 @@ public class Score : MonoBehaviour
 
     public int AddScore(int score)
     {
-        currentScore += score;
-        UpdateScore();
+        if (currentScore >= 0)
+        {
+            currentScore += score;
+            UpdateScore();
+        }
         return currentScore;
     }
 
     private void UpdateScore()
     {
         SetText("Score: " + currentScore);
+    }
+
+    internal int GetScore()
+    {
+        return currentScore;
     }
 
 }
