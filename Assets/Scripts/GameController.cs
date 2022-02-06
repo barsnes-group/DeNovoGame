@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour
     public GameObject peakPrefab;
     public GameObject slotPrefab;
     public List<Slot> allValidSlots;
-    public int score = 0;
     [SerializeField]
     private GameObject scoreObject;
 
@@ -24,6 +23,11 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        if (scoreObject == null)
+        {
+            throw new Exception("score obj. null");
+        }
+
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
         float previousX = 0;
@@ -79,6 +83,7 @@ public class GameController : MonoBehaviour
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
         box.SetPos(pos_x * scaleWidth, pos_y);
         box.posX = pos_x;
+        box.SetScoreObject(scoreObject);
         box.SetColor();
         return box;
     }
@@ -135,6 +140,7 @@ public class GameController : MonoBehaviour
         //TODO: set all affected slots to taken
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.AddScore(score);
+        print("score: " + scoreComponent.currentScore);
         JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
         if (validPosition)
         {

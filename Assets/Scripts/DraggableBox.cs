@@ -105,10 +105,18 @@ public class DraggableBox : MonoBehaviour
         Score scoreComponent = scoreObject.GetComponent<Score>();
         if (scoreComponent.currentScore > 0)
         {
-            print("score: " + gameController.score);
             gameController.BoxPlaced(-1, false, this);
 
         }  
+    }
+
+    public void SetScoreObject(GameObject scoreObjectSetter)
+    {
+        if (scoreObjectSetter == null)
+        {
+            throw new Exception("score object null");
+        }
+        scoreObject = scoreObjectSetter;
     }
 
     private void ReturnToStartPos()

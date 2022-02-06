@@ -386,6 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab4e7bc1c7d4840bcb67c9471bb411bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScore: 0
 --- !u!224 &559201653
 RectTransform:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ MonoBehaviour:
   peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   slotPrefab: {fileID: 579977173573170919, guid: 5d2e837c36324462db2591aa8b0429c6, type: 3}
   allValidSlots: []
-  score: 10
+  score: 0
   scoreObject: {fileID: 559201648}
   slotAndBoxScaling: 0.4
   peaksYPos: 5
@@ -745,6 +746,7 @@ MonoBehaviour:
   endCoord: []
   width: 
   boxToSlotTheshold: 5
+  startPos: {x: 0, y: 0, z: 0}
   _speed: 10
   textObject: {fileID: 0}
 --- !u!61 &7554153867389100607
