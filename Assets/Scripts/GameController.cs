@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
     public GameObject boxPrefab;
     public GameObject peakPrefab;
     public GameObject slotPrefab;
-    public List<Slot> allValidSlots;
+    private List<Slot> highlightedSlots = new List<Slot>();
     [SerializeField]
     private GameObject scoreObject;
 
@@ -31,24 +31,30 @@ public class GameController : MonoBehaviour
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
         float previousX = 0;
+        float xCoord = 5.0f; //= float.Parse(rows[0]);
         for (int i = 0; i <= array.Length - 1; i++)
         {
             string[] rows = array[i].Split(',');
 
-            float xCoord = float.Parse(rows[0]);
             //float yCoord = float.Parse(rows[1]);
 
             CreatePeakPrefab(xCoord, peaksYPos, 0.2f, 1, xCoord - previousX, i);
+            xCoord += 7;
             previousX = xCoord;
         }
     }
 
-    Slot CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity)
+    Slot CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity, Peak startPeak, Peak endPeak)
     {
+        if (startPeak == null || endPeak == null) {
+            throw new NullReferenceException();
+        }
         GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
         slotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
 
         Slot slot = slotObject.GetComponent<Slot>();
+        slot.startpeak = startPeak;
+        slot.endpeak = endPeak;
         slot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
         if (pos_x1 > pos_x2)
         {
@@ -70,6 +76,7 @@ public class GameController : MonoBehaviour
         peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
         peak.SetPos(pos_x * scaleWidth, pos_y);
         peak.SetText(index + "\n" + width_to_prev.ToString());
+        peak.index = index;
         return peak;
     }
 
@@ -88,7 +95,7 @@ public class GameController : MonoBehaviour
         return box;
     }
 
-    internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes, bool enabled)
+    internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes, bool setHighlightOn)
     {
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
@@ -96,14 +103,20 @@ public class GameController : MonoBehaviour
             Peak endPeak = GetPeak(startAndEndIndexes.Item2);
             Vector2 startPeakPos = startPeak.transform.position;
             Vector2 endPeakPos = endPeak.transform.position;
-            if (enabled)
+            if(SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes())){
+                return;
+            }
+            if (setHighlightOn)
             {
                 //draw valid slots, the height is the average intensity of the peaks
                 float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-                CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity / 10);
+                Slot slot = CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity / 10, startPeak,endPeak);
+                highlightedSlots.Add(slot);
             }
             else
             {
+                print("cleares slots");
+                highlightedSlots.Clear();
                 ClearSlots();
             }
         }
@@ -111,6 +124,7 @@ public class GameController : MonoBehaviour
 
     private void ClearSlots()
     {
+        List<Slot> allValidSlots;
         GameObject container = GameObject.Find("ValidSlotsContainer");
 
         allValidSlots = container.GetComponentsInChildren<Slot>().ToList();
@@ -121,30 +135,34 @@ public class GameController : MonoBehaviour
         }
     }
 
-    internal void SetHighlight(List<int> startIndexes, List<int> endIndexes, bool enabled)
-    {
-        foreach (int i in startIndexes)
-        {
-            Peak slot = GetPeak(i);
-            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
-        }
-        foreach (int i in endIndexes)
-        {
-            Peak slot = GetPeak(i);
-            if (enabled) { slot.Highlight(); } else { slot.DefaultColor(); }
-        }
-    }
 
-    internal void BoxPlaced(int score, bool validPosition, DraggableBox draggableBox)
+    /*
+    box was placed on a valid slot
+    */
+    internal Slot BoxPlaced(int score, bool validPosition, DraggableBox draggableBox, Peak startpeak)
     {
-        //TODO: set all affected slots to taken
+        print("highlightedSlots: " + highlightedSlots.Count + " startpeak: " + startpeak);
+        Slot selectedSlot = null;
+        foreach (Slot slot in highlightedSlots)
+        {
+            if (slot.startpeak.index == startpeak.index) {
+                print("set box to slot scale: " + slot.GetSlotScaleX() + slot.GetSlotScaleY());
+                draggableBox.SetScale(slot.GetSlotScaleX(), slot.GetSlotScaleY());
+                selectedSlot = slot;
+            }
+        }
+        if (selectedSlot == null) {
+            throw new NullReferenceException("selected slot is null");
+        }
+        draggableBox.placedStartPeak = selectedSlot.startpeak;
+        draggableBox.placedEndPeak = selectedSlot.endpeak;
+
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.AddScore(score);
-        print("score: " + scoreComponent.currentScore);
         JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
         if (validPosition)
         {
-            //TODO: spawn new box if there are available slots
+            //spawn new box if there are available slots
             for (int i = 0; i < possibleSlots.Length; i++)
             {
                 JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
@@ -154,10 +172,12 @@ public class GameController : MonoBehaviour
                 {
                     CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
                     continue;
+                    //TODO: remove from possible slots list  
                 }
-                //TODO: else remove from possible slots list
             }
         }
+
+        return selectedSlot;
     }
 
     //True if slot between (slotstart, slotend) is occupied by any other box
@@ -168,8 +188,8 @@ public class GameController : MonoBehaviour
             DraggableBox box = draggableBoxes[i];
             if (box.getIsPlaced())
             {
-                int boxStart = box.getStartPeak();
-                int boxEnd = box.getEndPeak();
+                int boxStart = box.getStartPeak().index;
+                int boxEnd = box.getEndPeak().index;
                 if (Overlap(boxStart, boxEnd, slotStart, slotEnd))
                 {
                     return true;
@@ -233,8 +253,8 @@ public class GameController : MonoBehaviour
         
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
-            box.startIndexes.Add(slot.start_peak_index);
-            box.endIndexes.Add(slot.end_peak_index);
+            box.startPeakNumbers.Add(slot.start_peak_index);
+            box.endPeakNumbers.Add(slot.end_peak_index);
             box.SwitchStartAndEndIndexes();
             box.aminoAcidChar = aminoAcidChar;
             //add intensity to peaks

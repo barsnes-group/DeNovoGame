@@ -10,6 +10,7 @@ public class Peak : MonoBehaviour
     public GameObject line;
 
     public float intensity;
+    internal int index;
 
     public void SetImageScale(float scale_x, float scale_y)
     {

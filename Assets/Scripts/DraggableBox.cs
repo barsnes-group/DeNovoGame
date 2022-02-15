@@ -10,13 +10,13 @@ using UnityEngine.UIElements;
 
 public class DraggableBox : MonoBehaviour
 {
-    public List<int> startIndexes;
-    public List<int> endIndexes;
+    public List<int> startPeakNumbers;
+    public List<int> endPeakNumbers;
     public List<float> startCoord;
     public List<float> endCoord;
 
     public string width;
-    public float boxToSlotTheshold = 5;
+    public float boxToSlotTheshold = 2;
 
     private GameObject scoreObject;
     private Vector3 _dragOffset;
@@ -26,28 +26,36 @@ public class DraggableBox : MonoBehaviour
     [SerializeField] private GameObject textObject;
     internal JSONReader.AminoAcid aminoAcidChar;
     private bool isPlaced = false;
-    private int placedStartPeak;
-    private int placedEndPeak;
+    public Peak placedStartPeak;
+    public Peak placedEndPeak;
     internal float posX;
 
     public bool getIsPlaced()
     {
         return isPlaced;
     }
-    public int getStartPeak()
+    public Peak getStartPeak()
     {
         if (!isPlaced)
         {
             throw new Exception("no start peak");
         }
+        if (placedStartPeak == null)
+        {
+            throw new NullReferenceException("start peak is not set");
+        }
         return placedStartPeak;
     }
 
-    public int getEndPeak()
+    public Peak getEndPeak()
     {
         if (!isPlaced)
         {
-            throw new Exception("no end peak");
+            throw new Exception("this box does is not placed at a peak");
+        }
+        if (placedEndPeak == null)
+        {
+            throw new NullReferenceException("endpeak is not set");
         }
         return placedEndPeak;
     }
@@ -59,12 +67,12 @@ public class DraggableBox : MonoBehaviour
     private String indexesToString()
     {
         String str = "";
-        foreach (var s in startIndexes)
+        foreach (var s in startPeakNumbers)
         {
             str += s + ", ";
         }
         str += "\n endpoints:";
-        foreach (var s in endIndexes)
+        foreach (var s in endPeakNumbers)
         {
             str += s + ", ";
         }
@@ -76,38 +84,48 @@ public class DraggableBox : MonoBehaviour
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.HighlightValidSlots(startIndexes, endIndexes, true);
-        gameController.SetHighlight(startIndexes, endIndexes, true);
+        gameController.HighlightValidSlots(startPeakNumbers, endPeakNumbers, true);
     }
 
     private void OnMouseUp()
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.HighlightValidSlots(startIndexes, endIndexes, false);
-        gameController.SetHighlight(startIndexes, endIndexes, false);
 
         //check if close enough to start index, snap into slot
-        foreach (int startpeak in startIndexes)
+        foreach (int startPeakIndex in startPeakNumbers)
         {
-            Vector2 peakPos = gameController.GetPeak(startpeak).transform.position;
-            if (Vector2.Distance(peakPos, transform.position) < boxToSlotTheshold)
+            Peak startPeak = getGameController().GetPeak(startPeakIndex);
+            if (startPeak == null) {
+                throw new NullReferenceException("startpeak, on mouse up");
+            }
+            Vector2 peakStartPos = startPeak.transform.position;
+            print("peakStartPos: " + peakStartPos);
+            if (Vector2.Distance(peakStartPos, transform.position) < boxToSlotTheshold)
             {
-                SnapPosition(peakPos);
-                isPlaced = true;
-                placedStartPeak = startpeak;
-                //TODO:
-                //placedEndPeak = startpeak;
-                gameController.BoxPlaced(1, true, this);
+                placeBox(startPeak);
                 return;
             }
         }
+        getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers, false);
         ReturnToStartPos();
-        Score scoreComponent = scoreObject.GetComponent<Score>();
-        if (scoreComponent.currentScore > 0)
-        {
-            gameController.BoxPlaced(-1, false, this);
+    }
 
-        }  
+    private void placeBox(Peak startPeak)
+    {
+        Vector2 peakStartPos = startPeak.transform.position;
+        SnapPosition(peakStartPos);
+        isPlaced = true;
+        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak);
+        Vector2 peakEndPos = slot.endpeak.transform.position;
+    }
+
+    private GameController getGameController()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        if (gameController == null)
+        {
+            throw new NullReferenceException();
+        }
+        return gameController;
     }
 
     public void SetScoreObject(GameObject scoreObjectSetter)
@@ -172,13 +190,13 @@ public class DraggableBox : MonoBehaviour
     internal void SwitchStartAndEndIndexes()
     {
         //switch the start and end index if the start index is bigger than the end index
-        for (int i = 0; i < startIndexes.Count(); i++)
+        for (int i = 0; i < startPeakNumbers.Count(); i++)
         {
-            if (startIndexes[i] > endIndexes[i])
+            if (startPeakNumbers[i] > endPeakNumbers[i])
             {
-                int temp = endIndexes[i];
-                endIndexes[i] = startIndexes[i];
-                startIndexes[i] = temp;
+                int temp = endPeakNumbers[i];
+                endPeakNumbers[i] = startPeakNumbers[i];
+                startPeakNumbers[i] = temp;
             }
         }
     }
