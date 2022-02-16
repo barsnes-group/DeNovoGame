@@ -19,8 +19,10 @@ public class Slot : MonoBehaviour
         throw new NullReferenceException();
     }
 
-    private void setIntensity(float intensity){
-        if(intensity == null){
+    private void setIntensity(float intensity)
+    {
+        if (intensity == null)
+        {
             throw new ArgumentException();
         }
         this.intensity = intensity;
@@ -37,7 +39,8 @@ public class Slot : MonoBehaviour
 
     internal void SetScale(float scale_x, float intensity)
     {
-        if(scale_x == null || scale_x == 0){
+        if (scale_x == null || scale_x == 0)
+        {
             throw new ArgumentException();
         }
         setIntensity(intensity);
@@ -53,19 +56,18 @@ public class Slot : MonoBehaviour
     internal float GetSlotScaleX()
     {
         return transform.localScale.x;
-        float slotXScale = Mathf.Abs(x2 - x1);
-        print("slotXScale" + slotXScale);
-        if (slotXScale >= 0)
-        {
-            return slotXScale;
-        }
-        throw new Exception("slot x scale not a number " + slotXScale);
+        // float slotXScale = Mathf.Abs(x2 - x1);
+        // print("slotXScale" + slotXScale);
+        // if (slotXScale >= 0)
+        // {
+        //     return slotXScale;
+        // }
+        // throw new Exception("slot x scale not a number " + slotXScale);
     }
 
     internal float GetSlotScaleY()
     {
         float avg = intensity;
-        print("avg = " + avg);
         if (avg >= 0)
         {
             return avg;

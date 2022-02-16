@@ -46,6 +46,7 @@ public class GameController : MonoBehaviour
 
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
     {
+        print("CreateSlotPrefab");
         float pos_x1 = startPeak.transform.position.x;
         float pos_x2 = endPeak.transform.position.x;
         if (startPeak == null || endPeak == null)
@@ -63,6 +64,8 @@ public class GameController : MonoBehaviour
         slot.startpeak = startPeak;
         slot.endpeak = endPeak;
         slot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
+
+        //TODO: check if this can be removed
         if (pos_x1 > pos_x2)
         {
             slot.SetPos(pos_x2, pos_y);
@@ -103,6 +106,7 @@ public class GameController : MonoBehaviour
 
     internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes)
     {
+        print("highlightedSlots: ");
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
@@ -116,6 +120,7 @@ public class GameController : MonoBehaviour
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 10, startPeak, endPeak);
             highlightedSlots.Add(slot);
+            print("slot " + slot.ToString());
         }
     }
 
@@ -125,7 +130,6 @@ public class GameController : MonoBehaviour
         highlightedSlots.Clear();
         List<Slot> allValidSlots;
         GameObject container = GameObject.Find("ValidSlotsContainer");
-
         allValidSlots = container.GetComponentsInChildren<Slot>().ToList();
 
         foreach (Slot slot in allValidSlots)
@@ -134,23 +138,13 @@ public class GameController : MonoBehaviour
         }
     }
 
-
     /*
     box was placed on a valid slot
     */
     internal Slot BoxPlaced(int score, bool validPosition, DraggableBox draggableBox, Peak startpeak)
     {
         print("highlightedSlots: " + highlightedSlots.Count + " startpeak: " + startpeak);
-        Slot selectedSlot = null;
-        foreach (Slot slot in highlightedSlots)
-        {
-            if (slot.startpeak.index == startpeak.index)
-            {
-                print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
-                draggableBox.SetScale(slot.GetSlotScaleX(), slot.GetSlotScaleY());
-                selectedSlot = slot;
-            }
-        }
+        Slot selectedSlot = ChangeScaleOfBox(startpeak, draggableBox);
         if (selectedSlot == null)
         {
             throw new NullReferenceException("selected slot is null");
@@ -160,28 +154,56 @@ public class GameController : MonoBehaviour
 
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.AddScore(score);
-        JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
         if (validPosition)
         {
             //spawn new box if there are available slots
-            for (int i = 0; i < possibleSlots.Length; i++)
-            {
-                JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
-                int start_peak_index = serializedSlot.start_peak_index;
-                int end_peak_index = serializedSlot.end_peak_index;
-                if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
-                {
-                    CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
-                    continue;
-                    //TODO: remove from possible slots list  
-                }
-            }
+            SpawnNewBox(draggableBox);
         }
 
         return selectedSlot;
     }
 
-    //True if slot between (slotstart, slotend) is occupied by any other box
+    /*
+    change the scale of the box to the scale of the slot it is placed on
+    */
+    private Slot ChangeScaleOfBox(Peak startpeak, DraggableBox draggableBox)
+    {
+        foreach (Slot slot in highlightedSlots)
+        {
+            if (slot.startpeak.index == startpeak.index)
+            {
+                print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
+                draggableBox.SetScale(slot.GetSlotScaleX(), slot.GetSlotScaleY());
+                return slot;
+            }
+        }
+        throw new NullReferenceException("selected slot is null");
+    }
+
+    /*
+    spawn a new box if there are available slots for that box type
+    */
+    private void SpawnNewBox(DraggableBox draggableBox)
+    {
+        JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
+        for (int i = 0; i < possibleSlots.Length; i++)
+        {
+            print("possibleSlots[i]: " + possibleSlots[i]);
+            JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
+            int start_peak_index = serializedSlot.start_peak_index;
+            int end_peak_index = serializedSlot.end_peak_index;
+            if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
+            {
+                CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
+                continue;
+                //TODO: remove from possible slots list  
+            }
+        }
+    }
+
+    /*
+    true if slot between (slotstart, slotend) is occupied by any other box
+    */
     private bool SlotOccupied(int slotStart, int slotEnd, DraggableBox[] draggableBoxes)
     {
         for (int i = 0; i < draggableBoxes.Length; i++)
@@ -221,7 +243,6 @@ public class GameController : MonoBehaviour
     {
         return GameObject.Find("BoxContainer").GetComponentsInChildren<DraggableBox>();
     }
-
 
     public Peak GetPeak(int index)
     {
@@ -268,7 +289,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void DrawLine()
+    private void DrawLine()
     {
         LineRenderer l = gameObject.AddComponent<LineRenderer>();
         List<Vector3> pos = new List<Vector3>
