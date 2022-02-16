@@ -83,30 +83,44 @@ public class DraggableBox : MonoBehaviour
     {
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        gameController.HighlightValidSlots(startPeakNumbers, endPeakNumbers, true);
+        getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
     }
 
     private void OnMouseUp()
     {
+        Peak closestPeak = checkClosestPeak();
+        if (closestPeak != null)
+        {
+            placeBox(closestPeak);
+        }
+        else
+        {
+            //no peak close enough
+            ReturnToStartPos();
+        }
+        getGameController().ClearSlots();
+    }
 
-        //check if close enough to start index, snap into slot
+    /*
+        check if this box is close to any peak
+        return Peak or null if not found
+    */
+    private Peak checkClosestPeak()
+    {
         foreach (int startPeakIndex in startPeakNumbers)
         {
             Peak startPeak = getGameController().GetPeak(startPeakIndex);
-            if (startPeak == null) {
+            if (startPeak == null)
+            {
                 throw new NullReferenceException("startpeak, on mouse up");
             }
             Vector2 peakStartPos = startPeak.transform.position;
-            print("peakStartPos: " + peakStartPos);
             if (Vector2.Distance(peakStartPos, transform.position) < boxToSlotTheshold)
             {
-                placeBox(startPeak);
-                return;
+                return startPeak;
             }
         }
-        getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers, false);
-        ReturnToStartPos();
+        return null;
     }
 
     private void placeBox(Peak startPeak)
@@ -161,6 +175,10 @@ public class DraggableBox : MonoBehaviour
 
     public void SetScale(float scaleX, float scaleY)
     {
+        if (scaleX == 0 || scaleY == 0)
+        {
+            throw new ArgumentException();
+        }
         transform.localScale = new Vector3(scaleX, scaleY, 0);
     }
 

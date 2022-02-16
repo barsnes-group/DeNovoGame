@@ -44,10 +44,17 @@ public class GameController : MonoBehaviour
         }
     }
 
-    Slot CreateSlotPrefab(float pos_x1, float pos_x2, float pos_y, float intensity, Peak startPeak, Peak endPeak)
+    Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
     {
-        if (startPeak == null || endPeak == null) {
+        float pos_x1 = startPeak.transform.position.x;
+        float pos_x2 = endPeak.transform.position.x;
+        if (startPeak == null || endPeak == null)
+        {
             throw new NullReferenceException();
+        }
+        if (pos_x1 == pos_x2)
+        {
+            throw new ArgumentException();
         }
         GameObject slotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
         slotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
@@ -84,7 +91,6 @@ public class GameController : MonoBehaviour
     {
         GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
-
         DraggableBox box = boxObject.GetComponent<DraggableBox>();
         box.width = scale_x.ToString();
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
@@ -95,35 +101,28 @@ public class GameController : MonoBehaviour
         return box;
     }
 
-    internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes, bool setHighlightOn)
+    internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes)
     {
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
             Peak endPeak = GetPeak(startAndEndIndexes.Item2);
-            Vector2 startPeakPos = startPeak.transform.position;
-            Vector2 endPeakPos = endPeak.transform.position;
-            if(SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes())){
+            if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
+            {
+                //TODO: why return if first slot was occupied? 
                 return;
             }
-            if (setHighlightOn)
-            {
-                //draw valid slots, the height is the average intensity of the peaks
-                float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-                Slot slot = CreateSlotPrefab(startPeakPos.x, endPeakPos.x, peaksYPos, avgIntensity / 10, startPeak,endPeak);
-                highlightedSlots.Add(slot);
-            }
-            else
-            {
-                print("cleares slots");
-                highlightedSlots.Clear();
-                ClearSlots();
-            }
+            //draw valid slots, the height is the average intensity of the peaks
+            float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
+            Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 10, startPeak, endPeak);
+            highlightedSlots.Add(slot);
         }
     }
 
-    private void ClearSlots()
+    public void ClearSlots()
     {
+        print("cleares slots");
+        highlightedSlots.Clear();
         List<Slot> allValidSlots;
         GameObject container = GameObject.Find("ValidSlotsContainer");
 
@@ -145,13 +144,15 @@ public class GameController : MonoBehaviour
         Slot selectedSlot = null;
         foreach (Slot slot in highlightedSlots)
         {
-            if (slot.startpeak.index == startpeak.index) {
-                print("set box to slot scale: " + slot.GetSlotScaleX() + slot.GetSlotScaleY());
+            if (slot.startpeak.index == startpeak.index)
+            {
+                print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
                 draggableBox.SetScale(slot.GetSlotScaleX(), slot.GetSlotScaleY());
                 selectedSlot = slot;
             }
         }
-        if (selectedSlot == null) {
+        if (selectedSlot == null)
+        {
             throw new NullReferenceException("selected slot is null");
         }
         draggableBox.placedStartPeak = selectedSlot.startpeak;
@@ -250,7 +251,7 @@ public class GameController : MonoBehaviour
     private void CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
-        
+
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
             box.startPeakNumbers.Add(slot.start_peak_index);

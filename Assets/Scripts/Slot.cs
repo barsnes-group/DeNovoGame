@@ -6,30 +6,41 @@ public class Slot : MonoBehaviour
 {
     private float x1;
     private float x2;
-    public List<float> intensity;
+    private float intensity;
     internal Peak startpeak;
     internal Peak endpeak;
 
-    public float setX1(float x1)
+    public void setX1(float x1)
     {
         if (x1 > 0)
         {
-            return x1;
+            this.x1 = x1;
         }
         throw new NullReferenceException();
     }
 
-    public float setX2(float x2)
+    private void setIntensity(float intensity){
+        if(intensity == null){
+            throw new ArgumentException();
+        }
+        this.intensity = intensity;
+    }
+
+    public void setX2(float x2)
     {
         if (x2 > 0)
         {
-            return x2;
+            this.x2 = x2;
         }
         throw new NullReferenceException();
     }
 
     internal void SetScale(float scale_x, float intensity)
     {
+        if(scale_x == null || scale_x == 0){
+            throw new ArgumentException();
+        }
+        setIntensity(intensity);
         transform.localScale = new Vector3(scale_x, intensity, 0);
     }
 
@@ -41,6 +52,7 @@ public class Slot : MonoBehaviour
 
     internal float GetSlotScaleX()
     {
+        return transform.localScale.x;
         float slotXScale = Mathf.Abs(x2 - x1);
         print("slotXScale" + slotXScale);
         if (slotXScale >= 0)
@@ -52,12 +64,8 @@ public class Slot : MonoBehaviour
 
     internal float GetSlotScaleY()
     {
-        float sum = 0;
-        foreach (float i in intensity)
-        {
-            sum += i;
-        }
-        float avg = sum / intensity.Count;
+        float avg = intensity;
+        print("avg = " + avg);
         if (avg >= 0)
         {
             return avg;
