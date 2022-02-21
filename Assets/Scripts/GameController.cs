@@ -223,7 +223,7 @@ public class GameController : MonoBehaviour
                 print("is overlapping: " + overlaps);
                 if (overlaps)
                 {
-                    print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd +" ss: "+  slotStart + " se: "+ slotEnd);
+                    print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd + " ss: " + slotStart + " se: " + slotEnd);
                     return true; //TODO: vil at dette bare skal gjelde for den slot som er tatt
                 }
             }
@@ -231,25 +231,43 @@ public class GameController : MonoBehaviour
         return false;
     }
 
+
     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
+    {
+        if (boxStart >= slotEnd)
+        {
+            print(boxStart + " >= " + slotEnd);
+            return false;
+        }
+        else if (boxEnd <= slotStart)
+        {
+            //langt til venstre
+            print( boxEnd + " <= " + slotStart);
+            return false;
+        }
+
+        return true;
+    }
+
+/*     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
     {
         if (boxStart < slotEnd && boxEnd > slotStart)
         {
-            print(boxStart + " < "+ slotEnd + "&&" + boxEnd +" > " + slotStart);
+            print(boxStart + " < " + slotEnd + "&&" + boxEnd + " > " + slotStart);
             return true;
         }
-        else if (boxStart > slotEnd && boxEnd > slotEnd)
+        else if (slotEnd < boxStart)
         {
-            print(boxStart + " > "+ slotEnd + "&&" + boxEnd +" > " + slotEnd);
+            print(boxStart + " > " + slotEnd + "&&" + boxEnd + " > " + slotEnd);
             return true;
         }
-        else if (boxStart <= slotEnd && boxEnd >= slotStart)
+        else if (boxStart < slotEnd && boxEnd > slotStart)
         {
-            print(boxStart + " <= "+ slotEnd + "&&" + boxEnd +" >= " + slotStart);
+            print(boxStart + " < " + slotEnd + " & " + boxEnd + " > " + slotStart);
             return true;
         }
         return false;
-    }
+    } */
 
     private DraggableBox[] GetAllBoxes()
     {
