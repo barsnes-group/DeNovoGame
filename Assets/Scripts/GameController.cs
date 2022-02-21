@@ -209,7 +209,6 @@ public class GameController : MonoBehaviour
     /*
     true if slot between (slotstart, slotend) is occupied by any other box
     */
-    //TODO: bug er i denne metoden, blir satt til true hvis en box er plassert i slot
     private bool SlotOccupied(int slotStart, int slotEnd, DraggableBox[] draggableBoxes)
     {
         for (int i = 0; i < draggableBoxes.Length; i++)
@@ -224,7 +223,7 @@ public class GameController : MonoBehaviour
                 if (overlaps)
                 {
                     print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd + " ss: " + slotStart + " se: " + slotEnd);
-                    return true; //TODO: vil at dette bare skal gjelde for den slot som er tatt
+                    return true; 
                 }
             }
         }
