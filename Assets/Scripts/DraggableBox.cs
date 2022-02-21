@@ -81,6 +81,7 @@ public class DraggableBox : MonoBehaviour
 
     void OnMouseDown()
     {
+        print("START: Box was Clicked");
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
@@ -97,6 +98,7 @@ public class DraggableBox : MonoBehaviour
         {
             //no peak close enough
             ReturnToStartPos();
+            isPlaced = false; 
         }
         getGameController().ClearSlots();
     }

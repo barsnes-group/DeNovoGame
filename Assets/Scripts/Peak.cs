@@ -38,4 +38,7 @@ public class Peak : MonoBehaviour
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
+    public string ToString(){
+return "peak nr "+index;
+    }
 }

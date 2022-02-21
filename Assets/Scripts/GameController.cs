@@ -106,21 +106,26 @@ public class GameController : MonoBehaviour
 
     internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes)
     {
-        print("highlightedSlots: ");
+        if (startIndexes.Count != endIndexes.Count)
+        {
+            throw new Exception("different size of index lists");
+        }
+        print("start highlighted Slots of count " + startIndexes.Count);
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
             Peak endPeak = GetPeak(startAndEndIndexes.Item2);
             if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
-                //TODO: why return if first slot was occupied? 
-                return;
+                print("did not create a slot for " + startPeak + " and " + endPeak);
+                continue;
             }
+            print("Creates a slot for " + startPeak + " and " + endPeak);
+
             //draw valid slots, the height is the average intensity of the peaks
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 10, startPeak, endPeak);
             highlightedSlots.Add(slot);
-            print("slot " + slot.ToString());
         }
     }
 
@@ -204,6 +209,7 @@ public class GameController : MonoBehaviour
     /*
     true if slot between (slotstart, slotend) is occupied by any other box
     */
+    //TODO: bug er i denne metoden, blir satt til true hvis en box er plassert i slot
     private bool SlotOccupied(int slotStart, int slotEnd, DraggableBox[] draggableBoxes)
     {
         for (int i = 0; i < draggableBoxes.Length; i++)
@@ -213,9 +219,12 @@ public class GameController : MonoBehaviour
             {
                 int boxStart = box.getStartPeak().index;
                 int boxEnd = box.getEndPeak().index;
-                if (Overlap(boxStart, boxEnd, slotStart, slotEnd))
+                bool overlaps = Overlap(boxStart, boxEnd, slotStart, slotEnd);
+                print("is overlapping: " + overlaps);
+                if (overlaps)
                 {
-                    return true;
+                    print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd +" ss: "+  slotStart + " se: "+ slotEnd);
+                    return true; //TODO: vil at dette bare skal gjelde for den slot som er tatt
                 }
             }
         }
@@ -226,14 +235,17 @@ public class GameController : MonoBehaviour
     {
         if (boxStart < slotEnd && boxEnd > slotStart)
         {
+            print(boxStart + " < "+ slotEnd + "&&" + boxEnd +" > " + slotStart);
             return true;
         }
         else if (boxStart > slotEnd && boxEnd > slotEnd)
         {
+            print(boxStart + " > "+ slotEnd + "&&" + boxEnd +" > " + slotEnd);
             return true;
         }
-        else if (boxStart <= slotEnd && boxEnd <= slotEnd)
+        else if (boxStart <= slotEnd && boxEnd >= slotStart)
         {
+            print(boxStart + " <= "+ slotEnd + "&&" + boxEnd +" >= " + slotStart);
             return true;
         }
         return false;
