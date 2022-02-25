@@ -99,6 +99,11 @@ public class DraggableBox : MonoBehaviour
             //no peak close enough
             ReturnToStartPos();
             isPlaced = false; 
+            SetScale(3, 3);
+            //int slotCount = getGameController().occupiedSlotsCount -= 1;
+            Score scoreComponent = scoreObject.GetComponent<Score>();
+            //scoreComponent.AddScore(slotCount);
+            print("# of occupied slots: " + getGameController().occupiedSlotsCount);
         }
         getGameController().ClearSlots();
     }
@@ -130,6 +135,7 @@ public class DraggableBox : MonoBehaviour
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         isPlaced = true;
+        int occupiedSlots = getGameController().occupiedSlotsCount;
         Slot slot = getGameController().BoxPlaced(1, true, this, startPeak);
         Vector2 peakEndPos = slot.endpeak.transform.position;
     }
@@ -193,13 +199,13 @@ public class DraggableBox : MonoBehaviour
 
     public void SetColor()
     {
-        Color color = new(Random.Range(0, 255), Random.Range(0, 255), Random.Range(0, 255), 255);
+        Color color = new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255);
         GetComponentInChildren<SpriteRenderer>().color = color;
     }
 
     private void Update()
     {
-        SetText(width);
+        //SetText(width);
     }
 
     internal void SetText(string text)
@@ -207,9 +213,11 @@ public class DraggableBox : MonoBehaviour
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
 
+    /*
+    switch the start and end index if the start index is bigger than the end index
+    */
     internal void SwitchStartAndEndIndexes()
     {
-        //switch the start and end index if the start index is bigger than the end index
         for (int i = 0; i < startPeakNumbers.Count(); i++)
         {
             if (startPeakNumbers[i] > endPeakNumbers[i])

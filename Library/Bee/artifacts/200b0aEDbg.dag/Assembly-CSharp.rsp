@@ -375,6 +375,7 @@
 "Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
 "Assets/Scripts/SlotDeserializer.cs"
+"Assets/Scripts/UnvalidSlot.cs"
 -langversion:9.0
 
 /deterministic

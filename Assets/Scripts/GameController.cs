@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject peakPrefab;
     public GameObject slotPrefab;
     private List<Slot> highlightedSlots = new List<Slot>();
+    public int occupiedSlotsCount = 0;
     [SerializeField]
     private GameObject scoreObject;
 
@@ -46,7 +47,6 @@ public class GameController : MonoBehaviour
 
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
     {
-        print("CreateSlotPrefab");
         float pos_x1 = startPeak.transform.position.x;
         float pos_x2 = endPeak.transform.position.x;
         if (startPeak == null || endPeak == null)
@@ -75,6 +75,38 @@ public class GameController : MonoBehaviour
             slot.SetPos(pos_x1, pos_y);
         }
         return slot;
+    }
+
+    UnvalidSlot CreateUSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
+    {
+        float pos_x1 = startPeak.transform.position.x;
+        float pos_x2 = endPeak.transform.position.x;
+        if (startPeak == null || endPeak == null)
+        {
+            throw new NullReferenceException();
+        }
+        if (pos_x1 == pos_x2)
+        {
+            throw new ArgumentException();
+        }
+        GameObject uSlotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
+        uSlotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
+
+        UnvalidSlot uSlot = uSlotObject.GetComponent<UnvalidSlot>();
+        uSlot.startpeak = startPeak;
+        uSlot.endpeak = endPeak;
+        uSlot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
+
+        //TODO: check if this can be removed
+        if (pos_x1 > pos_x2)
+        {
+            uSlot.SetPos(pos_x2, pos_y);
+        }
+        else
+        {
+            uSlot.SetPos(pos_x1, pos_y);
+        }
+        return uSlot;
     }
 
     Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
@@ -115,23 +147,25 @@ public class GameController : MonoBehaviour
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
             Peak endPeak = GetPeak(startAndEndIndexes.Item2);
+            float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
                 print("did not create a slot for " + startPeak + " and " + endPeak);
+                //TODO: create slot for not valid positions here
                 continue;
+                //UnvalidSlot uSlot = CreateUSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
             }
-            print("Creates a slot for " + startPeak + " and " + endPeak);
 
             //draw valid slots, the height is the average intensity of the peaks
-            float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-            Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 10, startPeak, endPeak);
+            Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
             highlightedSlots.Add(slot);
         }
     }
 
+
+
     public void ClearSlots()
     {
-        print("cleares slots");
         highlightedSlots.Clear();
         List<Slot> allValidSlots;
         GameObject container = GameObject.Find("ValidSlotsContainer");
@@ -157,13 +191,22 @@ public class GameController : MonoBehaviour
         draggableBox.placedStartPeak = selectedSlot.startpeak;
         draggableBox.placedEndPeak = selectedSlot.endpeak;
 
+        //occupiedSlotsCount += 1;
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.AddScore(score);
+        //scoreComponent.AddScore(occupiedSlotsCount);
+        if (score != occupiedSlotsCount)
+        {
+            print("score and occupiedSlotsCount not the same");
+        }
         if (validPosition)
         {
             //spawn new box if there are available slots
             SpawnNewBox(draggableBox);
         }
+
+        occupiedSlotsCount += 1;
+        print("OCCUPIED SLOTS: " + occupiedSlotsCount);
 
         return selectedSlot;
     }
@@ -191,17 +234,18 @@ public class GameController : MonoBehaviour
     private void SpawnNewBox(DraggableBox draggableBox)
     {
         JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
-        for (int i = 0; i < possibleSlots.Length; i++)
+        print("possibleSlots length: " + possibleSlots.Length);
+        for (int i = 0; i < possibleSlots.Length - 1; i++)
         {
-            print("possibleSlots[i]: " + possibleSlots[i]);
             JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
             int start_peak_index = serializedSlot.start_peak_index;
             int end_peak_index = serializedSlot.end_peak_index;
             if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
             {
                 CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
-                continue;
                 //TODO: remove from possible slots list  
+                //exit the loop when one new box is created
+                return;
             }
         }
     }
@@ -219,54 +263,29 @@ public class GameController : MonoBehaviour
                 int boxStart = box.getStartPeak().index;
                 int boxEnd = box.getEndPeak().index;
                 bool overlaps = Overlap(boxStart, boxEnd, slotStart, slotEnd);
-                print("is overlapping: " + overlaps);
                 if (overlaps)
                 {
                     print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd + " ss: " + slotStart + " se: " + slotEnd);
-                    return true; 
+                    return true;
                 }
             }
         }
         return false;
     }
 
-
     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
     {
         if (boxStart >= slotEnd)
         {
-            print(boxStart + " >= " + slotEnd);
             return false;
         }
         else if (boxEnd <= slotStart)
         {
-            //langt til venstre
-            print( boxEnd + " <= " + slotStart);
             return false;
         }
 
         return true;
     }
-
-/*     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
-    {
-        if (boxStart < slotEnd && boxEnd > slotStart)
-        {
-            print(boxStart + " < " + slotEnd + "&&" + boxEnd + " > " + slotStart);
-            return true;
-        }
-        else if (slotEnd < boxStart)
-        {
-            print(boxStart + " > " + slotEnd + "&&" + boxEnd + " > " + slotEnd);
-            return true;
-        }
-        else if (boxStart < slotEnd && boxEnd > slotStart)
-        {
-            print(boxStart + " < " + slotEnd + " & " + boxEnd + " > " + slotStart);
-            return true;
-        }
-        return false;
-    } */
 
     private DraggableBox[] GetAllBoxes()
     {
@@ -300,7 +319,8 @@ public class GameController : MonoBehaviour
 
     private void CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
-        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+        //DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
+        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 5, 5);
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
@@ -308,6 +328,7 @@ public class GameController : MonoBehaviour
             box.endPeakNumbers.Add(slot.end_peak_index);
             box.SwitchStartAndEndIndexes();
             box.aminoAcidChar = aminoAcidChar;
+            box.SetColor();
             //add intensity to peaks
             Peak startPeak = GetPeak(slot.start_peak_index);
             Peak endPeak = GetPeak(slot.end_peak_index);

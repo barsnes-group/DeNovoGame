@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Slot : MonoBehaviour
@@ -56,13 +55,6 @@ public class Slot : MonoBehaviour
     internal float GetSlotScaleX()
     {
         return transform.localScale.x;
-        // float slotXScale = Mathf.Abs(x2 - x1);
-        // print("slotXScale" + slotXScale);
-        // if (slotXScale >= 0)
-        // {
-        //     return slotXScale;
-        // }
-        // throw new Exception("slot x scale not a number " + slotXScale);
     }
 
     internal float GetSlotScaleY()
