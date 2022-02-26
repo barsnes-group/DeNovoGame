@@ -7,8 +7,10 @@ public class GameController : MonoBehaviour
 {
     public TextAsset CsvFile;
     public GameObject boxPrefab;
+    public GameObject boxContainerPrefab;
     public GameObject peakPrefab;
     public GameObject slotPrefab;
+    public GameObject uSlotPrefab;
     private List<Slot> highlightedSlots = new List<Slot>();
     public int occupiedSlotsCount = 0;
     [SerializeField]
@@ -89,7 +91,7 @@ public class GameController : MonoBehaviour
         {
             throw new ArgumentException();
         }
-        GameObject uSlotObject = Instantiate(slotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
+        GameObject uSlotObject = Instantiate(uSlotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
         uSlotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
 
         UnvalidSlot uSlot = uSlotObject.GetComponent<UnvalidSlot>();
@@ -136,6 +138,18 @@ public class GameController : MonoBehaviour
         return box;
     }
 
+    BoxContainer CreateBoxContainerPrefab(float pos_x, float pos_y, float scale_x, float scale_y) 
+    {
+        GameObject boxContainerObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
+        boxContainerObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
+        BoxContainer boxContainer = boxContainerObject.GetComponent<BoxContainer>();
+        boxContainer.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
+        boxContainer.SetPos(pos_x * scaleWidth, pos_y);
+        //boxContainer.width = scale_x.ToString();
+
+        return boxContainer; 
+    }
+
     internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes)
     {
         if (startIndexes.Count != endIndexes.Count)
@@ -152,13 +166,16 @@ public class GameController : MonoBehaviour
             {
                 print("did not create a slot for " + startPeak + " and " + endPeak);
                 //TODO: create slot for not valid positions here
-                continue;
+
                 //UnvalidSlot uSlot = CreateUSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
             }
+            else
+            {
+                //draw valid slots, the height is the average intensity of the peaks
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
+                highlightedSlots.Add(slot);
+            }
 
-            //draw valid slots, the height is the average intensity of the peaks
-            Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
-            highlightedSlots.Add(slot);
         }
     }
 
@@ -320,7 +337,8 @@ public class GameController : MonoBehaviour
     private void CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
         //DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
-        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 5, 5);
+        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
+        //BoxContainer boxContainer = CreateBoxContainerPrefab(xPos, boxYPos, 4, 4);
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
@@ -328,7 +346,6 @@ public class GameController : MonoBehaviour
             box.endPeakNumbers.Add(slot.end_peak_index);
             box.SwitchStartAndEndIndexes();
             box.aminoAcidChar = aminoAcidChar;
-            box.SetColor();
             //add intensity to peaks
             Peak startPeak = GetPeak(slot.start_peak_index);
             Peak endPeak = GetPeak(slot.end_peak_index);
