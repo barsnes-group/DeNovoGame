@@ -66,4 +66,9 @@ public class Slot : MonoBehaviour
         }
         throw new Exception("slot y scale type: " + avg.GetType());
     }
+
+    public void SetColor(Color color)
+    {
+        GetComponentInChildren<SpriteRenderer>().color = color;
+    }
 }

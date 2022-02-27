@@ -86,6 +86,9 @@ public class DraggableBox : MonoBehaviour
         print("box can be placed in " + indexesToString());
         _dragOffset = transform.position - GetMousePos();
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
+        //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
+        //removes text with possible slots, when box is picked up
+        SetText("");
     }
 
     private void OnMouseUp()
@@ -198,11 +201,9 @@ public class DraggableBox : MonoBehaviour
         startPos = transform.position;
     }
 
-//TODO: color som parameter
     public void SetColor(Color color)
     {
         currentColor = color;
-        //color = new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255);
         GetComponentInChildren<SpriteRenderer>().color = color;
     }
 

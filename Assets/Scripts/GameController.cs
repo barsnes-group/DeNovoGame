@@ -68,6 +68,11 @@ public class GameController : MonoBehaviour
         slot.endpeak = endPeak;
         slot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
 
+        if (!valid) 
+        {
+            slot.SetColor(new Color32(255, 255, 255, 155));
+        }
+
         //TODO: check if this can be removed
         if (pos_x1 > pos_x2)
         {
@@ -78,38 +83,6 @@ public class GameController : MonoBehaviour
             slot.SetPos(pos_x1, pos_y);
         }
         return slot;
-    }
-
-    UnvalidSlot CreateUSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
-    {
-        float pos_x1 = startPeak.transform.position.x;
-        float pos_x2 = endPeak.transform.position.x;
-        if (startPeak == null || endPeak == null)
-        {
-            throw new NullReferenceException();
-        }
-        if (pos_x1 == pos_x2)
-        {
-            throw new ArgumentException();
-        }
-        GameObject uSlotObject = Instantiate(uSlotPrefab, new Vector3(pos_x1, pos_y, 0), Quaternion.identity);
-        uSlotObject.transform.SetParent(GameObject.Find("ValidSlotsContainer").transform);
-
-        UnvalidSlot uSlot = uSlotObject.GetComponent<UnvalidSlot>();
-        uSlot.startpeak = startPeak;
-        uSlot.endpeak = endPeak;
-        uSlot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
-
-        //TODO: check if this can be removed
-        if (pos_x1 > pos_x2)
-        {
-            uSlot.SetPos(pos_x2, pos_y);
-        }
-        else
-        {
-            uSlot.SetPos(pos_x1, pos_y);
-        }
-        return uSlot;
     }
 
     Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
@@ -162,29 +135,25 @@ public class GameController : MonoBehaviour
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
             Peak endPeak = GetPeak(startAndEndIndexes.Item2);
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-            if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
+            if (!SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
-                print("did not create a slot for " + startPeak + " and " + endPeak);
-                //TODO: create slot for not valid positions here
-
-                //UnvalidSlot uSlot = CreateUSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
-            }
-            else
-            {
-                //draw valid slots, the height is the average intensity of the peaks
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, true);
                 highlightedSlots.Add(slot);
             }
-
+            else //highlight slots som ikke er occupied, men ikke valid 
+            {
+                print("highlight unvalid slots");
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
+            }
         }
     }
-    internal void HighlightInvalidSlots(List<int> startIndexes, List<int> endIndexes)
+
+    internal void HighlightUnvalidSlots(List<int> startIndexes, List<int> endIndexes)
     {
         if (startIndexes.Count != endIndexes.Count)
         {
             throw new Exception("different size of index lists");
         }
-        print("start highlighted Slots of count " + startIndexes.Count);
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
@@ -192,18 +161,12 @@ public class GameController : MonoBehaviour
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
+                print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
 
             }
-            else
-            {
-
-            }
-
         }
     }
-
-
 
     public void ClearSlots()
     {
@@ -284,8 +247,8 @@ public class GameController : MonoBehaviour
             if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
             {
                 DraggableBox newBox = CreateBox(previousBox.aminoAcidChar, previousBox.posX);
+                //the box always has the same color
                 newBox.SetColor(previousBox.GetColor());
-                //TODO: remove from possible slots list  
                 //exit the loop when one new box is created
                 return;
             }
@@ -325,7 +288,6 @@ public class GameController : MonoBehaviour
         {
             return false;
         }
-
         return true;
     }
 
