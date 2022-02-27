@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak)
+    Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
     {
         float pos_x1 = startPeak.transform.position.x;
         float pos_x2 = endPeak.transform.position.x;
@@ -134,7 +135,6 @@ public class GameController : MonoBehaviour
         box.SetPos(pos_x * scaleWidth, pos_y);
         box.posX = pos_x;
         box.SetScoreObject(scoreObject);
-        box.SetColor();
         return box;
     }
 
@@ -172,8 +172,32 @@ public class GameController : MonoBehaviour
             else
             {
                 //draw valid slots, the height is the average intensity of the peaks
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak);
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, true);
                 highlightedSlots.Add(slot);
+            }
+
+        }
+    }
+    internal void HighlightInvalidSlots(List<int> startIndexes, List<int> endIndexes)
+    {
+        if (startIndexes.Count != endIndexes.Count)
+        {
+            throw new Exception("different size of index lists");
+        }
+        print("start highlighted Slots of count " + startIndexes.Count);
+        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        {
+            Peak startPeak = GetPeak(startAndEndIndexes.Item1);
+            Peak endPeak = GetPeak(startAndEndIndexes.Item2);
+            float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
+            if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
+            {
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
+
+            }
+            else
+            {
+
             }
 
         }
@@ -248,9 +272,9 @@ public class GameController : MonoBehaviour
     /*
     spawn a new box if there are available slots for that box type
     */
-    private void SpawnNewBox(DraggableBox draggableBox)
+    private void SpawnNewBox(DraggableBox previousBox)
     {
-        JSONReader.SerializedSlot[] possibleSlots = draggableBox.aminoAcidChar.slots;
+        JSONReader.SerializedSlot[] possibleSlots = previousBox.aminoAcidChar.slots;
         print("possibleSlots length: " + possibleSlots.Length);
         for (int i = 0; i < possibleSlots.Length - 1; i++)
         {
@@ -259,7 +283,8 @@ public class GameController : MonoBehaviour
             int end_peak_index = serializedSlot.end_peak_index;
             if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
             {
-                CreateBox(draggableBox.aminoAcidChar, draggableBox.posX);
+                DraggableBox newBox = CreateBox(previousBox.aminoAcidChar, previousBox.posX);
+                newBox.SetColor(previousBox.GetColor());
                 //TODO: remove from possible slots list  
                 //exit the loop when one new box is created
                 return;
@@ -334,10 +359,13 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
+    private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
         //DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
+        box.aminoAcidChar = aminoAcidChar;
+        box.SetColor(new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255));
+        box.SetText(aminoAcidChar.slots.Length.ToString());
         //BoxContainer boxContainer = CreateBoxContainerPrefab(xPos, boxYPos, 4, 4);
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
@@ -345,7 +373,6 @@ public class GameController : MonoBehaviour
             box.startPeakNumbers.Add(slot.start_peak_index);
             box.endPeakNumbers.Add(slot.end_peak_index);
             box.SwitchStartAndEndIndexes();
-            box.aminoAcidChar = aminoAcidChar;
             //add intensity to peaks
             Peak startPeak = GetPeak(slot.start_peak_index);
             Peak endPeak = GetPeak(slot.end_peak_index);
@@ -354,6 +381,7 @@ public class GameController : MonoBehaviour
             startPeak.intensity = startPeakIntensity;
             endPeak.intensity = endPeakIntensity;
         }
+        return box;
     }
 
     private void DrawLine()

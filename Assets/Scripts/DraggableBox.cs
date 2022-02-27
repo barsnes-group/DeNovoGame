@@ -29,6 +29,7 @@ public class DraggableBox : MonoBehaviour
     public Peak placedStartPeak;
     public Peak placedEndPeak;
     internal float posX;
+    private Color currentColor;
 
     public bool getIsPlaced()
     {
@@ -197,18 +198,19 @@ public class DraggableBox : MonoBehaviour
         startPos = transform.position;
     }
 
-    public void SetColor()
+//TODO: color som parameter
+    public void SetColor(Color color)
     {
-        Color color = new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255);
+        currentColor = color;
+        //color = new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255);
         GetComponentInChildren<SpriteRenderer>().color = color;
     }
 
-    private void Update()
-    {
-        //SetText(width);
+    public Color GetColor() {
+        return currentColor;
     }
 
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
