@@ -8,10 +8,8 @@ public class GameController : MonoBehaviour
 {
     public TextAsset CsvFile;
     public GameObject boxPrefab;
-    public GameObject boxContainerPrefab;
     public GameObject peakPrefab;
     public GameObject slotPrefab;
-    public GameObject uSlotPrefab;
     private List<Slot> highlightedSlots = new List<Slot>();
     public int occupiedSlotsCount = 0;
     [SerializeField]
@@ -70,7 +68,7 @@ public class GameController : MonoBehaviour
 
         if (!valid) 
         {
-            slot.SetColor(new Color32(255, 255, 255, 155));
+            slot.SetColor(new Color32(229, 143, 30, 135));
         }
 
         //TODO: check if this can be removed
@@ -144,26 +142,6 @@ public class GameController : MonoBehaviour
             {
                 print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
-            }
-        }
-    }
-
-    internal void HighlightUnvalidSlots(List<int> startIndexes, List<int> endIndexes)
-    {
-        if (startIndexes.Count != endIndexes.Count)
-        {
-            throw new Exception("different size of index lists");
-        }
-        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
-        {
-            Peak startPeak = GetPeak(startAndEndIndexes.Item1);
-            Peak endPeak = GetPeak(startAndEndIndexes.Item2);
-            float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
-            if (SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
-            {
-                print("highlight unvalid slots");
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
-
             }
         }
     }
@@ -263,10 +241,10 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < draggableBoxes.Length; i++)
         {
             DraggableBox box = draggableBoxes[i];
-            if (box.getIsPlaced())
+            if (box.GetIsPlaced())
             {
-                int boxStart = box.getStartPeak().index;
-                int boxEnd = box.getEndPeak().index;
+                int boxStart = box.GetStartPeak().index;
+                int boxEnd = box.GetEndPeak().index;
                 bool overlaps = Overlap(boxStart, boxEnd, slotStart, slotEnd);
                 if (overlaps)
                 {

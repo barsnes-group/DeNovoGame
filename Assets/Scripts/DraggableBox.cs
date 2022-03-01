@@ -31,11 +31,11 @@ public class DraggableBox : MonoBehaviour
     internal float posX;
     private Color currentColor;
 
-    public bool getIsPlaced()
+    public bool GetIsPlaced()
     {
         return isPlaced;
     }
-    public Peak getStartPeak()
+    public Peak GetStartPeak()
     {
         if (!isPlaced)
         {
@@ -48,7 +48,7 @@ public class DraggableBox : MonoBehaviour
         return placedStartPeak;
     }
 
-    public Peak getEndPeak()
+    public Peak GetEndPeak()
     {
         if (!isPlaced)
         {
@@ -65,7 +65,7 @@ public class DraggableBox : MonoBehaviour
         _cam = Camera.main;
     }
 
-    private String indexesToString()
+    private String IndexesToString()
     {
         String str = "";
         foreach (var s in startPeakNumbers)
@@ -83,27 +83,26 @@ public class DraggableBox : MonoBehaviour
     void OnMouseDown()
     {
         print("START: Box was Clicked");
-        print("box can be placed in " + indexesToString());
+        print("box can be placed in " + IndexesToString());
         _dragOffset = transform.position - GetMousePos();
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
         //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
         //removes text with possible slots, when box is picked up
-        SetText("");
+       //SetText("");
     }
 
     private void OnMouseUp()
     {
-        Peak closestPeak = checkClosestPeak();
+        Peak closestPeak = CheckClosestPeak();
         if (closestPeak != null)
         {
-            placeBox(closestPeak);
+            PlaceBox(closestPeak);
         }
         else
         {
             //no peak close enough
             ReturnToStartPos();
             isPlaced = false; 
-            SetScale(3, 3);
             //int slotCount = getGameController().occupiedSlotsCount -= 1;
             Score scoreComponent = scoreObject.GetComponent<Score>();
             //scoreComponent.AddScore(slotCount);
@@ -116,7 +115,7 @@ public class DraggableBox : MonoBehaviour
         check if this box is close to any peak
         return Peak or null if not found
     */
-    private Peak checkClosestPeak()
+    private Peak CheckClosestPeak()
     {
         foreach (int startPeakIndex in startPeakNumbers)
         {
@@ -134,7 +133,7 @@ public class DraggableBox : MonoBehaviour
         return null;
     }
 
-    private void placeBox(Peak startPeak)
+    private void PlaceBox(Peak startPeak)
     {
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
@@ -191,7 +190,8 @@ public class DraggableBox : MonoBehaviour
         {
             throw new ArgumentException();
         }
-        transform.localScale = new Vector3(scaleX, scaleY, 0);
+        //transform.localScale = new Vector3(scaleX, scaleY, 0);
+        GetComponentInChildren<Transform>().localScale = new Vector3(scaleX, scaleY, 0);
     }
 
     public void SetPos(float posX, float posY)
