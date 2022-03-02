@@ -367,14 +367,12 @@
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEngine.UI.ref.dll"
-"Assets/Scripts/BoxContainer.cs"
 "Assets/Scripts/DraggableBox.cs"
 "Assets/Scripts/GameController.cs"
 "Assets/Scripts/JSONReader.cs"
 "Assets/Scripts/Peak.cs"
 "Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
-"Assets/Scripts/SlotDeserializer.cs"
 -langversion:9.0
 
 /deterministic

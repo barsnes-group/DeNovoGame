@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
     public float boxYPos = 13;
     public float scaleWidth = 0.1f;
     [SerializeField]
-    GameObject SlotContainer;
+    GameObject PeakContainer;
 
     void Start()
     {
@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour
 
         if (!valid) 
         {
-            slot.SetColor(new Color32(229, 143, 30, 135));
+            slot.SetColor(new Color32(229, 143, 30, 100));
         }
 
         //TODO: check if this can be removed
@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
     Peak CreatePeakPrefab(float pos_x, float pos_y, float scale_x, float scale_y, float width_to_prev, int index)
     {
         GameObject peakObject = Instantiate(peakPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        peakObject.transform.SetParent(GameObject.Find("SlotContainer").transform);
+        peakObject.transform.SetParent(GameObject.Find("PeakContainer").transform);
 
         Peak peak = peakObject.GetComponent<Peak>();
         peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
@@ -107,18 +107,6 @@ public class GameController : MonoBehaviour
         box.posX = pos_x;
         box.SetScoreObject(scoreObject);
         return box;
-    }
-
-    BoxContainer CreateBoxContainerPrefab(float pos_x, float pos_y, float scale_x, float scale_y) 
-    {
-        GameObject boxContainerObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
-        boxContainerObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
-        BoxContainer boxContainer = boxContainerObject.GetComponent<BoxContainer>();
-        boxContainer.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
-        boxContainer.SetPos(pos_x * scaleWidth, pos_y);
-        //boxContainer.width = scale_x.ToString();
-
-        return boxContainer; 
     }
 
     internal void HighlightValidSlots(List<int> startIndexes, List<int> endIndexes)
@@ -276,7 +264,7 @@ public class GameController : MonoBehaviour
 
     public Peak GetPeak(int index)
     {
-        GameObject peakIndex = SlotContainer.transform.GetChild(index).gameObject;
+        GameObject peakIndex = PeakContainer.transform.GetChild(index).gameObject;
         Peak peak = peakIndex.GetComponent<Peak>();
 
         if (peakIndex == null || peak == null)

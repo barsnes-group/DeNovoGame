@@ -23,21 +23,11 @@ public class Peak : MonoBehaviour
         transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
     }
 
-    internal void Highlight()
-    {
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
-    }
-
-    internal void DefaultColor()
-    {
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.black;
-    }
-
-
     internal void SetText(string text)
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
+    
     public string ToString()
     {
         return "peak nr " + index;
