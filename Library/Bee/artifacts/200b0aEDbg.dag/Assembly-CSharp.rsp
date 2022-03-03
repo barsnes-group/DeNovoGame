@@ -373,6 +373,7 @@
 "Assets/Scripts/Peak.cs"
 "Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
+"Assets/Scripts/Warnings.cs"
 -langversion:9.0
 
 /deterministic

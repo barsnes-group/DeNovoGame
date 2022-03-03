@@ -14,6 +14,7 @@ public class DraggableBox : MonoBehaviour
     public List<int> endPeakNumbers;
     public List<float> startCoord;
     public List<float> endCoord;
+    
 
     public string width;
     public float boxToSlotTheshold = 2;
@@ -88,7 +89,7 @@ public class DraggableBox : MonoBehaviour
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
         //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
         //removes text with possible slots, when box is picked up
-       //SetText("");
+       SetText("");
     }
 
     private void OnMouseUp()
@@ -107,13 +108,15 @@ public class DraggableBox : MonoBehaviour
             Score scoreComponent = scoreObject.GetComponent<Score>();
             //scoreComponent.AddScore(slotCount);
             print("# of occupied slots: " + getGameController().occupiedSlotsCount);
+            SetText(aminoAcidChar.slots.Length.ToString());
+            SetScale(1.5f,1.2f);
         }
         getGameController().ClearSlots();
     }
 
     /*
         check if this box is close to any peak
-        return Peak or null if not found
+        return Peak, or null if not found
     */
     private Peak CheckClosestPeak()
     {
@@ -135,12 +138,13 @@ public class DraggableBox : MonoBehaviour
 
     private void PlaceBox(Peak startPeak)
     {
+        //TODO: if- sjekk om occupied, hvis ikke print en warning på skjermen
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         isPlaced = true;
-        int occupiedSlots = getGameController().occupiedSlotsCount;
         Slot slot = getGameController().BoxPlaced(1, true, this, startPeak);
         Vector2 peakEndPos = slot.endpeak.transform.position;
+        int occupiedSlots = getGameController().occupiedSlotsCount;
     }
 
     private GameController getGameController()
@@ -162,7 +166,7 @@ public class DraggableBox : MonoBehaviour
         scoreObject = scoreObjectSetter;
     }
 
-    private void ReturnToStartPos()
+    public void ReturnToStartPos()
     {
         transform.position = startPos;
     }

@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject boxPrefab;
     public GameObject peakPrefab;
     public GameObject slotPrefab;
+    public GameObject warningObject;
     private List<Slot> highlightedSlots = new List<Slot>();
     public int occupiedSlotsCount = 0;
     [SerializeField]
@@ -46,6 +47,11 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void Update() {
+        Score scoreComponent = scoreObject.GetComponent<Score>();
+        scoreComponent.CalculateScore(GetAllBoxes());  
+    }
+
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
     {
         float pos_x1 = startPeak.transform.position.x;
@@ -66,7 +72,7 @@ public class GameController : MonoBehaviour
         slot.endpeak = endPeak;
         slot.SetScale(MathF.Abs(pos_x2 - pos_x1), intensity);
 
-        if (!valid) 
+        if (!valid)
         {
             slot.SetColor(new Color32(229, 143, 30, 100));
         }
@@ -152,7 +158,7 @@ public class GameController : MonoBehaviour
     */
     internal Slot BoxPlaced(int score, bool validPosition, DraggableBox draggableBox, Peak startpeak)
     {
-        print("highlightedSlots: " + highlightedSlots.Count + " startpeak: " + startpeak);
+        print("highlightedSlots: " + highlightedSlots.Count);
         Slot selectedSlot = ChangeScaleOfBox(startpeak, draggableBox);
         if (selectedSlot == null)
         {
@@ -160,24 +166,19 @@ public class GameController : MonoBehaviour
         }
         draggableBox.placedStartPeak = selectedSlot.startpeak;
         draggableBox.placedEndPeak = selectedSlot.endpeak;
-
-        //occupiedSlotsCount += 1;
-        Score scoreComponent = scoreObject.GetComponent<Score>();
-        scoreComponent.AddScore(score);
-        //scoreComponent.AddScore(occupiedSlotsCount);
-        if (score != occupiedSlotsCount)
-        {
-            print("score and occupiedSlotsCount not the same");
-        }
         if (validPosition)
         {
             //spawn new box if there are available slots
             SpawnNewBox(draggableBox);
         }
-
+        else if (!validPosition)
+        {
+            print("box can't be placed here!");
+        }
         occupiedSlotsCount += 1;
         print("OCCUPIED SLOTS: " + occupiedSlotsCount);
-
+        Score scoreComponent = scoreObject.GetComponent<Score>();
+        scoreComponent.CalculateScore(GetAllBoxes());
         return selectedSlot;
     }
 
@@ -195,6 +196,11 @@ public class GameController : MonoBehaviour
                 return slot;
             }
         }
+
+        Warnings warningComponent  = warningObject.GetComponent<Warnings>();
+        warningComponent.SetText("Warning! You can't place box on top of another box");
+        draggableBox.ReturnToStartPos();
+
         throw new NullReferenceException("selected slot is null");
     }
 
@@ -292,9 +298,8 @@ public class GameController : MonoBehaviour
         //DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
         box.aminoAcidChar = aminoAcidChar;
-        box.SetColor(new Color32((byte)Random.Range(0,255),(byte) Random.Range(0,255), (byte)Random.Range(0,255), 255));
+        box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255));
         box.SetText(aminoAcidChar.slots.Length.ToString());
-        //BoxContainer boxContainer = CreateBoxContainerPrefab(xPos, boxYPos, 4, 4);
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
