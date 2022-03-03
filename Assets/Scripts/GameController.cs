@@ -177,8 +177,8 @@ public class GameController : MonoBehaviour
         }
         occupiedSlotsCount += 1;
         print("OCCUPIED SLOTS: " + occupiedSlotsCount);
-        Score scoreComponent = scoreObject.GetComponent<Score>();
-        scoreComponent.CalculateScore(GetAllBoxes());
+        //Score scoreComponent = scoreObject.GetComponent<Score>();
+        //scoreComponent.CalculateScore(GetAllBoxes());
         return selectedSlot;
     }
 

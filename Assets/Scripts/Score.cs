@@ -16,7 +16,7 @@ public class Score : MonoBehaviour
 
     private void UpdateScore()
     {
-        SetText("Score: " + currentScore);
+        SetText("Score: " + (int)Math.Round(currentScore, 0));
     }
 
     internal float GetScore()
