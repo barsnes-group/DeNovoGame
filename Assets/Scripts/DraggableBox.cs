@@ -14,7 +14,7 @@ public class DraggableBox : MonoBehaviour
     public List<int> endPeakNumbers;
     public List<float> startCoord;
     public List<float> endCoord;
-    
+
 
     public string width;
     public float boxToSlotTheshold = 2;
@@ -89,7 +89,7 @@ public class DraggableBox : MonoBehaviour
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
         //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
         //removes text with possible slots, when box is picked up
-       SetText("");
+        SetText("");
     }
 
     private void OnMouseUp()
@@ -103,13 +103,14 @@ public class DraggableBox : MonoBehaviour
         {
             //no peak close enough
             ReturnToStartPos();
-            isPlaced = false; 
+            //TODO: sett dette i returnToStart()
+            isPlaced = false;
             //int slotCount = getGameController().occupiedSlotsCount -= 1;
             Score scoreComponent = scoreObject.GetComponent<Score>();
             //scoreComponent.AddScore(slotCount);
             print("# of occupied slots: " + getGameController().occupiedSlotsCount);
-            SetText(aminoAcidChar.slots.Length.ToString());
-            SetScale(1.5f,1.2f);
+            SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+            SetScale(1.5f, 1.2f);
         }
         getGameController().ClearSlots();
     }
@@ -138,11 +139,16 @@ public class DraggableBox : MonoBehaviour
 
     private void PlaceBox(Peak startPeak)
     {
-        //TODO: if- sjekk om occupied, hvis ikke print en warning på skjermen
+        //TODO: if- sjekk om occupied, print en warning på skjermen
+/*         DraggableBox[] draggableBoxList = getGameController().GetAllBoxes();
+        if (getGameController().SlotOccupied(startPeak.index, GetEndPeak().index, draggableBoxList))
+        {
+            getGameController().HandleInvalidBoxPlacement(this);
+        } */
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         isPlaced = true;
-        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak);
+        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak); //TODO: fiks
         Vector2 peakEndPos = slot.endpeak.transform.position;
         int occupiedSlots = getGameController().occupiedSlotsCount;
     }
@@ -211,7 +217,8 @@ public class DraggableBox : MonoBehaviour
         GetComponentInChildren<SpriteRenderer>().color = color;
     }
 
-    public Color GetColor() {
+    public Color GetColor()
+    {
         return currentColor;
     }
 

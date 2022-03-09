@@ -16,6 +16,7 @@ public class Score : MonoBehaviour
 
     private void UpdateScore()
     {
+        //rounds current score to int
         SetText("Score: " + (int)Math.Round(currentScore, 0));
     }
 

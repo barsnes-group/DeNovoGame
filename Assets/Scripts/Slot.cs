@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class Slot : MonoBehaviour
@@ -25,6 +26,15 @@ public class Slot : MonoBehaviour
             throw new ArgumentException();
         }
         this.intensity = intensity;
+    }
+
+    public float getIntensity()
+    {
+        if (intensity == null)
+        {
+            throw new ArgumentException();
+        }
+        return intensity;
     }
 
     public void setX2(float x2)
@@ -70,5 +80,10 @@ public class Slot : MonoBehaviour
     public void SetColor(Color color)
     {
         GetComponentInChildren<SpriteRenderer>().color = color;
+    }
+
+    public void SetText(string text)
+    {
+        GetComponent<TextMeshPro>().text = text.ToString();
     }
 }
