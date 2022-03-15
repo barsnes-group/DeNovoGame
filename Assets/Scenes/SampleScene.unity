@@ -927,13 +927,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1042557655}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnClick()
-        m_Mode: 0
+      - m_Target: {fileID: 1042557657}
+        m_TargetAssemblyTypeName: AminoAcidSequence, Assembly-CSharp
+        m_MethodName: OnResetClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1244,13 +1244,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1661499908}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnClick()
-        m_Mode: 0
+      - m_Target: {fileID: 1661499910}
+        m_TargetAssemblyTypeName: AminoAcidSequence, Assembly-CSharp
+        m_MethodName: OnGetAminoAcidsClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1522,7 +1522,6 @@ GameObject:
   - component: {fileID: 8477251219580983924}
   - component: {fileID: 3799744058465190971}
   - component: {fileID: 7554153867389100607}
-  - component: {fileID: 3881816199750541080}
   m_Layer: 0
   m_Name: bg
   m_TagString: Untagged
@@ -1582,29 +1581,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3881816199750541080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1099275961420370974}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ad4bef68c754d0e9a913b1091d434c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startPeakNumbers: 
-  endPeakNumbers: 
-  startCoord: []
-  endCoord: []
-  width: 
-  boxToSlotTheshold: 5
-  startPos: {x: 0, y: 0, z: 0}
-  _speed: 10
-  textObject: {fileID: 0}
-  placedStartPeak: {fileID: 0}
-  placedEndPeak: {fileID: 0}
 --- !u!61 &7554153867389100607
 BoxCollider2D:
   m_ObjectHideFlags: 0

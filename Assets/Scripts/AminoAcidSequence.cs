@@ -51,7 +51,7 @@ public class AminoAcidSequence : MonoBehaviour
 
     public void OnResetClick()
     {
-        GetAminoAcidSequence();
+        ResetAminoAcids();
         print("reset btn clicked");
     }
 }

@@ -97,6 +97,7 @@ public class DraggableBox : MonoBehaviour
         Peak closestPeak = CheckClosestPeak();
         if (closestPeak != null)
         {
+            //placed on a peak, may be occupied
             PlaceBox(closestPeak);
         }
         else
@@ -136,7 +137,10 @@ public class DraggableBox : MonoBehaviour
         }
         return null;
     }
-
+    /*
+    Box was placed on peak startPeak
+    box placement may be occupied
+    */
     private void PlaceBox(Peak startPeak)
     {
         //TODO: if- sjekk om occupied, print en warning på skjermen
@@ -148,7 +152,7 @@ public class DraggableBox : MonoBehaviour
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         isPlaced = true;
-        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak); //TODO: fiks
+        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak); //TODO: ta bort validplacement
         Vector2 peakEndPos = slot.endpeak.transform.position;
         int occupiedSlots = getGameController().occupiedSlotsCount;
     }
@@ -224,7 +228,8 @@ public class DraggableBox : MonoBehaviour
 
     public void SetText(string text)
     {
-        textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
+        TextMeshProUGUI textComponent = textObject.GetComponent<TextMeshProUGUI>();
+        textComponent.text = text.ToString();
     }
 
     /*

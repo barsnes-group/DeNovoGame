@@ -48,11 +48,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-        private void Update() {
-            Score scoreComponent = scoreObject.GetComponent<Score>();
-            scoreComponent.CalculateScore(GetAllBoxes()); 
-            validSlots = highlightedSlots.Count; 
-        }
+    private void Update()
+    {
+        Score scoreComponent = scoreObject.GetComponent<Score>();
+        scoreComponent.CalculateScore(GetAllBoxes());
+        validSlots = highlightedSlots.Count;
+    }
 
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
     {
@@ -174,6 +175,8 @@ public class GameController : MonoBehaviour
         {
             throw new NullReferenceException("selected slot is null");
         }
+        //bool isOccupied = SlotOccupied(selectedSlot.startpeak.index, selectedSlot.endpeak.index, GetAllBoxes());
+
         draggableBox.placedStartPeak = selectedSlot.startpeak;
         draggableBox.placedEndPeak = selectedSlot.endpeak;
         SpawnNewBox(draggableBox);

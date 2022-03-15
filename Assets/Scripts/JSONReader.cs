@@ -30,7 +30,10 @@ public class JSONReader : MonoBehaviour
         public string AminoAcidName;
         public float Mass;
         public SerializedSlot[] slots;
-
+        public override String ToString()
+        {
+            return AminoAcidName;
+        }
     }
 
     void Start()
