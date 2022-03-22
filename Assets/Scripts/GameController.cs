@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public GameObject slotPrefab;
     public GameObject warningObject;
     public int validSlots;
+    public bool lastBoxPlacedOccupied;
     private List<Slot> highlightedSlots = new List<Slot>();
     public int occupiedSlotsCount = 0;
     [SerializeField]
@@ -22,6 +23,7 @@ public class GameController : MonoBehaviour
     public float peaksYPos = 15;
     public float boxYPos = 13;
     public float scaleWidth = 0.1f;
+    public int rightBoxMarginSpace = 5;
     [SerializeField]
     GameObject PeakContainer;
 
@@ -133,6 +135,10 @@ public class GameController : MonoBehaviour
             if (!SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, true);
+                if (slot == null)
+                {
+                    print("slot in HighlightValidSlots() is null");
+                }
                 highlightedSlots.Add(slot);
                 //print("----avg intensity: " + slot.GetSlotScaleY() + " " +  avgIntensity.ToString());
                 //TODO: slot.SetText(slot.getIntensity().ToString());
@@ -161,32 +167,36 @@ public class GameController : MonoBehaviour
     /*
     box was placed on a valid slot
     */
-    internal Slot BoxPlaced(int score, bool validPosition, DraggableBox draggableBox, Peak startpeak)
+    internal Slot BoxPlaced(int score, DraggableBox draggableBox, Peak startpeak)
     {
         print("highlightedSlots: " + highlightedSlots.Count);
-        if (!validPosition)
-        {
-            HandleInvalidBoxPlacement(draggableBox);
-            return null;
 
-        }
         Slot selectedSlot = ChangeScaleOfBox(startpeak, draggableBox);
         if (selectedSlot == null)
         {
             throw new NullReferenceException("selected slot is null");
         }
-        //bool isOccupied = SlotOccupied(selectedSlot.startpeak.index, selectedSlot.endpeak.index, GetAllBoxes());
+        print("BOX PLACED - start, end index: " + selectedSlot.startpeak.index + " , " + selectedSlot.endpeak.index);
 
         draggableBox.placedStartPeak = selectedSlot.startpeak;
         draggableBox.placedEndPeak = selectedSlot.endpeak;
-        SpawnNewBox(draggableBox);
+
+        lastBoxPlacedOccupied = SlotOccupied(selectedSlot.startpeak.index, selectedSlot.endpeak.index, GetAllBoxes());
+
+        if (lastBoxPlacedOccupied)
+        {
+            HandleInvalidBoxPlacement(draggableBox);
+        }
+        else
+        {
+            SpawnNewBox(draggableBox);
+        }
 
         return selectedSlot;
     }
 
     public void HandleInvalidBoxPlacement(DraggableBox box)
     {
-        //TODO:!!!
         Warnings warningComponent = warningObject.GetComponent<Warnings>();
         print("Warning! You can't place box on top of another box");
         warningComponent.SetText("Warning! You can't place box on top of another box");
@@ -208,7 +218,6 @@ public class GameController : MonoBehaviour
             }
         }
         throw new NullReferenceException("selected slot is null");
-        //PrintWarning(draggableBox);
     }
 
     /*
@@ -241,11 +250,20 @@ public class GameController : MonoBehaviour
     {
         for (int i = 0; i < draggableBoxes.Length; i++)
         {
+            if (slotStart == null && slotEnd == null)
+            {
+                throw new NullReferenceException("slot start or end is null in SlotOccupied()");
+            }
             DraggableBox box = draggableBoxes[i];
             if (box.GetIsPlaced())
             {
                 int boxStart = box.GetStartPeak().index;
                 int boxEnd = box.GetEndPeak().index;
+                if (boxStart == null && boxEnd == null)
+                {
+                    throw new NullReferenceException("box start or end is null in SlotOccupied()");
+                }
+
                 bool overlaps = Overlap(boxStart, boxEnd, slotStart, slotEnd);
                 if (overlaps)
                 {
@@ -296,7 +314,7 @@ public class GameController : MonoBehaviour
             if (aminoAcidChar.slots.Length > 0)
             {
                 CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin);
-                rightBoxMargin += 12;
+                rightBoxMargin += rightBoxMarginSpace;
             }
         }
     }

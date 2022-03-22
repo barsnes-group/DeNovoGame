@@ -41,9 +41,10 @@
      <Compile Include="Assets/Scripts/DraggableBox.cs" />
      <Compile Include="Assets/Scripts/Peak.cs" />
      <Compile Include="Assets/Scripts/Slot.cs" />
+     <Compile Include="Assets/Scripts/ButtonsScript.cs" />
      <Compile Include="Assets/Scripts/JSONReader.cs" />
      <Compile Include="Assets/Scripts/GameController.cs" />
-     <Compile Include="Assets/Scripts/AminoAcidSequence.cs" />
+     <Compile Include="Assets/Scripts/Menu.cs" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />

@@ -31,6 +31,8 @@ public class DraggableBox : MonoBehaviour
     public Peak placedEndPeak;
     internal float posX;
     private Color currentColor;
+    private float defaultXScale = 1.5f;
+    private float defaultYScale = 1.2f;
 
     public bool GetIsPlaced()
     {
@@ -105,13 +107,12 @@ public class DraggableBox : MonoBehaviour
             //no peak close enough
             ReturnToStartPos();
             //TODO: sett dette i returnToStart()
-            isPlaced = false;
+            
             //int slotCount = getGameController().occupiedSlotsCount -= 1;
             Score scoreComponent = scoreObject.GetComponent<Score>();
             //scoreComponent.AddScore(slotCount);
             print("# of occupied slots: " + getGameController().occupiedSlotsCount);
             SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
-            SetScale(1.5f, 1.2f);
         }
         getGameController().ClearSlots();
     }
@@ -144,15 +145,15 @@ public class DraggableBox : MonoBehaviour
     private void PlaceBox(Peak startPeak)
     {
         //TODO: if- sjekk om occupied, print en warning på skjermen
-/*         DraggableBox[] draggableBoxList = getGameController().GetAllBoxes();
-        if (getGameController().SlotOccupied(startPeak.index, GetEndPeak().index, draggableBoxList))
-        {
-            getGameController().HandleInvalidBoxPlacement(this);
-        } */
+        /*         DraggableBox[] draggableBoxList = getGameController().GetAllBoxes();
+                if (getGameController().SlotOccupied(startPeak.index, GetEndPeak().index, draggableBoxList))
+                {
+                    getGameController().HandleInvalidBoxPlacement(this);
+                } */
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
+        Slot slot = getGameController().BoxPlaced(1, this, startPeak);
         isPlaced = true;
-        Slot slot = getGameController().BoxPlaced(1, true, this, startPeak); //TODO: ta bort validplacement
         Vector2 peakEndPos = slot.endpeak.transform.position;
         int occupiedSlots = getGameController().occupiedSlotsCount;
     }
@@ -179,6 +180,8 @@ public class DraggableBox : MonoBehaviour
     public void ReturnToStartPos()
     {
         transform.position = startPos;
+        SetScale(defaultXScale, defaultYScale);
+        isPlaced = false;
     }
 
     private void SnapPosition(Vector2 peakPos)

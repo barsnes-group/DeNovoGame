@@ -249,7 +249,7 @@ if __name__ == "__main__":
     #coordinates = read_file(f'{cwd}/selected_spectra.mgf')
     coordinates = read_file('Assets/Data/selected_spectra.mgf')
     print(f"Number of peaks before filtering: {len(coordinates)}")
-    coordinates = percentile_sorted(coordinates, args.percentile)
+    coordinates = percentile_sorted(coordinates, 84)#args.percentile)
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
     filtered_Slot_coord = sorted(filtered_Slot_coord);
@@ -259,5 +259,5 @@ if __name__ == "__main__":
     # pprint.pprint(slot_dict)
     # pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
-    playing_board_file(f'{cwd}/Assets/Data/playing_board.csv', filtered_Slot_coord)
-    write_to_json(slot_dict, f'{cwd}/Assets/Data/aa_to_slots.json')
+    playing_board_file(f'{cwd}/Assets/Data/playing_board_level2.csv', filtered_Slot_coord)
+    write_to_json(slot_dict, f'{cwd}/Assets/Data/aa_to_slots_level2.json')
