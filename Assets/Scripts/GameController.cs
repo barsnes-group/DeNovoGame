@@ -147,6 +147,7 @@ public class GameController : MonoBehaviour
             {
                 print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
+                highlightedSlots.Add(slot);
             }
         }
     }
@@ -171,11 +172,8 @@ public class GameController : MonoBehaviour
     {
         print("highlightedSlots: " + highlightedSlots.Count);
 
-        Slot selectedSlot = ChangeScaleOfBox(startpeak, draggableBox);
-        if (selectedSlot == null)
-        {
-            throw new NullReferenceException("selected slot is null");
-        }
+        Slot selectedSlot = FindMatchingSlot(startpeak);
+        draggableBox.SetScale(selectedSlot.GetSlotScaleX(), selectedSlot.GetSlotScaleY());
         print("BOX PLACED - start, end index: " + selectedSlot.startpeak.index + " , " + selectedSlot.endpeak.index);
 
         draggableBox.placedStartPeak = selectedSlot.startpeak;
@@ -199,21 +197,22 @@ public class GameController : MonoBehaviour
     {
         Warnings warningComponent = warningObject.GetComponent<Warnings>();
         print("Warning! You can't place box on top of another box");
-        warningComponent.SetText("Warning! You can't place box on top of another box");
+        //string warning = warningComponent.SetText("Warning! You can't place box on top of another box");
+        //Invoke("Warning! You can't place box on top of another box", 2f);
         box.ReturnToStartPos();
     }
 
     /*
     change the scale of the box to the scale of the slot it is placed on
     */
-    private Slot ChangeScaleOfBox(Peak startpeak, DraggableBox draggableBox)
+    //TODO: peak
+    private Slot FindMatchingSlot(Peak startpeak)
     {
         foreach (Slot slot in highlightedSlots)
         {
             if (slot.startpeak.index == startpeak.index)
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
-                draggableBox.SetScale(slot.GetSlotScaleX(), slot.GetSlotScaleY());
                 return slot;
             }
         }

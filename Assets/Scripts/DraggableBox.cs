@@ -106,13 +106,10 @@ public class DraggableBox : MonoBehaviour
         {
             //no peak close enough
             ReturnToStartPos();
-            //TODO: sett dette i returnToStart()
-            
-            //int slotCount = getGameController().occupiedSlotsCount -= 1;
             Score scoreComponent = scoreObject.GetComponent<Score>();
             //scoreComponent.AddScore(slotCount);
             print("# of occupied slots: " + getGameController().occupiedSlotsCount);
-            SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+            
         }
         getGameController().ClearSlots();
     }
@@ -182,6 +179,7 @@ public class DraggableBox : MonoBehaviour
         transform.position = startPos;
         SetScale(defaultXScale, defaultYScale);
         isPlaced = false;
+        SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
     }
 
     private void SnapPosition(Vector2 peakPos)
