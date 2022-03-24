@@ -41,9 +41,6 @@ public class GameController : MonoBehaviour
         for (int i = 0; i <= array.Length - 1; i++)
         {
             string[] rows = array[i].Split(',');
-
-            //float yCoord = float.Parse(rows[1]);
-
             CreatePeakPrefab(xCoord, peaksYPos, 0.2f, 1, xCoord - previousX, i);
             xCoord += 7;
             previousX = xCoord;
@@ -140,8 +137,6 @@ public class GameController : MonoBehaviour
                     print("slot in HighlightValidSlots() is null");
                 }
                 highlightedSlots.Add(slot);
-                //print("----avg intensity: " + slot.GetSlotScaleY() + " " +  avgIntensity.ToString());
-                //TODO: slot.SetText(slot.getIntensity().ToString());
             }
             else //highlight slots som ikke er occupied og ikke valid 
             {
@@ -172,10 +167,9 @@ public class GameController : MonoBehaviour
     {
         print("highlightedSlots: " + highlightedSlots.Count);
 
-        Slot selectedSlot = FindMatchingSlot(startpeak);
-        draggableBox.SetScale(selectedSlot.GetSlotScaleX(), selectedSlot.GetSlotScaleY());
-        print("BOX PLACED - start, end index: " + selectedSlot.startpeak.index + " , " + selectedSlot.endpeak.index);
+        Slot selectedSlot = FindMatchingSlot(startpeak, draggableBox);
 
+        draggableBox.SetScale(selectedSlot.GetSlotScaleX(), selectedSlot.GetSlotScaleY());
         draggableBox.placedStartPeak = selectedSlot.startpeak;
         draggableBox.placedEndPeak = selectedSlot.endpeak;
 
@@ -206,13 +200,15 @@ public class GameController : MonoBehaviour
     change the scale of the box to the scale of the slot it is placed on
     */
     //TODO: peak
-    private Slot FindMatchingSlot(Peak startpeak)
+    private Slot FindMatchingSlot(Peak startpeak, DraggableBox draggableBox)
     {
         foreach (Slot slot in highlightedSlots)
         {
-            if (slot.startpeak.index == startpeak.index)
+            //TODO: sjekk at den passer i tillegg
+            if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
+                print("slot width: " + slot.GetWidth() +" box width: " + Int32.Parse(draggableBox.width));
                 return slot;
             }
         }

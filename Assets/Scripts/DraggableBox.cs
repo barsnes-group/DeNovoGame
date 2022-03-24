@@ -106,10 +106,6 @@ public class DraggableBox : MonoBehaviour
         {
             //no peak close enough
             ReturnToStartPos();
-            Score scoreComponent = scoreObject.GetComponent<Score>();
-            //scoreComponent.AddScore(slotCount);
-            print("# of occupied slots: " + getGameController().occupiedSlotsCount);
-            
         }
         getGameController().ClearSlots();
     }
@@ -141,18 +137,15 @@ public class DraggableBox : MonoBehaviour
     */
     private void PlaceBox(Peak startPeak)
     {
-        //TODO: if- sjekk om occupied, print en warning på skjermen
-        /*         DraggableBox[] draggableBoxList = getGameController().GetAllBoxes();
-                if (getGameController().SlotOccupied(startPeak.index, GetEndPeak().index, draggableBoxList))
-                {
-                    getGameController().HandleInvalidBoxPlacement(this);
-                } */
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         Slot slot = getGameController().BoxPlaced(1, this, startPeak);
-        isPlaced = true;
-        Vector2 peakEndPos = slot.endpeak.transform.position;
-        int occupiedSlots = getGameController().occupiedSlotsCount;
+        if (!getGameController().lastBoxPlacedOccupied)
+        {
+            isPlaced = true;
+            Vector2 peakEndPos = slot.endpeak.transform.position;
+            int occupiedSlots = getGameController().occupiedSlotsCount;
+        }
     }
 
     private GameController getGameController()

@@ -16,13 +16,14 @@ public class ButtonsScript : MonoBehaviour
         
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
-
+        //TODO: sort array costume
         for (int i = 0; i < draggableBoxes.Length; i++)
         {
             DraggableBox box = draggableBoxes[i];
             if (box.GetIsPlaced())
             {
-                sequence += box.aminoAcidChar.ToString() + " , ";
+                sequence += box.aminoAcidChar.ToString() + " , " + box.transform.position.x;
+                
             }
         }
 

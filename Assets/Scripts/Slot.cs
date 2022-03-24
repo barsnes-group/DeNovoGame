@@ -19,6 +19,15 @@ public class Slot : MonoBehaviour
         throw new NullReferenceException();
     }
 
+    public void setX2(float x2)
+    {
+        if (x2 > 0)
+        {
+            this.x2 = x2;
+        }
+        throw new NullReferenceException();
+    }
+    
     private void setIntensity(float intensity)
     {
         if (intensity == null)
@@ -37,13 +46,9 @@ public class Slot : MonoBehaviour
         return intensity;
     }
 
-    public void setX2(float x2)
+    public float GetWidth()
     {
-        if (x2 > 0)
-        {
-            this.x2 = x2;
-        }
-        throw new NullReferenceException();
+        return (x2 - x1);
     }
 
     internal void SetScale(float scale_x, float intensity)
