@@ -34,10 +34,16 @@ public class DraggableBox : MonoBehaviour
     private float defaultXScale = 1.5f;
     private float defaultYScale = 1.2f;
 
+/*     private void Update()
+    {
+        SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+    } */
+
     public bool GetIsPlaced()
     {
         return isPlaced;
     }
+
     public Peak GetStartPeak()
     {
         if (!isPlaced)
@@ -90,7 +96,6 @@ public class DraggableBox : MonoBehaviour
         _dragOffset = transform.position - GetMousePos();
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
         //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
-        //removes text with possible slots, when box is picked up
         SetText("");
     }
 
@@ -172,7 +177,7 @@ public class DraggableBox : MonoBehaviour
         transform.position = startPos;
         SetScale(defaultXScale, defaultYScale);
         isPlaced = false;
-        SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+        SetText(getGameController().validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
     }
 
     private void SnapPosition(Vector2 peakPos)

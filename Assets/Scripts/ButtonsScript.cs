@@ -1,19 +1,22 @@
 using UnityEngine;
-using TMPro;
+using System.Collections.Generic;
 
 public class ButtonsScript : MonoBehaviour
 {
     private bool isReset;
+    private List<string> aminoAcidSequence = new List<string>();
+    private List<string> seq = new List<string>();
 
     public string GetAminoAcidSequence()
     {
         string sequence = "";
 
-        if (isReset) {
+        if (isReset)
+        {
             sequence = " ";
             return sequence;
         }
-        
+
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
         //TODO: sort array costume
@@ -22,11 +25,12 @@ public class ButtonsScript : MonoBehaviour
             DraggableBox box = draggableBoxes[i];
             if (box.GetIsPlaced())
             {
-                sequence += box.aminoAcidChar.ToString() + " , " + box.transform.position.x;
-                
+                seq.Add(box.aminoAcidChar.ToString());
+                seq.Add(box.transform.position.x.ToString());
+                sequence += "[" + box.aminoAcidChar.ToString() + ", " + box.transform.position.x + "], ";
             }
+            aminoAcidSequence.Add(seq.ToString());
         }
-
 
         return sequence;
     }
@@ -52,6 +56,15 @@ public class ButtonsScript : MonoBehaviour
     {
         string seq = GetAminoAcidSequence();
         print("Amino Acid Sequence: " + seq);
+
+        print("=============================");
+
+        foreach (var item in aminoAcidSequence)
+        {
+            print(item.ToString());
+        }
+        //print("aminoAcidSequence[0]: " + aminoAcidSequence[0]);
+
     }
 
     public void OnResetClick()

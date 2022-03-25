@@ -3,10 +3,9 @@ using TMPro;
 
 public class Warnings : MonoBehaviour
 {
+
     public void SetText(string text)
     {
-        GetComponent<TextMeshPro>().text = text.ToString();
+            GetComponent<TextMeshPro>().text = text.ToString();
     }
 }
-
-

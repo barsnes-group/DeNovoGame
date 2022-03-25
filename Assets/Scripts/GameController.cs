@@ -11,9 +11,10 @@ public class GameController : MonoBehaviour
     public GameObject peakPrefab;
     public GameObject slotPrefab;
     public GameObject warningObject;
-    public int validSlots;
+    public int validSlotsCount;
     public bool lastBoxPlacedOccupied;
     private List<Slot> highlightedSlots = new List<Slot>();
+    private List<Slot> validSlots = new List<Slot>();
     public int occupiedSlotsCount = 0;
     [SerializeField]
     private GameObject scoreObject;
@@ -51,7 +52,8 @@ public class GameController : MonoBehaviour
     {
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.CalculateScore(GetAllBoxes());
-        validSlots = highlightedSlots.Count;
+        validSlotsCount = validSlots.Count;
+        scoreComponent.UpdateHighScore(); //TODO: flytt til en gamecontroller i menu
     }
 
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
@@ -137,6 +139,7 @@ public class GameController : MonoBehaviour
                     print("slot in HighlightValidSlots() is null");
                 }
                 highlightedSlots.Add(slot);
+                validSlots.Add(slot);
             }
             else //highlight slots som ikke er occupied og ikke valid 
             {
@@ -150,6 +153,7 @@ public class GameController : MonoBehaviour
     public void ClearSlots()
     {
         highlightedSlots.Clear();
+        validSlots.Clear();
         List<Slot> allValidSlots;
         GameObject container = GameObject.Find("ValidSlotsContainer");
         allValidSlots = container.GetComponentsInChildren<Slot>().ToList();
@@ -191,20 +195,19 @@ public class GameController : MonoBehaviour
     {
         Warnings warningComponent = warningObject.GetComponent<Warnings>();
         print("Warning! You can't place box on top of another box");
-        //string warning = warningComponent.SetText("Warning! You can't place box on top of another box");
-        //Invoke("Warning! You can't place box on top of another box", 2f);
+        //TODO: legg til lyd?
+        warningComponent.SetText("You can't place box on top of another box");
         box.ReturnToStartPos();
     }
 
     /*
     change the scale of the box to the scale of the slot it is placed on
     */
-    //TODO: peak
     private Slot FindMatchingSlot(Peak startpeak, DraggableBox draggableBox)
     {
         foreach (Slot slot in highlightedSlots)
         {
-            //TODO: sjekk at den passer i tillegg
+            //TODO: sjekk at den passer itillegg
             if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
@@ -305,7 +308,7 @@ public class GameController : MonoBehaviour
         int rightBoxMargin = 0;
         foreach (JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
-            validSlots = aminoAcidChar.slots.Length;
+            validSlotsCount = aminoAcidChar.slots.Length;
             if (aminoAcidChar.slots.Length > 0)
             {
                 CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin);
@@ -320,7 +323,7 @@ public class GameController : MonoBehaviour
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
         box.aminoAcidChar = aminoAcidChar;
         box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255));
-        box.SetText(validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+        box.SetText(validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
         {
