@@ -175,9 +175,9 @@ public class DraggableBox : MonoBehaviour
     public void ReturnToStartPos()
     {
         transform.position = startPos;
+        SetText(getGameController().validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
         SetScale(defaultXScale, defaultYScale);
         isPlaced = false;
-        SetText(getGameController().validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
     }
 
     private void SnapPosition(Vector2 peakPos)

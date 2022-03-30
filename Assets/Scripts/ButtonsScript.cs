@@ -1,41 +1,41 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 public class ButtonsScript : MonoBehaviour
 {
     private bool isReset;
-    private List<string> aminoAcidSequence = new List<string>();
-    private List<string> seq = new List<string>();
 
-    public string GetAminoAcidSequence()
+    //private List<string> seq = new List<string>();
+
+    private List<List<string>> GetAminoAcidSequence()
     {
-        string sequence = "";
-
-        if (isReset)
-        {
-            sequence = " ";
-            return sequence;
-        }
+        List<List<string>> aminoAcidSequence = new List<List<string>>();
 
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
-        //TODO: sort array costume
-        for (int i = 0; i < draggableBoxes.Length; i++)
+        DraggableBox[] allBoxes = gameController.GetAllBoxes();
+        foreach (DraggableBox box in allBoxes)
         {
-            DraggableBox box = draggableBoxes[i];
+            List<string> aminoAcidInfo = new List<string>();
+
             if (box.GetIsPlaced())
             {
-                seq.Add(box.aminoAcidChar.ToString());
-                seq.Add(box.transform.position.x.ToString());
-                sequence += "[" + box.aminoAcidChar.ToString() + ", " + box.transform.position.x + "], ";
+                aminoAcidInfo.Add(box.aminoAcidChar.ToString());
+                aminoAcidInfo.Add(box.transform.position.x.ToString());
             }
-            aminoAcidSequence.Add(seq.ToString());
-        }
 
-        return sequence;
+            if (aminoAcidInfo.Count > 0)
+            {
+                aminoAcidSequence.Add(aminoAcidInfo);
+                print("aminoAcidInfo: " + aminoAcidInfo[1]);
+                //aminoAcidSequence.Sort((x, y) => string.Compare());
+            }
+        }
+        return aminoAcidSequence;
     }
 
-    public void ResetAminoAcids()
+    private void ResetAminoAcids()
     {
         //TODO: all boxes return to start pos
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -44,26 +44,42 @@ public class ButtonsScript : MonoBehaviour
         for (int i = 0; i < draggableBoxes.Length; i++)
         {
             DraggableBox box = draggableBoxes[i];
-            if (box.GetIsPlaced())
-            {
-                box.ReturnToStartPos();
-            }
+
+            box.ReturnToStartPos();
+
         }
         isReset = true;
     }
 
+    private void WriteToCsv()
+    {
+        string filePath = "Assets/Data/out.csv";
+        StreamWriter writer = new StreamWriter(filePath);
+
+        foreach (var seq in GetAminoAcidSequence())
+        {
+            if (seq.Count > 0)
+            {
+                writer.WriteLine(seq[0] + "," + seq[1]);
+            }
+        }
+        writer.Close();
+    }
+
+
     public void OnGetAminoAcidsClick()
     {
-        string seq = GetAminoAcidSequence();
-        print("Amino Acid Sequence: " + seq);
-
-        print("=============================");
-
-        foreach (var item in aminoAcidSequence)
-        {
-            print(item.ToString());
-        }
-        //print("aminoAcidSequence[0]: " + aminoAcidSequence[0]);
+        WriteToCsv();
+        /*         foreach (var seq in GetAminoAcidSequence())
+                {
+                    //print("seq: " + seq);
+                    foreach (var aa in seq)
+                    {
+                        print("aa: " + aa.ToString());
+                    }
+                }
+        */
+        print(GetAminoAcidSequence().Count);
 
     }
 

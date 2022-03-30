@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.CalculateScore(GetAllBoxes());
         validSlotsCount = validSlots.Count;
-        scoreComponent.UpdateHighScore(); //TODO: flytt til en gamecontroller i menu
+        //scoreComponent.UpdateHighScore(); //TODO: flytt til en gamecontroller i menu
     }
 
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
@@ -211,7 +211,7 @@ public class GameController : MonoBehaviour
             if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
-                print("slot width: " + slot.GetWidth() +" box width: " + Int32.Parse(draggableBox.width));
+                print("slot width: " + slot.GetWidth() + " box width: " + Int32.Parse(draggableBox.width));
                 return slot;
             }
         }
@@ -272,6 +272,23 @@ public class GameController : MonoBehaviour
         }
         return false;
     }
+
+/*     private List<float> AvailableSlotsList(Peak startIndexes, Peak endIndexes)
+    {
+        List<float> gap = new List<float>();
+
+
+        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
+        {
+            Peak startPeak = GetPeak(startAndEndIndexes.Item1);
+            Peak endPeak = GetPeak(startAndEndIndexes.Item2);
+
+            if (!SlotOccupied(startPeak, endPeak, draggableBoxes))
+            {
+                gap.Add(startPeak);
+        }
+        }
+    } */
 
     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
     {

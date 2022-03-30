@@ -50,6 +50,11 @@ public class Score : MonoBehaviour
 
     public void UpdateHighScore()
     {
-        SetText("Score: " + highScore);
+        SetTextUGUI("High Score: " + highScore);
+    }
+
+    private void SetTextUGUI(string text)
+    {
+        GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
 }
