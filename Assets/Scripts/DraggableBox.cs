@@ -95,7 +95,6 @@ public class DraggableBox : MonoBehaviour
         print("box can be placed in " + IndexesToString());
         _dragOffset = transform.position - GetMousePos();
         getGameController().HighlightValidSlots(startPeakNumbers, endPeakNumbers);
-        //getGameController().HighlightUnvalidSlots(startPeakNumbers, endPeakNumbers);
         SetText("");
     }
 

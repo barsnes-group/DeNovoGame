@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -9,29 +10,25 @@ public class ButtonsScript : MonoBehaviour
 
     //private List<string> seq = new List<string>();
 
-    private List<List<string>> GetAminoAcidSequence()
+    private List<Tuple<string, float>> GetAminoAcidSequence()
     {
-        List<List<string>> aminoAcidSequence = new List<List<string>>();
+        List<Tuple<string, float>> aminoAcidSequence = new List<Tuple<string, float>>();
+
 
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
         foreach (DraggableBox box in allBoxes)
         {
-            List<string> aminoAcidInfo = new List<string>();
+            Tuple<string, float> aminoAcidInfo;
 
             if (box.GetIsPlaced())
             {
-                aminoAcidInfo.Add(box.aminoAcidChar.ToString());
-                aminoAcidInfo.Add(box.transform.position.x.ToString());
-            }
+                aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.transform.position.x);
 
-            if (aminoAcidInfo.Count > 0)
-            {
                 aminoAcidSequence.Add(aminoAcidInfo);
-                print("aminoAcidInfo: " + aminoAcidInfo[1]);
-                //aminoAcidSequence.Sort((x, y) => string.Compare());
             }
         }
+        aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
         return aminoAcidSequence;
     }
 
@@ -50,37 +47,34 @@ public class ButtonsScript : MonoBehaviour
         }
         isReset = true;
     }
-
-    private void WriteToCsv()
-    {
-        string filePath = "Assets/Data/out.csv";
-        StreamWriter writer = new StreamWriter(filePath);
-
-        foreach (var seq in GetAminoAcidSequence())
+    /* 
+        private void WriteToCsv()
         {
-            if (seq.Count > 0)
+            string filePath = "Assets/Data/out.csv";
+            StreamWriter writer = new StreamWriter(filePath);
+
+            foreach (var seq in GetAminoAcidSequence())
             {
-                writer.WriteLine(seq[0] + "," + seq[1]);
+                if (seq.Count > 0)
+                {
+                    writer.WriteLine(seq[0] + "," + seq[1]);
+                }
             }
-        }
-        writer.Close();
-    }
+            writer.Close();
+        } */
 
 
     public void OnGetAminoAcidsClick()
     {
-        WriteToCsv();
-        /*         foreach (var seq in GetAminoAcidSequence())
-                {
-                    //print("seq: " + seq);
-                    foreach (var aa in seq)
-                    {
-                        print("aa: " + aa.ToString());
-                    }
-                }
-        */
-        print(GetAminoAcidSequence().Count);
+        //WriteToCsv();
+        foreach (Tuple<string, float> i in GetAminoAcidSequence())
+        {
+            print("seq: " + i);
+ 
+        }
 
+        //print(GetAminoAcidSequence().Count);
+        //GetAminoAcidSequence();
     }
 
     public void OnResetClick()
