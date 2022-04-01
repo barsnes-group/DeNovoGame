@@ -111,7 +111,7 @@ public class GameController : MonoBehaviour
         GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
         DraggableBox box = boxObject.GetComponent<DraggableBox>();
-        box.width = scale_x.ToString();
+        box.width = scale_x;
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
         box.SetPos(pos_x * scaleWidth, pos_y);
         box.posX = pos_x;
@@ -211,7 +211,7 @@ public class GameController : MonoBehaviour
             if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
-                print("slot width: " + slot.GetWidth() + " box width: " + Int32.Parse(draggableBox.width));
+                print("slot width: " + slot.GetWidth() + " box width: " + draggableBox.width);
                 return slot;
             }
         }

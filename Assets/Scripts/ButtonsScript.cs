@@ -8,26 +8,24 @@ public class ButtonsScript : MonoBehaviour
 {
     private bool isReset;
 
-    //private List<string> seq = new List<string>();
-
-    private List<Tuple<string, float>> GetAminoAcidSequence()
+    private List<Tuple<string, float, float>> GetAminoAcidSequence()
     {
-        List<Tuple<string, float>> aminoAcidSequence = new List<Tuple<string, float>>();
+        List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
 
 
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
         foreach (DraggableBox box in allBoxes)
         {
-            Tuple<string, float> aminoAcidInfo;
+            Tuple<string, float, float> aminoAcidInfo;
 
             if (box.GetIsPlaced())
             {
-                aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.transform.position.x);
-
+                aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.transform.position.x, box.aminoAcidChar.Mass);
                 aminoAcidSequence.Add(aminoAcidInfo);
             }
         }
+        //sort list by the xpos of the box
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
         return aminoAcidSequence;
     }
@@ -47,30 +45,43 @@ public class ButtonsScript : MonoBehaviour
         }
         isReset = true;
     }
-    /* 
-        private void WriteToCsv()
-        {
-            string filePath = "Assets/Data/out.csv";
-            StreamWriter writer = new StreamWriter(filePath);
 
-            foreach (var seq in GetAminoAcidSequence())
+    private void FindGaps()
+    {
+        List<Tuple<string, float, float>> placedBoxes = GetAminoAcidSequence();
+
+        for (int i = 0; i < placedBoxes.Count - 1; i++)
+        {
+            float gapSize = (placedBoxes[i+1].Item2 - (placedBoxes[i].Item2 + placedBoxes[i].Item3));
+            if (gapSize > 0)
             {
-                if (seq.Count > 0)
-                {
-                    writer.WriteLine(seq[0] + "," + seq[1]);
-                }
+                print("gapSize: " + gapSize);
             }
-            writer.Close();
-        } */
+        }
+    }
+
+    private void WriteToCsv()
+    {
+        string filePath = "Assets/Data/out.csv";
+        StreamWriter writer = new StreamWriter(filePath);
+
+        foreach (var seq in GetAminoAcidSequence())
+        {
+
+            writer.WriteLine(seq.Item1 + ", " + seq.Item2 + ", " + seq.Item3);
+        }
+        writer.Close();
+    }
 
 
     public void OnGetAminoAcidsClick()
     {
-        //WriteToCsv();
-        foreach (Tuple<string, float> i in GetAminoAcidSequence())
+        WriteToCsv();
+        FindGaps();
+        foreach (Tuple<string, float, float> i in GetAminoAcidSequence())
         {
             print("seq: " + i);
- 
+
         }
 
         //print(GetAminoAcidSequence().Count);

@@ -16,7 +16,7 @@ public class DraggableBox : MonoBehaviour
     public List<float> endCoord;
 
 
-    public string width;
+    public float width;
     public float boxToSlotTheshold = 2;
 
     private GameObject scoreObject;
