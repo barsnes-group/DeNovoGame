@@ -273,23 +273,6 @@ public class GameController : MonoBehaviour
         return false;
     }
 
-/*     private List<float> AvailableSlotsList(Peak startIndexes, Peak endIndexes)
-    {
-        List<float> gap = new List<float>();
-
-
-        foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
-        {
-            Peak startPeak = GetPeak(startAndEndIndexes.Item1);
-            Peak endPeak = GetPeak(startAndEndIndexes.Item2);
-
-            if (!SlotOccupied(startPeak, endPeak, draggableBoxes))
-            {
-                gap.Add(startPeak);
-        }
-        }
-    } */
-
     private bool Overlap(int boxStart, int boxEnd, int slotStart, int slotEnd)
     {
         if (boxStart >= slotEnd)
@@ -347,6 +330,7 @@ public class GameController : MonoBehaviour
             box.startPeakNumbers.Add(slot.start_peak_index);
             box.endPeakNumbers.Add(slot.end_peak_index);
             box.SwitchStartAndEndIndexes();
+
             //add intensity to peaks
             Peak startPeak = GetPeak(slot.start_peak_index);
             Peak endPeak = GetPeak(slot.end_peak_index);
@@ -354,6 +338,7 @@ public class GameController : MonoBehaviour
             float endPeakIntensity = slot.intensity[1];
             startPeak.intensity = startPeakIntensity;
             endPeak.intensity = endPeakIntensity;
+            startPeak.coord = slot.start_peak_coord;
         }
         return box;
     }
@@ -371,5 +356,4 @@ public class GameController : MonoBehaviour
         l.SetPositions(pos.ToArray());
         l.useWorldSpace = true;
     }
-
 }

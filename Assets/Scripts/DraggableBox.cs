@@ -33,11 +33,12 @@ public class DraggableBox : MonoBehaviour
     private Color currentColor;
     private float defaultXScale = 1.5f;
     private float defaultYScale = 1.2f;
+    internal float start_coord;
 
-/*     private void Update()
-    {
-        SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
-    } */
+    /*     private void Update()
+        {
+            SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+        } */
 
     public bool GetIsPlaced()
     {
@@ -69,6 +70,7 @@ public class DraggableBox : MonoBehaviour
         }
         return placedEndPeak;
     }
+    
     void Awake()
     {
         _cam = Camera.main;

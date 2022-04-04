@@ -11,6 +11,7 @@ public class Peak : MonoBehaviour
 
     public float intensity;
     internal int index;
+    internal float coord;
 
     public void SetImageScale(float scale_x, float scale_y)
     {

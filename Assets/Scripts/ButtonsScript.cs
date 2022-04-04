@@ -7,22 +7,30 @@ using System.Linq;
 public class ButtonsScript : MonoBehaviour
 {
     private bool isReset;
+    private List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
 
     private List<Tuple<string, float, float>> GetAminoAcidSequence()
     {
-        List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
-
-
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
-        foreach (DraggableBox box in allBoxes)
+        print("allBoxes.Length " + allBoxes.Length);
+        //foreach (DraggableBox box in allBoxes)
+        for (int i = 0; i < allBoxes.Length - 1; i++)
         {
             Tuple<string, float, float> aminoAcidInfo;
-
-            if (box.GetIsPlaced())
+            if (allBoxes[i].GetIsPlaced() && allBoxes[i] != null)
             {
-                aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.transform.position.x, box.aminoAcidChar.Mass);
-                aminoAcidSequence.Add(aminoAcidInfo);
+                JSONReader.SerializedSlot[] slots = allBoxes[i].aminoAcidChar.slots;
+                for (int j = 0; j < slots.Length; j++)
+                {
+                    if (allBoxes[i].GetStartPeak().index == slots[j].start_peak_index)
+                    {
+                        //aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.start_coord, box.aminoAcidChar.Mass);
+                        aminoAcidInfo = Tuple.Create(allBoxes[i].aminoAcidChar.ToString(), slots[j].start_peak_coord, allBoxes[i].aminoAcidChar.Mass);
+                        aminoAcidSequence.Add(aminoAcidInfo);
+                        print("aminoAcidInfo: " + aminoAcidInfo);
+                    }
+                }
             }
         }
         //sort list by the xpos of the box
@@ -52,12 +60,16 @@ public class ButtonsScript : MonoBehaviour
 
         for (int i = 0; i < placedBoxes.Count - 1; i++)
         {
-            float gapSize = (placedBoxes[i+1].Item2 - (placedBoxes[i].Item2 + placedBoxes[i].Item3));
+            float boxWidth = placedBoxes[i].Item2 + placedBoxes[i].Item3;
+            float gapSize = (placedBoxes[i + 1].Item2 - boxWidth);
             if (gapSize > 0)
             {
                 print("gapSize: " + gapSize);
+                Tuple<string, float, float> gap = Tuple.Create("gap", boxWidth, gapSize);
+                aminoAcidSequence.Add(gap);
             }
         }
+        aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
     }
 
     private void WriteToCsv()
@@ -65,7 +77,7 @@ public class ButtonsScript : MonoBehaviour
         string filePath = "Assets/Data/out.csv";
         StreamWriter writer = new StreamWriter(filePath);
 
-        foreach (var seq in GetAminoAcidSequence())
+        foreach (var seq in aminoAcidSequence)
         {
 
             writer.WriteLine(seq.Item1 + ", " + seq.Item2 + ", " + seq.Item3);
@@ -76,13 +88,13 @@ public class ButtonsScript : MonoBehaviour
 
     public void OnGetAminoAcidsClick()
     {
-        WriteToCsv();
         FindGaps();
-        foreach (Tuple<string, float, float> i in GetAminoAcidSequence())
-        {
-            print("seq: " + i);
+        WriteToCsv();
+        /*         foreach (Tuple<string, float, float> i in aminoAcidSequence)
+                {
+                    print("seq: " + i);
 
-        }
+                } */
 
         //print(GetAminoAcidSequence().Count);
         //GetAminoAcidSequence();
