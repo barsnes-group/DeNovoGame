@@ -29,6 +29,8 @@ public class JSONReader : MonoBehaviour
     {
         public string AminoAcidName;
         public float Mass;
+        public float MassOriginal;
+        public float MaxXValue;
         public SerializedSlot[] slots;
         public override String ToString()
         {

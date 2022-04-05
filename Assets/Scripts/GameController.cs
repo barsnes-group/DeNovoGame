@@ -319,9 +319,9 @@ public class GameController : MonoBehaviour
 
     private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
-        //DraggableBox box = CreateBoxPrefab(xPos, boxYPos, aminoAcidChar.Mass, aminoAcidChar.Mass);
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
         box.aminoAcidChar = aminoAcidChar;
+        print("MASS : " + box.aminoAcidChar.MassOriginal);
         box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
 

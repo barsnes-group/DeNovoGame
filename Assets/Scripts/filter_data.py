@@ -59,6 +59,8 @@ amino_acids = {
     "V": 99.068414
 }
 
+amino_acids_original_mass = amino_acids.copy()
+max_x_value = 0
 
 def read_file(file_in):
     coord = []
@@ -166,6 +168,8 @@ def max_x_slot(slots):
         x = max(slot.start, slot.end)
         if max_x < x:
             max_x = x
+    global max_x_value 
+    max_x_value = max_x/100
     return max_x
 
 
@@ -222,6 +226,8 @@ def write_to_json(slot_dict: dict, filename: str):
         a_a_dict = {}
         a_a_dict["AminoAcidName"] = amino_acid
         a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
+        a_a_dict["MassOriginal"] = round(amino_acids_original_mass[amino_acid], 3)
+        a_a_dict["MaxXValue"] = max_x_value
         slots = []
         for e in slot:
             slots.append(e.to_dict(peaks_to_index))
@@ -259,6 +265,8 @@ if __name__ == "__main__":
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
     filtered_Slot_coord = (list_of_Slot_coord(slot_dict))
     filtered_Slot_coord = sorted(filtered_Slot_coord)
+    
+    slot_list = make_slot_objects(coordinates)
 
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(

@@ -1,129 +1,69 @@
 [
-  { "AminoAcidName": "A", "Mass": 4.86, "Slots": [] },
-  { "AminoAcidName": "R", "Mass": 10.679, "Slots": [] },
+  { "AminoAcidName": "A", "Mass": 4.86, "MassOriginal": 71.037, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "R", "Mass": 10.679, "MassOriginal": 156.101, "MaxXValue": 14.617685547, "Slots": [] },
   {
     "AminoAcidName": "N",
     "Mass": 7.802,
-    "Slots": [
-      {
-        "start_peak_index": 6,
-        "start_peak_coord": 70.571,
-        "end_peak_index": 7,
-        "end_peak_coord": 78.372,
-        "intensity": [7.966, 32.643]
-      }
-    ]
+    "MassOriginal": 114.043,
+    "MaxXValue": 14.617685547,
+    "Slots": [{ "start_peak_index": 6, "start_peak_coord": 70.571, "end_peak_index": 7, "end_peak_coord": 78.372, "intensity": [7.966, 32.643] }]
   },
   {
     "AminoAcidName": "D",
     "Mass": 7.869,
+    "MassOriginal": 115.027,
+    "MaxXValue": 14.617685547,
     "Slots": [
-      {
-        "start_peak_index": 6,
-        "start_peak_coord": 70.571,
-        "end_peak_index": 8,
-        "end_peak_coord": 78.441,
-        "intensity": [7.966, 13.646]
-      },
-      {
-        "start_peak_index": 9,
-        "start_peak_coord": 86.108,
-        "end_peak_index": 10,
-        "end_peak_coord": 93.977,
-        "intensity": [12.762, 13.467]
-      },
-      {
-        "start_peak_index": 5,
-        "start_peak_coord": 70.503,
-        "end_peak_index": 7,
-        "end_peak_coord": 78.372,
-        "intensity": [23.525, 32.643]
-      }
+      { "start_peak_index": 6, "start_peak_coord": 70.571, "end_peak_index": 8, "end_peak_coord": 78.441, "intensity": [7.966, 13.646] },
+      { "start_peak_index": 9, "start_peak_coord": 86.108, "end_peak_index": 10, "end_peak_coord": 93.977, "intensity": [12.762, 13.467] },
+      { "start_peak_index": 5, "start_peak_coord": 70.503, "end_peak_index": 7, "end_peak_coord": 78.372, "intensity": [23.525, 32.643] }
     ]
   },
-  { "AminoAcidName": "C", "Mass": 7.047, "Slots": [] },
+  { "AminoAcidName": "C", "Mass": 7.047, "MassOriginal": 103.009, "MaxXValue": 14.617685547, "Slots": [] },
   {
     "AminoAcidName": "E",
     "Mass": 8.828,
-    "Slots": [
-      {
-        "start_peak_index": 4,
-        "start_peak_coord": 61.675,
-        "end_peak_index": 5,
-        "end_peak_coord": 70.503,
-        "intensity": [18.729, 23.525]
-      }
-    ]
+    "MassOriginal": 129.043,
+    "MaxXValue": 14.617685547,
+    "Slots": [{ "start_peak_index": 4, "start_peak_coord": 61.675, "end_peak_index": 5, "end_peak_coord": 70.503, "intensity": [18.729, 23.525] }]
   },
-  { "AminoAcidName": "Q", "Mass": 8.761, "Slots": [] },
-  { "AminoAcidName": "G", "Mass": 3.901, "Slots": [] },
-  { "AminoAcidName": "H", "Mass": 9.376, "Slots": [] },
+  { "AminoAcidName": "Q", "Mass": 8.761, "MassOriginal": 128.059, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "G", "Mass": 3.901, "MassOriginal": 57.021, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "H", "Mass": 9.376, "MassOriginal": 137.059, "MaxXValue": 14.617685547, "Slots": [] },
   {
     "AminoAcidName": "I/L",
     "Mass": 7.736,
+    "MassOriginal": 113.084,
+    "MaxXValue": 14.617685547,
     "Slots": [
-      {
-        "start_peak_index": 7,
-        "start_peak_coord": 78.372,
-        "end_peak_index": 9,
-        "end_peak_coord": 86.108,
-        "intensity": [12.762, 32.643]
-      },
-      {
-        "start_peak_index": 1,
-        "start_peak_coord": 39.426,
-        "end_peak_index": 2,
-        "end_peak_coord": 47.162,
-        "intensity": [17.142, 28.634]
-      },
-      {
-        "start_peak_index": 3,
-        "start_peak_coord": 53.939,
-        "end_peak_index": 4,
-        "end_peak_coord": 61.675,
-        "intensity": [18.729, 35.171]
-      }
+      { "start_peak_index": 7, "start_peak_coord": 78.372, "end_peak_index": 9, "end_peak_coord": 86.108, "intensity": [12.762, 32.643] },
+      { "start_peak_index": 1, "start_peak_coord": 39.426, "end_peak_index": 2, "end_peak_coord": 47.162, "intensity": [17.142, 28.634] },
+      { "start_peak_index": 3, "start_peak_coord": 53.939, "end_peak_index": 4, "end_peak_coord": 61.675, "intensity": [18.729, 35.171] }
     ]
   },
-  { "AminoAcidName": "K", "Mass": 8.763, "Slots": [] },
-  { "AminoAcidName": "M", "Mass": 8.965, "Slots": [] },
-  { "AminoAcidName": "F", "Mass": 10.061, "Slots": [] },
-  { "AminoAcidName": "P", "Mass": 6.639, "Slots": [] },
+  { "AminoAcidName": "K", "Mass": 8.763, "MassOriginal": 128.095, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "M", "Mass": 8.965, "MassOriginal": 131.04, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "F", "Mass": 10.061, "MassOriginal": 147.068, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "P", "Mass": 6.639, "MassOriginal": 97.053, "MaxXValue": 14.617685547, "Slots": [] },
   {
     "AminoAcidName": "S",
     "Mass": 5.954,
-    "Slots": [
-      {
-        "start_peak_index": 10,
-        "start_peak_coord": 93.977,
-        "end_peak_index": 11,
-        "end_peak_coord": 99.931,
-        "intensity": [13.467, 23.162]
-      }
-    ]
+    "MassOriginal": 87.032,
+    "MaxXValue": 14.617685547,
+    "Slots": [{ "start_peak_index": 10, "start_peak_coord": 93.977, "end_peak_index": 11, "end_peak_coord": 99.931, "intensity": [13.467, 23.162] }]
   },
-  { "AminoAcidName": "T", "Mass": 6.913, "Slots": [] },
-  { "AminoAcidName": "U", "Mass": 10.327, "Slots": [] },
-  { "AminoAcidName": "W", "Mass": 12.73, "Slots": [] },
-  { "AminoAcidName": "Y", "Mass": 11.155, "Slots": [] },
+  { "AminoAcidName": "T", "Mass": 6.913, "MassOriginal": 101.048, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "U", "Mass": 10.327, "MassOriginal": 150.954, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "W", "Mass": 12.73, "MassOriginal": 186.079, "MaxXValue": 14.617685547, "Slots": [] },
+  { "AminoAcidName": "Y", "Mass": 11.155, "MassOriginal": 163.063, "MaxXValue": 14.617685547, "Slots": [] },
   {
     "AminoAcidName": "V",
     "Mass": 6.777,
+    "MassOriginal": 99.068,
+    "MaxXValue": 14.617685547,
     "Slots": [
-      {
-        "start_peak_index": 0,
-        "start_peak_coord": 32.648,
-        "end_peak_index": 1,
-        "end_peak_coord": 39.426,
-        "intensity": [17.142, 27.481]
-      },
-      {
-        "start_peak_index": 2,
-        "start_peak_coord": 47.162,
-        "end_peak_index": 3,
-        "end_peak_coord": 53.939,
-        "intensity": [28.634, 35.171]
-      }
+      { "start_peak_index": 0, "start_peak_coord": 32.648, "end_peak_index": 1, "end_peak_coord": 39.426, "intensity": [17.142, 27.481] },
+      { "start_peak_index": 2, "start_peak_coord": 47.162, "end_peak_index": 3, "end_peak_coord": 53.939, "intensity": [28.634, 35.171] }
     ]
   }
 ]

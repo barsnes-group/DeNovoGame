@@ -18,15 +18,18 @@ public class ButtonsScript : MonoBehaviour
         for (int i = 0; i < allBoxes.Length - 1; i++)
         {
             Tuple<string, float, float> aminoAcidInfo;
-            if (allBoxes[i].GetIsPlaced() && allBoxes[i] != null)
+            DraggableBox box = allBoxes[i];
+            float maxX = box.aminoAcidChar.MaxXValue;
+
+            if (box.GetIsPlaced() && box != null)
             {
-                JSONReader.SerializedSlot[] slots = allBoxes[i].aminoAcidChar.slots;
+                //loop though the box's valid slots, to get the start coordinates for the placed box
+                JSONReader.SerializedSlot[] slots = box.aminoAcidChar.slots;
                 for (int j = 0; j < slots.Length; j++)
                 {
-                    if (allBoxes[i].GetStartPeak().index == slots[j].start_peak_index)
+                    if (box.GetStartPeak().index == slots[j].start_peak_index)
                     {
-                        //aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), box.start_coord, box.aminoAcidChar.Mass);
-                        aminoAcidInfo = Tuple.Create(allBoxes[i].aminoAcidChar.ToString(), slots[j].start_peak_coord, allBoxes[i].aminoAcidChar.Mass);
+                        aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), slots[j].start_peak_coord * maxX, box.aminoAcidChar.MassOriginal);
                         aminoAcidSequence.Add(aminoAcidInfo);
                         print("aminoAcidInfo: " + aminoAcidInfo);
                     }
