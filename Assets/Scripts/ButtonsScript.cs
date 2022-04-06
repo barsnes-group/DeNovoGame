@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
+using TMPro;
 
 public class ButtonsScript : MonoBehaviour
 {
     private bool isReset;
-    private List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
+    public TextMeshProUGUI seqText;
+    [SerializeField]
+    GameObject aminoSeqText;
 
-    private List<Tuple<string, float, float>> GetAminoAcidSequence()
+    private List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence)
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
@@ -29,7 +32,8 @@ public class ButtonsScript : MonoBehaviour
                 {
                     if (box.GetStartPeak().index == slots[j].start_peak_index)
                     {
-                        aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), slots[j].start_peak_coord * maxX, box.aminoAcidChar.MassOriginal);
+                        float deNormalizeCoord = slots[j].start_peak_coord * maxX;
+                        aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), deNormalizeCoord, box.aminoAcidChar.MassOriginal);
                         aminoAcidSequence.Add(aminoAcidInfo);
                         print("aminoAcidInfo: " + aminoAcidInfo);
                     }
@@ -57,50 +61,66 @@ public class ButtonsScript : MonoBehaviour
         isReset = true;
     }
 
-    private void FindGaps()
+    private void FindGaps(List<Tuple<string, float, float>> aminoAcidSequence)
     {
-        List<Tuple<string, float, float>> placedBoxes = GetAminoAcidSequence();
+        List<Tuple<string, float, float>> placedBoxes = aminoAcidSequence;
+        int count = placedBoxes.Count;
 
-        for (int i = 0; i < placedBoxes.Count - 1; i++)
+        for (int i = 0; i < count - 1; i++)
         {
-            float boxWidth = placedBoxes[i].Item2 + placedBoxes[i].Item3;
-            float gapSize = (placedBoxes[i + 1].Item2 - boxWidth);
-            if (gapSize > 0)
+            float boxEndCoord = placedBoxes[i].Item2 + placedBoxes[i].Item3;
+            float gapSize = (placedBoxes[i + 1].Item2 - boxEndCoord);
+            if (gapSize > 0.5)
             {
                 print("gapSize: " + gapSize);
-                Tuple<string, float, float> gap = Tuple.Create("gap", boxWidth, gapSize);
+                Tuple<string, float, float> gap = Tuple.Create("gap", boxEndCoord, gapSize);
                 aminoAcidSequence.Add(gap);
             }
         }
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
     }
 
-    private void WriteToCsv()
+    private string WriteToCsv(List<Tuple<string, float, float>> aminoAcidSequence)
     {
-        string filePath = "Assets/Data/out.csv";
+        string filePath = "Assets/Data/out2.csv";
         StreamWriter writer = new StreamWriter(filePath);
+        string sequence = "sequence: ";
 
         foreach (var seq in aminoAcidSequence)
         {
 
-            writer.WriteLine(seq.Item1 + ", " + seq.Item2 + ", " + seq.Item3);
+            //writer.WriteLine(seq.Item1 + ", " + seq.Item2 + ", " + seq.Item3);
+
+            if (seq.Item1 != "gap")
+            {
+                sequence += seq.Item1 + ", ";
+                writer.Write(seq.Item1 + ", ");
+            }
+            else
+            {
+                sequence += " <" + seq.Item3 + ">, ";
+                writer.Write(" <" + seq.Item3 + ">, ");
+            }
         }
         writer.Close();
+        return sequence;
     }
 
+    private void SetText(string text)
+    {
+        //GameController gameController = GameObject.Find("AminoSeq").GetComponent<GameController>();
+        seqText.text = text.ToString();
+    }
 
     public void OnGetAminoAcidsClick()
     {
-        FindGaps();
-        WriteToCsv();
-        /*         foreach (Tuple<string, float, float> i in aminoAcidSequence)
-                {
-                    print("seq: " + i);
+        List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
+        GetAminoAcidSequence(aminoAcidSequence);
+        FindGaps(aminoAcidSequence);
+        string sequence = WriteToCsv(aminoAcidSequence);
+        print(sequence);
+        SetText(sequence);
 
-                } */
-
-        //print(GetAminoAcidSequence().Count);
-        //GetAminoAcidSequence();
     }
 
     public void OnResetClick()

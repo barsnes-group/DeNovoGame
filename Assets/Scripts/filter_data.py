@@ -226,7 +226,7 @@ def write_to_json(slot_dict: dict, filename: str):
         a_a_dict = {}
         a_a_dict["AminoAcidName"] = amino_acid
         a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
-        a_a_dict["MassOriginal"] = round(amino_acids_original_mass[amino_acid], 3)
+        a_a_dict["MassOriginal"] = round(amino_acids_original_mass[amino_acid], 4)
         a_a_dict["MaxXValue"] = max_x_value
         slots = []
         for e in slot:
