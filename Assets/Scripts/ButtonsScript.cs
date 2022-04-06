@@ -2,12 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using System.Linq;
 using TMPro;
 
 public class ButtonsScript : MonoBehaviour
 {
-    private bool isReset;
     public TextMeshProUGUI seqText;
     [SerializeField]
     GameObject aminoSeqText;
@@ -45,22 +43,6 @@ public class ButtonsScript : MonoBehaviour
         return aminoAcidSequence;
     }
 
-    private void ResetAminoAcids()
-    {
-        //TODO: all boxes return to start pos
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
-
-        for (int i = 0; i < draggableBoxes.Length; i++)
-        {
-            DraggableBox box = draggableBoxes[i];
-
-            box.ReturnToStartPos();
-
-        }
-        isReset = true;
-    }
-
     private void FindGaps(List<Tuple<string, float, float>> aminoAcidSequence)
     {
         List<Tuple<string, float, float>> placedBoxes = aminoAcidSequence;
@@ -82,9 +64,9 @@ public class ButtonsScript : MonoBehaviour
 
     private string WriteToCsv(List<Tuple<string, float, float>> aminoAcidSequence)
     {
-        string filePath = "Assets/Data/out2.csv";
+        string filePath = "Assets/Data/out_level_1.csv";
         StreamWriter writer = new StreamWriter(filePath);
-        string sequence = "sequence: ";
+        string sequence = "Sequence: ";
 
         foreach (var seq in aminoAcidSequence)
         {
@@ -108,8 +90,21 @@ public class ButtonsScript : MonoBehaviour
 
     private void SetText(string text)
     {
-        //GameController gameController = GameObject.Find("AminoSeq").GetComponent<GameController>();
         seqText.text = text.ToString();
+    }
+
+    private void ResetAminoAcids()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
+
+        for (int i = 0; i < draggableBoxes.Length; i++)
+        {
+            DraggableBox box = draggableBoxes[i];
+
+            box.ReturnToStartPos();
+
+        }
     }
 
     public void OnGetAminoAcidsClick()

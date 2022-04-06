@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Peak : MonoBehaviour
 {
-    public GameObject textObject;
+    //public GameObject textObject;
     public GameObject line;
 
     public float intensity;
@@ -24,13 +24,13 @@ public class Peak : MonoBehaviour
         transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
     }
 
-    internal void SetText(string text)
+/*     internal void SetText(string text)
     {
         textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
     }
-    
+
     public string ToString()
     {
         return "peak nr " + index;
-    }
+    } */
 }

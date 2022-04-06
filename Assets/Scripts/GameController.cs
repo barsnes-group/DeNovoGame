@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -101,7 +102,6 @@ public class GameController : MonoBehaviour
         Peak peak = peakObject.GetComponent<Peak>();
         peak.SetImageScale(scale_x * slotAndBoxScaling, scale_y * slotAndBoxScaling);
         peak.SetPos(pos_x * scaleWidth, pos_y);
-        peak.SetText(index + "\n" + width_to_prev.ToString());
         peak.index = index;
         return peak;
     }
@@ -141,7 +141,7 @@ public class GameController : MonoBehaviour
                 highlightedSlots.Add(slot);
                 validSlots.Add(slot);
             }
-            else //highlight slots som ikke er occupied og ikke valid 
+            else 
             {
                 print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
@@ -321,7 +321,6 @@ public class GameController : MonoBehaviour
     {
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
         box.aminoAcidChar = aminoAcidChar;
-        print("MASS : " + box.aminoAcidChar.MassOriginal);
         box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
 
