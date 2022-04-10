@@ -13,12 +13,12 @@ public class Menu : MonoBehaviour
 
     public void StartLevel1()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level1", LoadSceneMode.Single);
     }
 
     public void StartLevel2()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level2", LoadSceneMode.Single);
     }
 
     public void StartMenu()

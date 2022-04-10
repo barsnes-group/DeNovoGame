@@ -7,6 +7,9 @@ using TMPro;
 public class ButtonsScript : MonoBehaviour
 {
     public TextMeshProUGUI seqText;
+    bool sequenceBtnClicked;
+    float maxX;
+
     [SerializeField]
     GameObject aminoSeqText;
 
@@ -20,7 +23,7 @@ public class ButtonsScript : MonoBehaviour
         {
             Tuple<string, float, float> aminoAcidInfo;
             DraggableBox box = allBoxes[i];
-            float maxX = box.aminoAcidChar.MaxXValue;
+            maxX = box.aminoAcidChar.MaxXValue;
 
             if (box.GetIsPlaced() && box != null)
             {
@@ -30,14 +33,23 @@ public class ButtonsScript : MonoBehaviour
                 {
                     if (box.GetStartPeak().index == slots[j].start_peak_index)
                     {
-                        float deNormalizeCoord = slots[j].start_peak_coord * maxX;
-                        aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), deNormalizeCoord, box.aminoAcidChar.MassOriginal);
+                        float deNormalizedStartCoord = slots[j].start_peak_coord * maxX;
+                        aminoAcidInfo = Tuple.Create(box.aminoAcidChar.ToString(), deNormalizedStartCoord, box.aminoAcidChar.MassOriginal);
                         aminoAcidSequence.Add(aminoAcidInfo);
                         print("aminoAcidInfo: " + aminoAcidInfo);
                     }
                 }
             }
         }
+        List<float> peaks = new List<float>();
+        for (int i = 0; i < gameController.GetLastPeak().index - 1; i++)
+        {
+            if (gameController.GetPeak(i).coord != 0)
+            {
+                peaks.Add(gameController.GetPeak(i).coord);
+            }
+        }
+
         //sort list by the xpos of the box
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
         return aminoAcidSequence;
@@ -62,28 +74,33 @@ public class ButtonsScript : MonoBehaviour
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
     }
 
-    private string WriteToCsv(List<Tuple<string, float, float>> aminoAcidSequence)
+    private string WriteToCsv(List<Tuple<string, float, float>> aminoAcidSequence, string filePath)
     {
-        string filePath = "Assets/Data/out_level_1.csv";
         StreamWriter writer = new StreamWriter(filePath);
         string sequence = "Sequence: ";
+        //get the gap infront of sequence
+        sequence += " <" + aminoAcidSequence[0].Item2 + "> ";
 
         foreach (var seq in aminoAcidSequence)
         {
 
             //writer.WriteLine(seq.Item1 + ", " + seq.Item2 + ", " + seq.Item3);
 
-            if (seq.Item1 != "gap")
+            if (seq.Item1 == "gap")
             {
-                sequence += seq.Item1 + ", ";
-                writer.Write(seq.Item1 + ", ");
+                sequence += " <" + seq.Item3 + "> ";
+                writer.Write(" <" + seq.Item3 + ">, ");
             }
             else
             {
-                sequence += " <" + seq.Item3 + ">, ";
-                writer.Write(" <" + seq.Item3 + ">, ");
+                sequence += seq.Item1 + " ";
+                writer.Write(seq.Item1 + ", ");
             }
         }
+        //get the gap at the end of the sequence
+        float endCoorinate = (aminoAcidSequence[aminoAcidSequence.Count - 1].Item2 + aminoAcidSequence[aminoAcidSequence.Count - 1].Item3);
+        sequence += " <" + endCoorinate + "> ";
+
         writer.Close();
         return sequence;
     }
@@ -103,24 +120,25 @@ public class ButtonsScript : MonoBehaviour
             DraggableBox box = draggableBoxes[i];
 
             box.ReturnToStartPos();
-
         }
     }
+/*     public void Update()
+    {
+        OnGetAminoAcidsClick();
+    } */
 
     public void OnGetAminoAcidsClick()
     {
+        sequenceBtnClicked = true;
         List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
         GetAminoAcidSequence(aminoAcidSequence);
         FindGaps(aminoAcidSequence);
-        string sequence = WriteToCsv(aminoAcidSequence);
-        print(sequence);
+        string sequence = WriteToCsv(aminoAcidSequence, "Assets/Data/amino_acid_seq.csv");
         SetText(sequence);
-
     }
 
     public void OnResetClick()
     {
         ResetAminoAcids();
-        print("reset btn clicked");
     }
 }

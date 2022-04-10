@@ -57,6 +57,7 @@ public class GameController : MonoBehaviour
         //scoreComponent.UpdateHighScore(); //TODO: flytt til en gamecontroller i menu
     }
 
+
     Slot CreateSlotPrefab(float pos_y, float intensity, Peak startPeak, Peak endPeak, bool valid)
     {
         float pos_x1 = startPeak.transform.position.x;
@@ -141,7 +142,7 @@ public class GameController : MonoBehaviour
                 highlightedSlots.Add(slot);
                 validSlots.Add(slot);
             }
-            else 
+            else
             {
                 print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
@@ -303,6 +304,12 @@ public class GameController : MonoBehaviour
         return peak;
     }
 
+    public Peak GetLastPeak()
+    {
+        int total = PeakContainer.transform.childCount;
+        return GetPeak(total - 1);
+    }
+
     public void CreateAllBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
         int rightBoxMargin = 0;
@@ -337,8 +344,14 @@ public class GameController : MonoBehaviour
             float endPeakIntensity = slot.intensity[1];
             startPeak.intensity = startPeakIntensity;
             endPeak.intensity = endPeakIntensity;
+            if (slot.start_peak_coord == 0 || slot.end_peak_coord == 0)
+            {
+                throw new Exception("start or end peak coord is 0");
+            }            
             startPeak.coord = slot.start_peak_coord;
+            endPeak.coord = slot.end_peak_coord; 
         }
+
         return box;
     }
 
