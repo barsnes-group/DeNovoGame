@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     GameObject PeakContainer;
 
-    void Start()
+    void Awake()
     {
         if (scoreObject == null)
         {
@@ -194,10 +194,9 @@ public class GameController : MonoBehaviour
 
     public void HandleInvalidBoxPlacement(DraggableBox box)
     {
+        //TODO: future work - add sound
         Warnings warningComponent = warningObject.GetComponent<Warnings>();
-        print("Warning! You can't place box on top of another box");
-        //TODO: legg til lyd?
-        warningComponent.SetText("You can't place box on top of another box");
+        //warningComponent.SetText("You can't place box on top of another box");
         box.ReturnToStartPos();
     }
 
@@ -294,6 +293,12 @@ public class GameController : MonoBehaviour
 
     public Peak GetPeak(int index)
     {
+        int count = PeakContainer.transform.childCount;
+        if (index > count - 1)
+        {
+            throw new Exception(index + "higher than total children of " + count);
+        }
+
         GameObject peakIndex = PeakContainer.transform.GetChild(index).gameObject;
         Peak peak = peakIndex.GetComponent<Peak>();
 
@@ -347,9 +352,9 @@ public class GameController : MonoBehaviour
             if (slot.start_peak_coord == 0 || slot.end_peak_coord == 0)
             {
                 throw new Exception("start or end peak coord is 0");
-            }            
+            }
             startPeak.coord = slot.start_peak_coord;
-            endPeak.coord = slot.end_peak_coord; 
+            endPeak.coord = slot.end_peak_coord;
         }
 
         return box;
