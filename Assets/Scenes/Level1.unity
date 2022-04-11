@@ -1928,7 +1928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6382af7ab00e64d03b2ca8e04d0c5a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CsvFile: {fileID: 4900000, guid: d52ebc0d66f4e409bb917737273f5b87, type: 3}
+  CsvFile: {fileID: 4900000, guid: 6121fa1c17a2a402c8dd124ac4de8297, type: 3}
   boxPrefab: {fileID: 579977173573170919, guid: c8c6dac98996f45febecb9576b932d8c, type: 3}
   peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   slotPrefab: {fileID: 579977173573170919, guid: 5d2e837c36324462db2591aa8b0429c6, type: 3}
@@ -1942,6 +1942,8 @@ MonoBehaviour:
   boxYPos: 13
   scaleWidth: 0.5
   rightBoxMarginSpace: 12
+  peaksSpace: 5
+  slotHeight: 5
   PeakContainer: {fileID: 146717902}
 --- !u!114 &1943325020
 MonoBehaviour:
@@ -1955,7 +1957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74745cf3781644634b5ddafef8c3c871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonString: {fileID: 4900000, guid: 6f0b27bb2bf7f4495aa03265189e271c, type: 3}
+  jsonString: {fileID: 4900000, guid: 922965477b05949f487a0b4430309ba7, type: 3}
 --- !u!1 &2031277496
 GameObject:
   m_ObjectHideFlags: 0

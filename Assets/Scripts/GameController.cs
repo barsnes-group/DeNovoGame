@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
     public float boxYPos = 13;
     public float scaleWidth = 0.1f;
     public int rightBoxMarginSpace = 5;
+    public int peaksSpace = 5;
+    public float slotHeight = 5;
     [SerializeField]
     GameObject PeakContainer;
 
@@ -44,7 +46,7 @@ public class GameController : MonoBehaviour
         {
             string[] rows = array[i].Split(',');
             CreatePeakPrefab(xCoord, peaksYPos, 0.2f, 1, xCoord - previousX, i);
-            xCoord += 7;
+            xCoord += peaksSpace;
             previousX = xCoord;
         }
     }
@@ -54,7 +56,6 @@ public class GameController : MonoBehaviour
         Score scoreComponent = scoreObject.GetComponent<Score>();
         scoreComponent.CalculateScore(GetAllBoxes());
         validSlotsCount = validSlots.Count;
-        //scoreComponent.UpdateHighScore(); //TODO: flytt til en gamecontroller i menu
     }
 
 
@@ -134,7 +135,7 @@ public class GameController : MonoBehaviour
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             if (!SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, true);
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeight, startPeak, endPeak, true);
                 if (slot == null)
                 {
                     print("slot in HighlightValidSlots() is null");
@@ -145,7 +146,7 @@ public class GameController : MonoBehaviour
             else
             {
                 print("highlight unvalid slots");
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / 5, startPeak, endPeak, false);
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeight, startPeak, endPeak, false);
                 highlightedSlots.Add(slot);
             }
         }
