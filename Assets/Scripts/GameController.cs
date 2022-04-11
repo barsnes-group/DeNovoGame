@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Random = UnityEngine.Random;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -334,7 +333,7 @@ public class GameController : MonoBehaviour
     {
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
         box.aminoAcidChar = aminoAcidChar;
-        box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255));
+        box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 0), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)

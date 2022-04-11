@@ -114,6 +114,8 @@
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
+-r:"/Applications/Unity/Hub/Editor/2021.2.4f1/PlaybackEngines/AndroidPlayer/Unity.Android.Gradle.dll"
+-r:"/Applications/Unity/Hub/Editor/2021.2.4f1/PlaybackEngines/AndroidPlayer/Unity.Android.Types.dll"
 -r:"/Applications/Unity/Hub/Editor/2021.2.4f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2021.2.4f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
 -r:"/Applications/Unity/Hub/Editor/2021.2.4f1/Unity.app/Contents/Managed/UnityEngine/UnityEditor.DiagnosticsModule.dll"
@@ -367,10 +369,15 @@
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/AminoAcidSequence.cs"
+"Assets/Scripts/ButtonsScript.cs"
 "Assets/Scripts/DraggableBox.cs"
 "Assets/Scripts/GameController.cs"
 "Assets/Scripts/JSONReader.cs"
+"Assets/Scripts/Menu.cs"
+"Assets/Scripts/MenuGameController.cs"
 "Assets/Scripts/Peak.cs"
+"Assets/Scripts/PlatformDefines.cs"
 "Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
 "Assets/Scripts/Warnings.cs"
