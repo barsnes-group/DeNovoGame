@@ -28,17 +28,23 @@ public class ButtonsScript : MonoBehaviour
             box.ReturnToStartPos();
         }
     }
-/*     public void Update()
-    {
-        OnGetAminoAcidsClick();
-    } */
+    /*     public void Update()
+        {
+            OnGetAminoAcidsClick();
+        } */
 
     public void OnGetAminoAcidsClick()
     {
+        print("OnGetAminoAcidsClick() clicked");
         List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
         AminoAcidSequence.GetAminoAcidSequence(aminoAcidSequence);
         AminoAcidSequence.FindGaps(aminoAcidSequence);
         string sequence = AminoAcidSequence.WriteToCsv(aminoAcidSequence, "Assets/Data/amino_acid_seq.csv");
+        if (sequence == "" || sequence == null)
+        {
+            throw new Exception("seq null");
+        }
+        print(sequence);
         SetText(sequence);
     }
 
