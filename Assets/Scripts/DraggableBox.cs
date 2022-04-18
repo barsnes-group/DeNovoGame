@@ -16,6 +16,7 @@ public class DraggableBox : MonoBehaviour
     public List<float> endCoord;
 
 
+    public GameController gameController;
     public float width;
     public float boxToSlotTheshold = 2;
 
@@ -40,6 +41,10 @@ public class DraggableBox : MonoBehaviour
             SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
         } */
 
+/*     private void Start() {
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+    } */
+    
     public bool GetIsPlaced()
     {
         return isPlaced;
@@ -70,7 +75,7 @@ public class DraggableBox : MonoBehaviour
         }
         return placedEndPeak;
     }
-    
+
     void Awake()
     {
         _cam = Camera.main;
@@ -156,12 +161,13 @@ public class DraggableBox : MonoBehaviour
 
     private GameController getGameController()
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        
         if (gameController == null)
         {
-            throw new NullReferenceException();
+            throw new NullReferenceException("can't find game controller");
         }
-        return gameController;
+        return gameController.GetComponent<GameController>();
     }
 
     public void SetScoreObject(GameObject scoreObjectSetter)

@@ -112,6 +112,7 @@ public class GameController : MonoBehaviour
         GameObject boxObject = Instantiate(boxPrefab, new Vector3(pos_x, pos_y, 0), Quaternion.identity);
         boxObject.transform.SetParent(GameObject.Find("BoxContainer").transform);
         DraggableBox box = boxObject.GetComponent<DraggableBox>();
+        box.gameController = this;
         box.width = scale_x;
         box.SetScale(scale_x * scaleWidth, scale_y * slotAndBoxScaling);
         box.SetPos(pos_x * scaleWidth, pos_y);
