@@ -10,6 +10,7 @@ and calculate the gaps between them.
 
 public static class AminoAcidSequence
 {
+
     public static List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence)
     {
         GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -70,7 +71,8 @@ public static class AminoAcidSequence
     public static string MakeSequence(List<Tuple<string, float, float>> aminoAcidSequence)
     {
         string sequence = "Sequence: ";
-        if (aminoAcidSequence.Count <= 0) {
+        if (aminoAcidSequence.Count <= 0)
+        {
             return sequence;
         }
 
@@ -81,7 +83,7 @@ public static class AminoAcidSequence
         {
             if (seq.Item1 == "gap")
             {
-                sequence += " <" + MathF.Round(seq.Item3,3) + ">, ";
+                sequence += " <" + MathF.Round(seq.Item3, 3) + ">, ";
             }
             else
             {
@@ -90,12 +92,13 @@ public static class AminoAcidSequence
         }
         //get the gap at the end of the sequence
         float endCoorinate = (aminoAcidSequence[aminoAcidSequence.Count - 1].Item2 + aminoAcidSequence[aminoAcidSequence.Count - 1].Item3);
-        sequence += " <" + MathF.Round(endCoorinate,3) + "> ";
+        sequence += " <" + MathF.Round(endCoorinate, 3) + "> ";
 
         return sequence;
     }
 
-    public static void WriteToCsv(string aminoAcidSeq, string filePath) {
+    public static void WriteToCsv(string aminoAcidSeq, string filePath)
+    {
         StreamWriter writer = new StreamWriter(filePath);
         foreach (var item in aminoAcidSeq)
         {

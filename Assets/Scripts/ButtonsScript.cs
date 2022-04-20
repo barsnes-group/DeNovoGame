@@ -28,10 +28,10 @@ public class ButtonsScript : MonoBehaviour
             box.ReturnToStartPos();
         }
     }
-/*     public void Update()
+    public void Update()
     {
         OnGetAminoAcidsClick();
-    } */
+    }
 
     public void OnGetAminoAcidsClick()
     {
@@ -46,7 +46,7 @@ public class ButtonsScript : MonoBehaviour
             AminoAcidSequence.FindGaps(aminoAcidSequence);
 
             string sequence = AminoAcidSequence.MakeSequence(aminoAcidSequence);
-            AminoAcidSequence.WriteToCsv(sequence, "Assets/Data/amino_acid_seq.csv");
+            //AminoAcidSequence.WriteToCsv(sequence, "Assets/Data/amino_acid_seq.csv");
             SetText(sequence);
         }
     }

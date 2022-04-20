@@ -21,6 +21,11 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene("Level2", LoadSceneMode.Single);
     }
 
+    public void StartAbout()
+    {
+        SceneManager.LoadScene("About");
+    }
+
     public void StartMenu()
     {
         SceneManager.LoadScene("Menu");
