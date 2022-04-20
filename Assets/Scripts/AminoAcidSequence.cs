@@ -67,32 +67,41 @@ public static class AminoAcidSequence
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
     }
 
-    public static string WriteToCsv(List<Tuple<string, float, float>> aminoAcidSequence, string filePath)
+    public static string MakeSequence(List<Tuple<string, float, float>> aminoAcidSequence)
     {
-        StreamWriter writer = new StreamWriter(filePath);
         string sequence = "Sequence: ";
+        if (aminoAcidSequence.Count <= 0) {
+            return sequence;
+        }
+
         //get the gap infront of sequence
-        sequence += " <" + aminoAcidSequence[0].Item2 + ">, ";
+        sequence += " <" + MathF.Round(aminoAcidSequence[0].Item2, 3) + ">, ";
 
         foreach (var seq in aminoAcidSequence)
         {
             if (seq.Item1 == "gap")
             {
-                sequence += " <" + seq.Item3 + ">, ";
-                writer.Write(" <" + seq.Item3 + ">, ");
+                sequence += " <" + MathF.Round(seq.Item3,3) + ">, ";
             }
             else
             {
                 sequence += seq.Item1 + ", ";
-                writer.Write(seq.Item1 + ", ");
             }
         }
         //get the gap at the end of the sequence
         float endCoorinate = (aminoAcidSequence[aminoAcidSequence.Count - 1].Item2 + aminoAcidSequence[aminoAcidSequence.Count - 1].Item3);
-        sequence += " <" + endCoorinate + "> ";
+        sequence += " <" + MathF.Round(endCoorinate,3) + "> ";
 
-        writer.Close();
         return sequence;
+    }
+
+    public static void WriteToCsv(string aminoAcidSeq, string filePath) {
+        StreamWriter writer = new StreamWriter(filePath);
+        foreach (var item in aminoAcidSeq)
+        {
+            writer.Write(item);
+        }
+        writer.Close();
     }
 
 }

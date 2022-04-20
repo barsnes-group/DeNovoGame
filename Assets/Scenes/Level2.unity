@@ -209,7 +209,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.94509804, g: 0.917288, b: 0.5372549, a: 1}
+  m_Color: {r: 0.5372549, g: 0.94509804, b: 0.7838901, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -228,7 +228,7 @@ Transform:
   m_GameObject: {fileID: 120516333}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 21.4556, y: 9.8471, z: 10}
-  m_LocalScale: {x: 45.772503, y: 26.951172, z: 1}
+  m_LocalScale: {x: 70.1, y: 41.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -291,8 +291,8 @@ MonoBehaviour:
   boxYPos: 13
   scaleWidth: 0.5
   rightBoxMarginSpace: 12
-  peaksSpace: 5
-  slotHeight: 5
+  peaksSpace: 3
+  slotHeight: 12
   PeakContainer: {fileID: 1149075527}
 --- !u!4 &221159266
 Transform:
@@ -492,12 +492,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.25
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1823,7 +1823,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.29, y: 20.5}
+  m_AnchoredPosition: {x: 10, y: 20.5}
   m_SizeDelta: {x: 17.7583, y: 4.1351}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1560820424

@@ -375,7 +375,6 @@
 "Assets/Scripts/GameController.cs"
 "Assets/Scripts/JSONReader.cs"
 "Assets/Scripts/Menu.cs"
-"Assets/Scripts/MenuGameController.cs"
 "Assets/Scripts/Peak.cs"
 "Assets/Scripts/PlatformDefines.cs"
 "Assets/Scripts/Score.cs"

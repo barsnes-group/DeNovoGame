@@ -40,7 +40,6 @@
      <Compile Include="Assets/Scripts/Score.cs" />
      <Compile Include="Assets/Scripts/DraggableBox.cs" />
      <Compile Include="Assets/Scripts/Peak.cs" />
-     <Compile Include="Assets/Scripts/MenuGameController.cs" />
      <Compile Include="Assets/Scripts/Slot.cs" />
      <Compile Include="Assets/Scripts/ButtonsScript.cs" />
      <Compile Include="Assets/Scripts/JSONReader.cs" />
