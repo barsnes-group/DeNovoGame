@@ -84,7 +84,7 @@ def playing_board_file(filename_out: str, list_of_filtered_data: list):
             csv_out.writerow(row)
         out.close()
 
-def get_highest_peak_in_mgf(file_in):
+def get_highest_peak_from_mgf(file_in):
     pepmass = ""
     charge = ""
     with open(file_in, 'r') as csvfile:
@@ -243,7 +243,7 @@ def write_to_json(slot_dict: dict, filename: str, input_file: str):
         a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
         a_a_dict["MassOriginal"] = round(amino_acids_original_mass[amino_acid], 4)
         a_a_dict["MaxXValue"] = max_x_value
-        a_a_dict["HighestPeakFromMGF"] = get_highest_peak_in_mgf(input_file)
+        a_a_dict["HighestPeakFromMGF"] = get_highest_peak_from_mgf(input_file)
         slots = []
         for e in slot:
             slots.append(e.to_dict(peaks_to_index))

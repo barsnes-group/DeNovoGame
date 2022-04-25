@@ -1,6 +1,20 @@
 [
-  { "AminoAcidName": "A", "Mass": 4.86, "MassOriginal": 71.0371, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "R", "Mass": 10.679, "MassOriginal": 156.1011, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
+  {
+    "AminoAcidName": "A",
+    "Mass": 4.86,
+    "MassOriginal": 71.0371,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "R",
+    "Mass": 10.679,
+    "MassOriginal": 156.1011,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
   {
     "AminoAcidName": "N",
     "Mass": 7.802,
@@ -47,7 +61,14 @@
       }
     ]
   },
-  { "AminoAcidName": "C", "Mass": 7.047, "MassOriginal": 103.0092, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
+  {
+    "AminoAcidName": "C",
+    "Mass": 7.047,
+    "MassOriginal": 103.0092,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
   {
     "AminoAcidName": "E",
     "Mass": 8.828,
@@ -64,9 +85,30 @@
       }
     ]
   },
-  { "AminoAcidName": "Q", "Mass": 8.761, "MassOriginal": 128.0586, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "G", "Mass": 3.901, "MassOriginal": 57.0215, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "H", "Mass": 9.376, "MassOriginal": 137.0589, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
+  {
+    "AminoAcidName": "Q",
+    "Mass": 8.761,
+    "MassOriginal": 128.0586,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "G",
+    "Mass": 3.901,
+    "MassOriginal": 57.0215,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "H",
+    "Mass": 9.376,
+    "MassOriginal": 137.0589,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
   {
     "AminoAcidName": "I/L",
     "Mass": 7.736,
@@ -97,10 +139,38 @@
       }
     ]
   },
-  { "AminoAcidName": "K", "Mass": 8.763, "MassOriginal": 128.095, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "M", "Mass": 8.965, "MassOriginal": 131.0405, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "F", "Mass": 10.061, "MassOriginal": 147.0684, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "P", "Mass": 6.639, "MassOriginal": 97.0528, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
+  {
+    "AminoAcidName": "K",
+    "Mass": 8.763,
+    "MassOriginal": 128.095,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "M",
+    "Mass": 8.965,
+    "MassOriginal": 131.0405,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "F",
+    "Mass": 10.061,
+    "MassOriginal": 147.0684,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "P",
+    "Mass": 6.639,
+    "MassOriginal": 97.0528,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
   {
     "AminoAcidName": "S",
     "Mass": 5.954,
@@ -117,10 +187,38 @@
       }
     ]
   },
-  { "AminoAcidName": "T", "Mass": 6.913, "MassOriginal": 101.0477, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "U", "Mass": 10.327, "MassOriginal": 150.9536, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "W", "Mass": 12.73, "MassOriginal": 186.0793, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
-  { "AminoAcidName": "Y", "Mass": 11.155, "MassOriginal": 163.0633, "MaxXValue": 14.617685547, "HighestPeakFromMGF": 1589.86328125, "Slots": [] },
+  {
+    "AminoAcidName": "T",
+    "Mass": 6.913,
+    "MassOriginal": 101.0477,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "U",
+    "Mass": 10.327,
+    "MassOriginal": 150.9536,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "W",
+    "Mass": 12.73,
+    "MassOriginal": 186.0793,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
+  {
+    "AminoAcidName": "Y",
+    "Mass": 11.155,
+    "MassOriginal": 163.0633,
+    "MaxXValue": 14.617685547,
+    "HighestPeakFromMGF": 1589.86328125,
+    "Slots": []
+  },
   {
     "AminoAcidName": "V",
     "Mass": 6.777,

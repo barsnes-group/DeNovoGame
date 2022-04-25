@@ -31,6 +31,7 @@ public class JSONReader : MonoBehaviour
         public float Mass;
         public float MassOriginal;
         public float MaxXValue;
+        public float HighestPeakFromMGF;
         public SerializedSlot[] slots;
         public override String ToString()
         {
