@@ -28,10 +28,10 @@ public class ButtonsScript : MonoBehaviour
             box.ReturnToStartPos();
         }
     }
-    public void Update()
+/*     public void Update()
     {
         OnGetAminoAcidsClick();
-    }
+    } */
 
     public void OnGetAminoAcidsClick()
     {

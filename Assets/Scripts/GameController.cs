@@ -369,9 +369,10 @@ public class GameController : MonoBehaviour
             new Vector3(-500, peaksYPos, 0),
             new Vector3(1000, peaksYPos, 0)
         };
-
+        l.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
         l.startWidth = 0.1f;
         l.SetPositions(pos.ToArray());
         l.useWorldSpace = true;
+        l.SetColors(Color.black, Color.black);
     }
 }
