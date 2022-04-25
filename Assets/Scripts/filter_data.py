@@ -84,7 +84,22 @@ def playing_board_file(filename_out: str, list_of_filtered_data: list):
             csv_out.writerow(row)
         out.close()
 
-
+def get_highest_peak_in_mgf(file_in):
+    pepmass = ""
+    charge = ""
+    with open(file_in, 'r') as csvfile:
+        reader = csvfile.readlines()
+        for line in reader[0:5]:
+            if "PEPMASS" in line:
+                temp_pepmass = line.strip().split("=")
+                pepmass = float(temp_pepmass[1])
+            if "CHARGE" in line:
+                temp_charge = line.strip().split("=")
+                temp_charge = temp_charge[1].split()
+                charge = float(temp_charge[0][0])
+    return (pepmass * charge)
+                
+                
 def create_slots_from_coordinates(coordinates: list, threshold: float) -> "dict[str, list[Slot]]":
     '''
     create Slot object
@@ -219,7 +234,7 @@ def plot(input_coord, filtered_coord):
     plt.show()
 
 
-def write_to_json(slot_dict: dict, filename: str):
+def write_to_json(slot_dict: dict, filename: str, input_file: str):
     list_of_amino_acids = []
     peaks_to_index = sorted_peaks(slot_dict)
     for amino_acid, slot in slot_dict.items():
@@ -228,6 +243,7 @@ def write_to_json(slot_dict: dict, filename: str):
         a_a_dict["Mass"] = round(amino_acids[amino_acid], 3)
         a_a_dict["MassOriginal"] = round(amino_acids_original_mass[amino_acid], 4)
         a_a_dict["MaxXValue"] = max_x_value
+        a_a_dict["HighestPeakFromMGF"] = get_highest_peak_in_mgf(input_file)
         slots = []
         for e in slot:
             slots.append(e.to_dict(peaks_to_index))
@@ -259,7 +275,8 @@ def sorted_peaks(acid_to_slots: "dict") -> dict:
 if __name__ == "__main__":
     cwd = os.getcwd()  # get the current working directory (cwd)
     #coordinates = read_file(f'{cwd}/selected_spectra.mgf')
-    coordinates = read_file('Assets/Data/level2_selected_spectra.mgf')
+    input_file = 'Assets/Data/level1_selected_spectra.mgf'
+    coordinates = read_file(input_file)
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, 85)  # args.percentile)
     slot_dict = create_slots_from_coordinates(coordinates, args.threshold)
@@ -268,6 +285,7 @@ if __name__ == "__main__":
     
     slot_list = make_slot_objects(coordinates)
 
+
     print(f"Number of peaks after filtering on percentage: {len(coordinates)}")
     print(
         f"Number of peaks after filtering on percentage and amino acids: {len(filtered_Slot_coord)}")
@@ -275,5 +293,5 @@ if __name__ == "__main__":
     # pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
     playing_board_file(
-        f'{cwd}/Assets/Data/level2_playing_board.csv', filtered_Slot_coord)
-    write_to_json(slot_dict, f'{cwd}/Assets/Data/level2_aa_to_slots.json')
+        f'{cwd}/Assets/Data/level1_playing_board.csv', filtered_Slot_coord)
+    write_to_json(slot_dict, f'{cwd}/Assets/Data/level1_aa_to_slots.json', input_file)
