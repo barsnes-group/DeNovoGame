@@ -287,11 +287,11 @@ MonoBehaviour:
   occupiedSlotsCount: 0
   scoreObject: {fileID: 1464661938}
   slotAndBoxScaling: 0.4
-  peaksYPos: 5
+  peaksYPos: 2
   boxYPos: 13
   scaleWidth: 0.5
-  rightBoxMarginSpace: 10
-  peaksSpace: 3
+  rightBoxMarginSpace: 12
+  peaksSpace: 10
   slotHeight: 12
   PeakContainer: {fileID: 1149075527}
 --- !u!4 &221159266
@@ -900,7 +900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -289.6, y: -200}
+  m_AnchoredPosition: {x: -289.6, y: -215}
   m_SizeDelta: {x: 1995.71, y: 132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &741466935
@@ -1483,7 +1483,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1149075527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2177,7 +2177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2122535429}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []

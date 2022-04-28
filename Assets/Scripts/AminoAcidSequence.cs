@@ -10,9 +10,8 @@ and calculate the gaps between them.
 
 public static class AminoAcidSequence
 {
-    public static List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence)
+    public static List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence, GameController gameController)
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
         for (int i = 0; i < allBoxes.Length - 1; i++)
         {

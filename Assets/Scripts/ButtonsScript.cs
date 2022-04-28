@@ -9,9 +9,9 @@ public class ButtonsScript : MonoBehaviour
     float maxX;
 
     [SerializeField]
-    GameObject aminoSeqText;
+    //GameObject aminoSeqText;
 
-    private void SetText(string text)
+    public void SetText(string text)
     {
         seqText.text = text.ToString();
     }
@@ -35,6 +35,8 @@ public class ButtonsScript : MonoBehaviour
 
     public void OnGetAminoAcidsClick()
     {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+
         List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
         if (aminoAcidSequence == null)
         {
@@ -42,7 +44,7 @@ public class ButtonsScript : MonoBehaviour
         }
         else
         {
-            AminoAcidSequence.GetAminoAcidSequence(aminoAcidSequence);
+            AminoAcidSequence.GetAminoAcidSequence(aminoAcidSequence, gameController);
             AminoAcidSequence.FindGaps(aminoAcidSequence);
 
             string sequence = AminoAcidSequence.MakeSequence(aminoAcidSequence);

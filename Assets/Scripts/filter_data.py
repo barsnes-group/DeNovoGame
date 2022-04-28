@@ -275,7 +275,7 @@ def sorted_peaks(acid_to_slots: "dict") -> dict:
 if __name__ == "__main__":
     cwd = os.getcwd()  # get the current working directory (cwd)
     #coordinates = read_file(f'{cwd}/selected_spectra.mgf')
-    input_file = 'Assets/Data/level1_selected_spectra.mgf'
+    input_file = 'Assets/Data/level2_selected_spectra.mgf'
     coordinates = read_file(input_file)
     print(f"Number of peaks before filtering: {len(coordinates)}")
     coordinates = percentile_sorted(coordinates, 85)  # args.percentile)
@@ -293,5 +293,5 @@ if __name__ == "__main__":
     # pprint.pprint(filtered_Slot_coord)
     #plot(coordinates, filtered_Slot_coord)
     playing_board_file(
-        f'{cwd}/Assets/Data/level1_playing_board.csv', filtered_Slot_coord)
-    write_to_json(slot_dict, f'{cwd}/Assets/Data/level1_aa_to_slots.json', input_file)
+        f'{cwd}/Assets/Data/level2_playing_board.csv', filtered_Slot_coord)
+    write_to_json(slot_dict, f'{cwd}/Assets/Data/level2_aa_to_slots.json', input_file)
