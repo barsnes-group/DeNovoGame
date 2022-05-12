@@ -11,24 +11,27 @@ public class GameController : MonoBehaviour
     public GameObject peakPrefab;
     public GameObject slotPrefab;
     public GameObject warningObject;
-    public int validSlotsCount;
-    public bool lastBoxPlacedOccupied;
+    private int validSlotsCount;
+    private bool lastBoxPlacedOccupied;
     private List<Slot> highlightedSlots = new List<Slot>();
     private List<Slot> validSlots = new List<Slot>();
-    public int occupiedSlotsCount = 0;
+    private int occupiedSlotsCount = 0;
+    private float xStartCoord = 5.0f;
+    private int defaultBoxSize = 4;
+
     [SerializeField]
     private GameObject scoreObject;
+    [SerializeField]
+    GameObject PeakContainer;
 
     [Header("Sizes")]
-    public float slotAndBoxScaling;
     public float peaksYPos = 15;
     public float boxYPos = 13;
     public float scaleWidth = 0.1f;
     public int rightBoxMarginSpace = 5;
     public int peaksSpace = 5;
-    public float slotHeight = 5;
-    [SerializeField]
-    GameObject PeakContainer;
+    public float slotAndBoxScaling;
+    public float slotHeightDivider = 5;
 
     void Awake()
     {
@@ -40,7 +43,7 @@ public class GameController : MonoBehaviour
         DrawLine();
         string[] array = CsvFile.text.Split('\n');
         float previousX = 0;
-        float xCoord = 5.0f; //= float.Parse(rows[0]);
+        float xCoord = xStartCoord;
         for (int i = 0; i <= array.Length - 1; i++)
         {
             string[] rows = array[i].Split(',');
@@ -83,15 +86,6 @@ public class GameController : MonoBehaviour
             slot.SetColor(new Color32(229, 143, 30, 100));
         }
 
-        //TODO: check if this can be removed
-        if (pos_x1 > pos_x2)
-        {
-            slot.SetPos(pos_x2, pos_y);
-        }
-        else
-        {
-            slot.SetPos(pos_x1, pos_y);
-        }
         return slot;
     }
 
@@ -135,7 +129,7 @@ public class GameController : MonoBehaviour
             float avgIntensity = (startPeak.intensity + endPeak.intensity) / 2;
             if (!SlotOccupied(startPeak.index, endPeak.index, GetAllBoxes()))
             {
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeight, startPeak, endPeak, true);
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeightDivider, startPeak, endPeak, true);
                 if (slot == null)
                 {
                     print("slot in HighlightValidSlots() is null");
@@ -146,7 +140,7 @@ public class GameController : MonoBehaviour
             else
             {
                 print("highlight unvalid slots");
-                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeight, startPeak, endPeak, false);
+                Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeightDivider, startPeak, endPeak, false);
                 highlightedSlots.Add(slot);
             }
         }
@@ -195,7 +189,6 @@ public class GameController : MonoBehaviour
 
     public void HandleInvalidBoxPlacement(DraggableBox box)
     {
-        //TODO: future work - add sound
         Warnings warningComponent = warningObject.GetComponent<Warnings>();
         //warningComponent.SetText("You can't place box on top of another box");
         box.ReturnToStartPos();
@@ -208,7 +201,6 @@ public class GameController : MonoBehaviour
     {
         foreach (Slot slot in highlightedSlots)
         {
-            //TODO: sjekk at den passer itillegg
             if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
                 print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
@@ -316,6 +308,21 @@ public class GameController : MonoBehaviour
         return GetPeak(total - 1);
     }
 
+    public bool GetLastBoxPlacedOccupied()
+    {
+        return lastBoxPlacedOccupied;
+    }
+
+    public int GetValidSlotsCount()
+    {
+        return validSlotsCount;
+    }
+
+    public int GetOccupiedSlotsCount()
+    {
+        return occupiedSlotsCount;
+    }
+
     public void CreateAllBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
         int rightBoxMargin = 0;
@@ -332,7 +339,7 @@ public class GameController : MonoBehaviour
 
     private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
     {
-        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, 3, 3);
+        DraggableBox box = CreateBoxPrefab(xPos, boxYPos, defaultBoxSize, defaultBoxSize);
         box.aminoAcidChar = aminoAcidChar;
         box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 0), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + "/" + aminoAcidChar.slots.Length.ToString());

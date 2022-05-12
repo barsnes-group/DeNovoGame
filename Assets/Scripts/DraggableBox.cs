@@ -32,8 +32,8 @@ public class DraggableBox : MonoBehaviour
     public Peak placedEndPeak;
     internal float posX;
     private Color currentColor;
-    private float defaultXScale = 1.5f;
-    private float defaultYScale = 1.2f;
+    private float defaultXScale = 2;
+    private float defaultYScale = 1.6f;
     internal float start_coord;
 
     /*     private void Update()
@@ -151,11 +151,11 @@ public class DraggableBox : MonoBehaviour
         Vector2 peakStartPos = startPeak.transform.position;
         SnapPosition(peakStartPos);
         Slot slot = getGameController().BoxPlaced(1, this, startPeak);
-        if (!getGameController().lastBoxPlacedOccupied)
+        if (!getGameController().GetLastBoxPlacedOccupied())
         {
             isPlaced = true;
             Vector2 peakEndPos = slot.endpeak.transform.position;
-            int occupiedSlots = getGameController().occupiedSlotsCount;
+            int occupiedSlots = getGameController().GetOccupiedSlotsCount();
         }
     }
 
@@ -182,7 +182,7 @@ public class DraggableBox : MonoBehaviour
     public void ReturnToStartPos()
     {
         transform.position = startPos;
-        SetText(getGameController().validSlotsCount.ToString() + "/" + aminoAcidChar.slots.Length.ToString());
+        SetText(getGameController().GetValidSlotsCount().ToString() + "/" + aminoAcidChar.slots.Length.ToString());
         SetScale(defaultXScale, defaultYScale);
         isPlaced = false;
     }

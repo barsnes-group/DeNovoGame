@@ -1932,18 +1932,15 @@ MonoBehaviour:
   peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   slotPrefab: {fileID: 579977173573170919, guid: 5d2e837c36324462db2591aa8b0429c6, type: 3}
   warningObject: {fileID: 342937581}
-  validSlotsCount: 0
-  lastBoxPlacedOccupied: 0
-  occupiedSlotsCount: 0
   scoreObject: {fileID: 559201648}
-  slotAndBoxScaling: 0.4
+  PeakContainer: {fileID: 146717902}
   peaksYPos: 2
   boxYPos: 13
-  scaleWidth: 0.5
+  scaleWidth: 1
   rightBoxMarginSpace: 12
   peaksSpace: 7
-  slotHeight: 5
-  PeakContainer: {fileID: 146717902}
+  slotAndBoxScaling: 0.4
+  slotHeightDivider: 5
 --- !u!114 &1943325020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1969,6 +1966,7 @@ GameObject:
   - component: {fileID: 2012312580}
   - component: {fileID: 2012312579}
   - component: {fileID: 2012312581}
+  - component: {fileID: 2012312582}
   m_Layer: 5
   m_Name: StartText
   m_TagString: Untagged
@@ -2016,8 +2014,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Place a box in one of the green slots.  \n\nThe highest slots give more
-    points!"
+  m_text: "Click on a box and place it in one of the green slots.  \n\nThe tallest
+    slots give more points!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2094,7 +2092,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2012312577}
   m_CullTransparentMesh: 1
---- !u!111 &2012312581
+--- !u!95 &2012312581
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012312577}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 816901bb849bc4d3b96ab590a2e3a0d5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!111 &2012312582
 Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2103,9 +2121,8 @@ Animation:
   m_GameObject: {fileID: 2012312577}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: ca06c613e4f9944929dce22ffe952002, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: ca06c613e4f9944929dce22ffe952002, type: 2}
+  m_Animation: {fileID: 7400000, guid: 00f3f769b06254f84856a666da83c580, type: 2}
+  m_Animations: []
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
