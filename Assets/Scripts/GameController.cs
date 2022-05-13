@@ -225,7 +225,7 @@ public class GameController : MonoBehaviour
             int end_peak_index = serializedSlot.end_peak_index;
             if (!SlotOccupied(start_peak_index, end_peak_index, GetAllBoxes()))
             {
-                DraggableBox newBox = CreateBox(previousBox.aminoAcidChar, previousBox.posX);
+                DraggableBox newBox = CreateBox(previousBox.aminoAcidChar, previousBox.posX, previousBox.GetColor());
                 //the box always has the same color
                 newBox.SetColor(previousBox.GetColor());
                 //exit the loop when one new box is created
@@ -323,25 +323,56 @@ public class GameController : MonoBehaviour
         return occupiedSlotsCount;
     }
 
+    public List<Slot> GetValidSlots()
+    {
+        return validSlots;
+    }
+
     public void CreateAllBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
+        
+
         int rightBoxMargin = 0;
+        int index = 0;
         foreach (JSONReader.AminoAcid aminoAcidChar in aminoAcids)
         {
             validSlotsCount = aminoAcidChar.slots.Length;
             if (aminoAcidChar.slots.Length > 0)
             {
-                CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin);
+                Color32 color = GetColorFromList(index);
+
+                CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin, color);
                 rightBoxMargin += rightBoxMarginSpace;
+                index += 1;
             }
         }
     }
 
-    private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos)
+    private Color32 GetColorFromList(int colorIndex)
     {
+        Color32[] colors = { new Color32(255, 102, 102, 255), new Color32(255, 178, 102, 255), new Color32(255, 255, 102, 255), new Color32(178, 255, 102, 255), new Color32(102, 102, 255, 255),
+        new Color32(102, 178, 255, 255), new Color32(178, 102, 255, 255), new Color32(255, 102, 178, 255)};
+
+        if (colorIndex < colors.Length)
+        {
+            return colors[colorIndex];
+        }
+        else
+        {
+            return new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 255), (byte)Random.Range(0, 255), 255);
+        }
+
+    }
+
+    private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos, Color color)
+    {
+
+
+
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, defaultBoxSize, defaultBoxSize);
         box.aminoAcidChar = aminoAcidChar;
-        box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 0), (byte)Random.Range(0, 255), 255));
+        box.SetColor(color);
+        //box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 0), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + "/" + aminoAcidChar.slots.Length.ToString());
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)

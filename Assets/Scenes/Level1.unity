@@ -1936,7 +1936,7 @@ MonoBehaviour:
   PeakContainer: {fileID: 146717902}
   peaksYPos: 2
   boxYPos: 13
-  scaleWidth: 1
+  scaleWidth: 0.5
   rightBoxMarginSpace: 12
   peaksSpace: 7
   slotAndBoxScaling: 0.4

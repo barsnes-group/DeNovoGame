@@ -36,9 +36,9 @@ public class DraggableBox : MonoBehaviour
     private float defaultYScale = 1.6f;
     internal float start_coord;
 
-    /*     private void Update()
+/*         private void Update()
         {
-            SetText(getGameController().validSlots.ToString() + " / " + aminoAcidChar.slots.Length.ToString());
+            SetText(getGameController().GetValidSlots().ToString() + " / " + aminoAcidChar.slots.Length.ToString());
         } */
 
 /*     private void Start() {
