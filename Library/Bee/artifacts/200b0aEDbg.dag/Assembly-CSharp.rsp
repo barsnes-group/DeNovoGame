@@ -376,10 +376,15 @@
 "Assets/Scripts/JSONReader.cs"
 "Assets/Scripts/Menu.cs"
 "Assets/Scripts/Peak.cs"
-"Assets/Scripts/PlatformDefines.cs"
 "Assets/Scripts/Score.cs"
 "Assets/Scripts/Slot.cs"
 "Assets/Scripts/Warnings.cs"
+"Assets/Unity-Logs-Viewer/Reporter/MultiKeyDictionary.cs"
+"Assets/Unity-Logs-Viewer/Reporter/Reporter.cs"
+"Assets/Unity-Logs-Viewer/Reporter/ReporterGUI.cs"
+"Assets/Unity-Logs-Viewer/Reporter/ReporterMessageReceiver.cs"
+"Assets/Unity-Logs-Viewer/Reporter/Test/Rotate.cs"
+"Assets/Unity-Logs-Viewer/Reporter/Test/TestReporter.cs"
 -langversion:9.0
 
 /deterministic

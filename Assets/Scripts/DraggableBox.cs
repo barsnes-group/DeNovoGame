@@ -1,12 +1,8 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
 using System.Linq;
-using Random = UnityEngine.Random;
-using UnityEngine.UIElements;
-//https://gist.github.com/Matthew-J-Spencer/65aea3d55f1e2c6ccb2c3586bccbdbdb 
 
 public class DraggableBox : MonoBehaviour
 {
@@ -22,7 +18,6 @@ public class DraggableBox : MonoBehaviour
 
     private GameObject scoreObject;
     private Vector3 _dragOffset;
-    private Camera _cam;
     public Vector3 startPos;
     [SerializeField] private float _speed = 10;
     [SerializeField] private GameObject textObject;
@@ -35,15 +30,6 @@ public class DraggableBox : MonoBehaviour
     private float defaultXScale = 2;
     private float defaultYScale = 1.6f;
     internal float start_coord;
-
-/*         private void Update()
-        {
-            SetText(getGameController().GetValidSlots().ToString() + " / " + aminoAcidChar.slots.Length.ToString());
-        } */
-
-/*     private void Start() {
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
-    } */
     
     public bool GetIsPlaced()
     {
@@ -76,10 +62,12 @@ public class DraggableBox : MonoBehaviour
         return placedEndPeak;
     }
 
-    void Awake()
+/*     void Awake()
     {
         _cam = Camera.main;
-    }
+    } */
+
+
 
     private String IndexesToString()
     {
@@ -160,9 +148,7 @@ public class DraggableBox : MonoBehaviour
     }
 
     private GameController getGameController()
-    {
-        //GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
-        
+    {   
         if (gameController == null)
         {
             throw new NullReferenceException("can't find game controller");
@@ -199,7 +185,7 @@ public class DraggableBox : MonoBehaviour
 
     Vector3 GetMousePos()
     {
-        var mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 1;
         return mousePos;
     }

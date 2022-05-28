@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class Peak : MonoBehaviour
@@ -23,14 +19,4 @@ public class Peak : MonoBehaviour
         Vector3 parent_transform = transform.parent.position;
         transform.localPosition = new Vector3((parent_transform.x + pos_x), (parent_transform.y + pos_y), 0);
     }
-
-/*     internal void SetText(string text)
-    {
-        textObject.GetComponent<TextMeshProUGUI>().text = text.ToString();
-    }
-
-    public string ToString()
-    {
-        return "peak nr " + index;
-    } */
 }

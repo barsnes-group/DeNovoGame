@@ -8,9 +8,6 @@ public class ButtonsScript : MonoBehaviour
     public TextMeshProUGUI seqText;
     float maxX;
 
-    [SerializeField]
-    //GameObject aminoSeqText;
-
     public void SetText(string text)
     {
         seqText.text = text.ToString();

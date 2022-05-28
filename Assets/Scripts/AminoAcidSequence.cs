@@ -8,7 +8,7 @@ Class that get the amino acids from the placed boxes
 and calculate the gaps between them.
 **/
 
-public static class AminoAcidSequence
+public static class AminoAcidSequence 
 {
     public static List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence, GameController gameController)
     {

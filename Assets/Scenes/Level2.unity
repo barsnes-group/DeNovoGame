@@ -209,7 +209,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.5372549, g: 0.94509804, b: 0.7838901, a: 1}
+  m_Color: {r: 0.69411767, g: 0.8509804, b: 0.74509805, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -282,18 +282,16 @@ MonoBehaviour:
   peakPrefab: {fileID: 7096655766899672058, guid: 07ec3944a16d546799d5eb90e05433b8, type: 3}
   slotPrefab: {fileID: 579977173573170919, guid: 5d2e837c36324462db2591aa8b0429c6, type: 3}
   warningObject: {fileID: 741466935}
-  validSlotsCount: 0
-  lastBoxPlacedOccupied: 0
-  occupiedSlotsCount: 0
   scoreObject: {fileID: 1464661938}
-  slotAndBoxScaling: 0.4
+  PeakContainer: {fileID: 1149075527}
+  lineShader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
   peaksYPos: 2
   boxYPos: 13
   scaleWidth: 0.5
   rightBoxMarginSpace: 12
   peaksSpace: 10
-  slotHeight: 12
-  PeakContainer: {fileID: 1149075527}
+  slotAndBoxScaling: 0.4
+  slotHeightDivider: 8
 --- !u!4 &221159266
 Transform:
   m_ObjectHideFlags: 0
@@ -1544,7 +1542,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seqText: {fileID: 0}
-  aminoSeqText: {fileID: 0}
 --- !u!114 &1285209809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2058,7 +2055,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seqText: {fileID: 664905328}
-  aminoSeqText: {fileID: 664905326}
 --- !u!114 &1767253936
 MonoBehaviour:
   m_ObjectHideFlags: 0

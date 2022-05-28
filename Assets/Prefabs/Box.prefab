@@ -77,7 +77,8 @@ MonoBehaviour:
   endPeakNumbers: 
   startCoord: []
   endCoord: []
-  width: 
+  gameController: {fileID: 0}
+  width: 0
   boxToSlotTheshold: 5
   startPos: {x: 0, y: 0, z: 0}
   _speed: 100

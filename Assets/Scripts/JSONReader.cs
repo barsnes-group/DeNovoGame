@@ -9,7 +9,7 @@ public class JSONReader : MonoBehaviour
     private GameController gc;
     private GameObject GameControllerObject;
 
-
+    //System.Serializable makes it possible to store objects as text
     [System.Serializable]
     public class SerializedSlot
     {
@@ -41,6 +41,7 @@ public class JSONReader : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Start");
         GameControllerObject = gameObject;
         gc = GameControllerObject.GetComponent<GameController>();
         AminoAcid[] aminoAcids = JsonConvert.DeserializeObject<AminoAcid[]>(jsonString.text);

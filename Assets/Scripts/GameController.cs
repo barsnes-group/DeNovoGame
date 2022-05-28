@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     private GameObject scoreObject;
     [SerializeField]
     GameObject PeakContainer;
+    public Shader lineShader;
 
     [Header("Sizes")]
     public float peaksYPos = 15;
@@ -31,9 +32,9 @@ public class GameController : MonoBehaviour
     public int rightBoxMarginSpace = 5;
     public int peaksSpace = 5;
     public float slotAndBoxScaling;
-    public float slotHeightDivider = 5;
+    public float slotHeightDivider;
 
-    void Awake()
+    void OnEnable()
     {
         if (scoreObject == null)
         {
@@ -330,7 +331,7 @@ public class GameController : MonoBehaviour
 
     public void CreateAllBoxes(JSONReader.AminoAcid[] aminoAcids)
     {
-        
+
 
         int rightBoxMargin = 0;
         int index = 0;
@@ -344,14 +345,18 @@ public class GameController : MonoBehaviour
                 CreateBox(aminoAcidChar, aminoAcidChar.Mass + rightBoxMargin, color);
                 rightBoxMargin += rightBoxMarginSpace;
                 index += 1;
+                Debug.Log("Created new box: " + aminoAcidChar);
             }
         }
     }
 
     private Color32 GetColorFromList(int colorIndex)
     {
-        Color32[] colors = { new Color32(255, 102, 102, 255), new Color32(255, 178, 102, 255), new Color32(255, 255, 102, 255), new Color32(178, 255, 102, 255), new Color32(102, 102, 255, 255),
-        new Color32(102, 178, 255, 255), new Color32(178, 102, 255, 255), new Color32(255, 102, 178, 255)};
+        Color32[] colors = {
+        new Color32(255, 102, 102, 255), new Color32(255, 178, 102, 255), new Color32(255, 255, 102, 255),
+        new Color32(178, 255, 102, 255), new Color32(102, 102, 255, 255), new Color32(102, 178, 255, 255),
+        new Color32(178, 102, 255, 255), new Color32(255, 102, 178, 255)
+        };
 
         if (colorIndex < colors.Length)
         {
@@ -366,13 +371,9 @@ public class GameController : MonoBehaviour
 
     private DraggableBox CreateBox(JSONReader.AminoAcid aminoAcidChar, float xPos, Color color)
     {
-
-
-
         DraggableBox box = CreateBoxPrefab(xPos, boxYPos, defaultBoxSize, defaultBoxSize);
         box.aminoAcidChar = aminoAcidChar;
         box.SetColor(color);
-        //box.SetColor(new Color32((byte)Random.Range(0, 255), (byte)Random.Range(0, 0), (byte)Random.Range(0, 255), 255));
         box.SetText(validSlotsCount.ToString() + "/" + aminoAcidChar.slots.Length.ToString());
 
         foreach (JSONReader.SerializedSlot slot in aminoAcidChar.slots)
@@ -407,7 +408,7 @@ public class GameController : MonoBehaviour
             new Vector3(-500, peaksYPos, 0),
             new Vector3(1000, peaksYPos, 0)
         };
-        l.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
+        l.material = new Material(lineShader);
         l.startWidth = 0.1f;
         l.SetPositions(pos.ToArray());
         l.useWorldSpace = true;
