@@ -1252,6 +1252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seqText: {fileID: 0}
+  gameController: {fileID: 1943325019}
 --- !u!1 &1067250919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,6 +1307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seqText: {fileID: 1623363816}
+  gameController: {fileID: 1943325019}
 --- !u!114 &1067250922
 MonoBehaviour:
   m_ObjectHideFlags: 0

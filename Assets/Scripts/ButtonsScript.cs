@@ -6,6 +6,7 @@ using TMPro;
 public class ButtonsScript : MonoBehaviour
 {
     public TextMeshProUGUI seqText;
+    public GameController gameController;
     float maxX;
 
     public void SetText(string text)
@@ -15,7 +16,7 @@ public class ButtonsScript : MonoBehaviour
 
     private void ResetAminoAcids()
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] draggableBoxes = gameController.GetAllBoxes();
 
         for (int i = 0; i < draggableBoxes.Length; i++)
@@ -25,14 +26,14 @@ public class ButtonsScript : MonoBehaviour
             box.ReturnToStartPos();
         }
     }
-/*     public void Update()
+    public void Update()
     {
         OnGetAminoAcidsClick();
-    } */
+    }
 
     public void OnGetAminoAcidsClick()
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
         List<Tuple<string, float, float>> aminoAcidSequence = new List<Tuple<string, float, float>>();
         if (aminoAcidSequence == null)
@@ -44,7 +45,8 @@ public class ButtonsScript : MonoBehaviour
             AminoAcidSequence.GetAminoAcidSequence(aminoAcidSequence, gameController);
             AminoAcidSequence.FindGaps(aminoAcidSequence);
 
-            string sequence = AminoAcidSequence.MakeSequence(aminoAcidSequence);
+            AminoAcidSequence aaSeq = new AminoAcidSequence();
+            string sequence = aaSeq.MakeSequence(aminoAcidSequence, gameController);
             //AminoAcidSequence.WriteToCsv(sequence, "Assets/Data/amino_acid_seq.csv");
             SetText(sequence);
         }

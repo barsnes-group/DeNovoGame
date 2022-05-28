@@ -8,7 +8,7 @@ Class that get the amino acids from the placed boxes
 and calculate the gaps between them.
 **/
 
-public static class AminoAcidSequence 
+public class AminoAcidSequence
 {
     public static List<Tuple<string, float, float>> GetAminoAcidSequence(List<Tuple<string, float, float>> aminoAcidSequence, GameController gameController)
     {
@@ -66,9 +66,8 @@ public static class AminoAcidSequence
         aminoAcidSequence.Sort((x, y) => x.Item2.CompareTo(y.Item2));
     }
 
-    public static string MakeSequence(List<Tuple<string, float, float>> aminoAcidSequence)
+    public string MakeSequence(List<Tuple<string, float, float>> aminoAcidSequence, GameController gameController)
     {
-        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
         DraggableBox[] allBoxes = gameController.GetAllBoxes();
         float highestPeak = allBoxes[0].aminoAcidChar.HighestPeakFromMGF;
 
