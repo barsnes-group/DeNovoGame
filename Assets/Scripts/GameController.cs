@@ -122,7 +122,6 @@ public class GameController : MonoBehaviour
         {
             throw new Exception("different size of index lists");
         }
-        print("start highlighted Slots of count " + startIndexes.Count);
         foreach (var startAndEndIndexes in startIndexes.Zip(endIndexes, Tuple.Create))
         {
             Peak startPeak = GetPeak(startAndEndIndexes.Item1);
@@ -140,7 +139,6 @@ public class GameController : MonoBehaviour
             }
             else
             {
-                print("highlight unvalid slots");
                 Slot slot = CreateSlotPrefab(peaksYPos, avgIntensity / slotHeightDivider, startPeak, endPeak, false);
                 highlightedSlots.Add(slot);
             }
@@ -166,8 +164,6 @@ public class GameController : MonoBehaviour
     */
     internal Slot BoxPlaced(int score, DraggableBox draggableBox, Peak startpeak)
     {
-        print("highlightedSlots: " + highlightedSlots.Count);
-
         Slot selectedSlot = FindMatchingSlot(startpeak, draggableBox);
 
         draggableBox.SetScale(selectedSlot.GetSlotScaleX(), selectedSlot.GetSlotScaleY());
@@ -204,8 +200,6 @@ public class GameController : MonoBehaviour
         {
             if (slot.startpeak.index == startpeak.index)// && slot.GetWidth() == Int32.Parse(draggableBox.width))
             {
-                print("set box to slot scale: " + slot.GetSlotScaleX() + " , y: " + slot.GetSlotScaleY());
-                print("slot width: " + slot.GetWidth() + " box width: " + draggableBox.width);
                 return slot;
             }
         }
@@ -218,7 +212,6 @@ public class GameController : MonoBehaviour
     private void SpawnNewBox(DraggableBox previousBox)
     {
         JSONReader.SerializedSlot[] possibleSlots = previousBox.aminoAcidChar.slots;
-        print("possibleSlots length: " + possibleSlots.Length);
         for (int i = 0; i < possibleSlots.Length - 1; i++)
         {
             JSONReader.SerializedSlot serializedSlot = possibleSlots[i];
@@ -259,7 +252,6 @@ public class GameController : MonoBehaviour
                 bool overlaps = Overlap(boxStart, boxEnd, slotStart, slotEnd);
                 if (overlaps)
                 {
-                    print("box " + i + " overlaps bs: " + boxStart + " be: " + boxEnd + " ss: " + slotStart + " se: " + slotEnd);
                     return true;
                 }
             }

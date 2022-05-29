@@ -26,6 +26,8 @@ public class ButtonsScript : MonoBehaviour
             box.ReturnToStartPos();
         }
     }
+
+    //This updates the amino acid sequence each frame
     public void Update()
     {
         OnGetAminoAcidsClick();
